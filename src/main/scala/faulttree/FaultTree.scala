@@ -129,10 +129,17 @@ def height(tree: FaultTree, layers: IArray[Seq[FaultTree]]): Real = {
         }
     }
 
-    vectorMultiply(height0Map(tree.event).map(_.toDouble), probabilities0Map(tree.event)) + vectorMultiply(height1Map(tree.event).map(_.toDouble), probabilities1Map(tree.event))
+    vectorMultiply(
+        height0Map(tree.event).map(_.toDouble),
+        probabilities0Map(tree.event)
+    ) +
+    vectorMultiply(
+        height1Map(tree.event).map(_.toDouble),
+        probabilities1Map(tree.event))
 }
 
 @main def main(): Unit = {
+    // 2.35
     val tree = FaultTree.AndEvent('g', Seq(
         FaultTree.OrEvent('e', Seq(
             FaultTree.BasicEvent('a', 1D/2D),
@@ -144,6 +151,7 @@ def height(tree: FaultTree, layers: IArray[Seq[FaultTree]]): Real = {
         ))
     ))
 
+    // 1.375
 //    val tree = FaultTree.AndEvent('a', Seq(
 //        FaultTree.OrEvent('o', Seq(
 //            FaultTree.BasicEvent(0, 1D/2D),
@@ -152,5 +160,30 @@ def height(tree: FaultTree, layers: IArray[Seq[FaultTree]]): Real = {
 //        FaultTree.BasicEvent(2, 1D/4D)
 //    ))
 
-    println(height(tree))
+    //println(height(tree))
+
+    println(height(problematicTree))
 }
+
+val problematicTree: FaultTree = FaultTree.AndEvent(0, Seq(
+    FaultTree.OrEvent(1, Seq(
+        FaultTree.AndEvent(2, Seq(
+            FaultTree.BasicEvent(3, 1D/3D),
+            FaultTree.BasicEvent(4, 1D/4D)
+        )),
+        FaultTree.OrEvent(5, Seq(
+            FaultTree.BasicEvent(6, 1D/6D),
+            FaultTree.BasicEvent(7, 1D/7D)
+        ))
+    )),
+    FaultTree.AndEvent(8, Seq(
+        FaultTree.OrEvent(9, Seq(
+            FaultTree.BasicEvent(10, 1D/10D),
+            FaultTree.BasicEvent(11, 1D/11D)
+        )),
+        FaultTree.AndEvent(12, Seq(
+            FaultTree.BasicEvent(13, 1D/13D),
+            FaultTree.BasicEvent(14, 1D/14D)
+        ))
+    ))
+))

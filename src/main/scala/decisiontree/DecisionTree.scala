@@ -31,74 +31,37 @@ def computeLookupBiId()(lookup: BooleanFormula, variableId: Id): Boolean = {
     variables(lookup).contains(variableId)
 }
 
-def normalise(formula: BooleanFormula): BooleanFormula = formula match
-    // Distributive Laws
-    case Or(And(a, b), c) =>
-        normalise(And(Or(a, c), Or(b, c)))
-    case Or(a, And(b, c)) =>
-        normalise(And(Or(a, b), Or(a, c)))
-
-    // Identity Laws
-    case And(a, True) => normalise(a)
-    case And(True, b) => normalise(b)
-    case Or(a, False) => normalise(a)
-    case Or(False, b) => normalise(b)
-
-    // Domination Laws
+def subsuper(formula: BooleanFormula, superscript: Id, subscript: Boolean): BooleanFormula = formula match {
+    case f @ (True | False) => f
+    case v @ Variable(id) => if id == superscript then literal(subscript) else v
     case And(_, False) => False
     case And(False, _) => False
-    case Or(_, True) => True
     case Or(True, _) => True
-
-    // Idempotent Laws
-    case And(a, b) if a == b => normalise(a)
-    case Or(a, b) if a == b => normalise(a)
-
-    // Complement Laws
-    case And(a, Or(b, _)) if a == b => False
-    case Or(a, And(b, _)) if a == b => True
-
-    // Recursively normalize
-    case And(a, b) => 
-        val normalizedLeft = normalise(a)
-        val normalizedRight = normalise(b)
-        if normalizedLeft == normalizedRight then normalizedLeft else And(normalizedLeft, normalizedRight)
-    
-    case Or(a, b) => 
-        val normalizedLeft = normalise(a)
-        val normalizedRight = normalise(b)
-        if normalizedLeft == normalizedRight then normalizedLeft else Or(normalizedLeft, normalizedRight)
-
-    // Base cases
-    case _ => formula
+    case Or(_, True) => True
+    case And(True, b) => subsuper(b, superscript, subscript)
+    case And(a, True) => subsuper(a, superscript, subscript)
+    case Or(False, b) => subsuper(b, superscript, subscript)
+    case Or(a, False) => subsuper(a, superscript, subscript)
+    case And(lhs, rhs) =>
+        val nlhs = subsuper(lhs, superscript, subscript)
+        val nrhs = subsuper(rhs, superscript, subscript)
+        if nlhs == lhs && nrhs == rhs then And(lhs, rhs) else subsuper(And(nlhs, nrhs), superscript, subscript)
+    case Or(lhs, rhs) =>
+        val nlhs = subsuper(lhs, superscript, subscript)
+        val nrhs = subsuper(rhs, superscript, subscript)
+        if nlhs == lhs && nrhs == rhs then Or(lhs, rhs) else subsuper(Or(nlhs, nrhs), superscript, subscript)
+}
 
 def literal(boolean: Boolean): BooleanFormula = boolean match
     case true => True
     case false => False
-    
-def substitute(formula/*already normalised*/: BooleanFormula, variableId: Int, value: Boolean): BooleanFormula = formula match
-    case v @ Variable(id) => if id == variableId then literal(value) else v
-    case Or(left, right) => Or(substitute(left, variableId, value), substitute(right, variableId, value))
-    case And(left, right) => And(substitute(left, variableId, value), substitute(right, variableId, value))
-    case _ => formula
 
 type RealNumber = Double    // We use IEEE 754 double precision floating point numbers for speed. Can change it to BigDecimal at any time for better accuracy.
 
-def subsuper(formula: BooleanFormula, superscript: Id, subscript: Boolean) =
-    normalise(substitute(formula, superscript, subscript))
-
-// TODO can we memoize the result of a height calculation? which one do we cache? we should cache heights for at least (k, formula) pairs, maybe also just heights of (formula)s.
-// TODO we should probably analyse why we run out of java heap (use Eclipse MAT and dump heap on oom jvm flag)
-
-def height(formula: BooleanFormula, probabilities: Seq[RealNumber], containsVariable: (BooleanFormula, Id) => Boolean): RealNumber = normalise(formula) match
+def height(formula: BooleanFormula, probabilities: Seq[RealNumber], containsVariable: (BooleanFormula, Id) => Boolean): RealNumber = formula match
     case BooleanFormula.True => 0   // used to be 1.
     case BooleanFormula.False => 0  // used to be 1.
     case _ =>
-//        var min = Double.MaxValue
-//        for k <- probabilities.indices do
-//            if containsVariable(formula, k) then
-//                min = Math.min(min, height(k, formula, probabilities, containsVariable))
-//        min
         val heights = for
             k <- probabilities.indices
             if containsVariable(formula, k)
@@ -115,14 +78,43 @@ def height(formula: BooleanFormula, probabilities: Seq[RealNumber]): RealNumber 
     height(formula, probabilities, computeLookupBiId())
 
 @main def main(): Unit = {
-    val formula = And(Or(Variable(0), Variable(1)), Variable(2))
-    val probabilities = Seq(1D/2D, 1D/3D, 1D/4D)
+    // 1.375
+//    val formula = And(Or(Variable(0), Variable(1)), Variable(2))
+//    val probabilities = Seq(1D/2D, 1D/3D, 1D/4D)
 
+    // 2.35
 //    val formula = And(
 //        Or(Variable(0), Variable(1)),
 //        Or(Variable(2), Variable(3))
 //    )
 //    val probabilities = Seq(1D/2D, 1D/3D, 1D/4D, 1D/5D)
 
+    // 1.08
+    val formula = problematicTree
+    val probabilities = Seq(1D/3D, 1D/4D, 1D/6D, 1D/7D, 1D/10D, 1D/11D, 1D/13D, 1D/14D)
+
     println(height(formula, probabilities, computeLookupBiId()))
 }
+
+val problematicTree: BooleanFormula = And(
+    Or(
+        And(
+            Variable(0),
+            Variable(1)
+        ),
+        Or(
+            Variable(2),
+            Variable(3)
+        )
+    ),
+    And(
+        Or(
+            Variable(4),
+            Variable(5)
+        ),
+        And(
+            Variable(6),
+            Variable(7)
+        )
+    )
+)
