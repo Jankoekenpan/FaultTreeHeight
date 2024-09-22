@@ -77,6 +77,26 @@ class MyBenchmark {
     def testHeightFaultTree4(): Double = {
         faulttree.height(faultTree, faultTreeLayers)
     }
+
+
+}
+
+object ApproximationRatio {
+
+    def main(args: Array[String]): Unit = {
+        println(ratio(Setup.depth1))
+        println(ratio(Setup.depth2))
+        println(ratio(Setup.depth3))
+        println(ratio(Setup.depth4))
+        println(ratio(Setup.depth5))    // enumeration algorithm is too slow to compute this height in reasonable time
+    }
+
+    def ratio(recipe: Setup.Recipe): Double = {
+        val (decTree, decProbabilities, decContainsVariable) = Setup.makeDecisionTree(recipe)
+        ratio(faulttree.height(Setup.makeFaultTree(recipe)), decisiontree.height(decTree, decProbabilities, decContainsVariable))
+    }
+
+    def ratio(approximation: Double, realValue: Double): Double = approximation / realValue
 }
 
 object Setup {
@@ -97,48 +117,15 @@ object Setup {
                       branchingWidth: BranchingWidth,
                       probabilityOf: ProbabilityGen)
 
-    val depth1 = Recipe(
-        depth = 1,
-        branching = Seq(Setup.Branching.And, Setup.Branching.Or),
-        childIsBasicProbability = 0,
-        branchingWidth = 2,
-        probabilityOf = id => 1D / id
-    )
+    val depth1 = fullTreeRecipe(1)
+    val depth2 = fullTreeRecipe(2)
+    val depth3 = fullTreeRecipe(3)
+    val depth4 = fullTreeRecipe(4)
+    val depth5 = fullTreeRecipe(5)
+    val depth10 = fullTreeRecipe(10)
 
-    val depth2 = Recipe(
-        depth = 2,
-        branching = Seq(Setup.Branching.And, Setup.Branching.Or),
-        childIsBasicProbability = 0,
-        branchingWidth = 2,
-        probabilityOf = id => 1D / id
-    )
-
-    val depth3 = Recipe(
-        depth = 3,
-        branching = Seq(Setup.Branching.And, Setup.Branching.Or),
-        childIsBasicProbability = 0,
-        branchingWidth = 2,
-        probabilityOf = id => 1D / id
-    )
-
-    val depth4 = Recipe(
-        depth = 4,
-        branching = Seq(Setup.Branching.And, Setup.Branching.Or),
-        childIsBasicProbability = 0,
-        branchingWidth = 2,
-        probabilityOf = id => 1D / id
-    )
-
-    val depth5 = Recipe(
-        depth = 5,
-        branching = Seq(Setup.Branching.And, Setup.Branching.Or),
-        childIsBasicProbability = 0,
-        branchingWidth = 2,
-        probabilityOf = id => 1D / id
-    )
-
-    val depth10 = Recipe(
-        depth = 10,
+    def fullTreeRecipe(depth: Int): Recipe = Recipe(
+        depth = depth,
         branching = Seq(Setup.Branching.And, Setup.Branching.Or),
         childIsBasicProbability = 0,
         branchingWidth = 2,
