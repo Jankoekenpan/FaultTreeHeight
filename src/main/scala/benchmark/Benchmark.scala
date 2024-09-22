@@ -84,16 +84,37 @@ class MyBenchmark {
 object ApproximationRatio {
 
     def main(args: Array[String]): Unit = {
-        println(ratio(Setup.depth1))
+        //println(ratio(Setup.depth1))    // NaN
         println(ratio(Setup.depth2))
         println(ratio(Setup.depth3))
         println(ratio(Setup.depth4))
-        println(ratio(Setup.depth5))    // enumeration algorithm is too slow to compute this height in reasonable time
+        //println(ratio(Setup.depth5))    // enumeration algorithm is too slow to compute this height in reasonable time
+
+        println(Setup.makeDecisionTree(recipe(2, 3)))
+
+//        for recipe <- recipes do
+//            println(s"approxmiation ratio for depth=${recipe.depth}, branching width=${recipe.branchingWidth}, ratio=${ratio(recipe)}")
     }
+
+    val recipes: Seq[Setup.Recipe] = for {
+        treeDepth <- 2 to 4
+        children <- 2 to 10
+    } yield recipe(treeDepth, children)
+
+    def recipe(depth: Int, width: Int): Setup.Recipe = Setup.Recipe(
+        depth = depth,
+        branching = Seq(Setup.Branching.And, Setup.Branching.Or),
+        childIsBasicProbability = 0,
+        branchingWidth = width,
+        probabilityOf = id => 1D / id
+    )
 
     def ratio(recipe: Setup.Recipe): Double = {
         val (decTree, decProbabilities, decContainsVariable) = Setup.makeDecisionTree(recipe)
-        ratio(faulttree.height(Setup.makeFaultTree(recipe)), decisiontree.height(decTree, decProbabilities, decContainsVariable))
+        val heightFaultTree = faulttree.height(Setup.makeFaultTree(recipe))
+        val heightDecisionTree = decisiontree.height(decTree, decProbabilities, decContainsVariable)
+        println(s"heightFaultTree=$heightFaultTree, heightDecisionTree=${heightDecisionTree}, recipe=${recipe}")
+        ratio(heightFaultTree, heightDecisionTree)
     }
 
     def ratio(approximation: Double, realValue: Double): Double = approximation / realValue
@@ -122,7 +143,6 @@ object Setup {
     val depth3 = fullTreeRecipe(3)
     val depth4 = fullTreeRecipe(4)
     val depth5 = fullTreeRecipe(5)
-    val depth10 = fullTreeRecipe(10)
 
     def fullTreeRecipe(depth: Int): Recipe = Recipe(
         depth = depth,
@@ -218,12 +238,19 @@ object Setup {
             val rightHalf = nodeCount - leftHalf
 
             val (leftChildren, rightChildren) = children.splitAt(leftHalf)
-            decisiontree.BooleanFormula.And(createBalancedOr(leftChildren, nextId), createBalancedOr(rightChildren, nextId))
+            decisiontree.BooleanFormula.And(createBalancedAnd(leftChildren, nextId), createBalancedAnd(rightChildren, nextId))
     }
 
     // main method to manually verify our generators indeed work the same way - the generated trees are 'the same'.
     def main(args: Array[String]): Unit = {
-        val recipe = depth4;
+        //val recipe = depth4;
+        val recipe = Recipe(
+            depth = 4,
+            branching = Seq(Branching.And, Branching.Or),
+            childIsBasicProbability = 0,
+            branchingWidth = 3,
+            probabilityOf = id => 1D / id
+        )
 
         val (decisionTree, probabilities, containsId) = makeDecisionTree(recipe)
         println(ppDecisionTree(decisionTree, probabilities))
