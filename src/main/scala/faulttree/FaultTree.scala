@@ -133,24 +133,24 @@ def height(tree: FaultTree, layers: IArray[Seq[FaultTree]]): Real = {
 }
 
 @main def main(): Unit = {
-//    val tree = FaultTree.AndEvent('g', Seq(
-//        FaultTree.OrEvent('e', Seq(
-//            FaultTree.BasicEvent('a', 1D/2D),
-//            FaultTree.BasicEvent('b', 1D/3D)
-//        )),
-//        FaultTree.OrEvent('f', Seq(
-//            FaultTree.BasicEvent('c', 1D/4D),
-//            FaultTree.BasicEvent('d', 1D/5D)
-//        ))
-//    ))
-
-    val tree = FaultTree.AndEvent('a', Seq(
-        FaultTree.OrEvent('o', Seq(
-            FaultTree.BasicEvent(0, 1D/2D),
-            FaultTree.BasicEvent(1, 1D/3D)
+    val tree = FaultTree.AndEvent('g', Seq(
+        FaultTree.OrEvent('e', Seq(
+            FaultTree.BasicEvent('a', 1D/2D),
+            FaultTree.BasicEvent('b', 1D/3D)
         )),
-        FaultTree.BasicEvent(2, 1D/4D)
+        FaultTree.OrEvent('f', Seq(
+            FaultTree.BasicEvent('c', 1D/4D),
+            FaultTree.BasicEvent('d', 1D/5D)
+        ))
     ))
+
+//    val tree = FaultTree.AndEvent('a', Seq(
+//        FaultTree.OrEvent('o', Seq(
+//            FaultTree.BasicEvent(0, 1D/2D),
+//            FaultTree.BasicEvent(1, 1D/3D)
+//        )),
+//        FaultTree.BasicEvent(2, 1D/4D)
+//    ))
 
     println(height(tree))
 }

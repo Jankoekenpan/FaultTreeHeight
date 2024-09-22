@@ -90,15 +90,20 @@ def subsuper(formula: BooleanFormula, superscript: Id, subscript: Boolean) =
 // TODO can we memoize the result of a height calculation? which one do we cache? we should cache heights for at least (k, formula) pairs, maybe also just heights of (formula)s.
 // TODO we should probably analyse why we run out of java heap (use Eclipse MAT and dump heap on oom jvm flag)
 
-def height(formula: BooleanFormula, probabilities: Seq[RealNumber], containsVariable: (BooleanFormula, Id) => Boolean): RealNumber = formula match
+def height(formula: BooleanFormula, probabilities: Seq[RealNumber], containsVariable: (BooleanFormula, Id) => Boolean): RealNumber = normalise(formula) match
     case BooleanFormula.True => 0   // used to be 1.
     case BooleanFormula.False => 0  // used to be 1.
     case _ =>
-        var min = Double.MaxValue
-        for k <- probabilities.indices do
-            if containsVariable(formula, k) then
-                min = Math.min(min, height(k, formula, probabilities, containsVariable))
-        min
+//        var min = Double.MaxValue
+//        for k <- probabilities.indices do
+//            if containsVariable(formula, k) then
+//                min = Math.min(min, height(k, formula, probabilities, containsVariable))
+//        min
+        val heights = for
+            k <- probabilities.indices
+            if containsVariable(formula, k)
+        yield height(k, formula, probabilities, containsVariable)
+        heights.min
 
 def height(k/*zero-based*/: Int, formula: BooleanFormula, probabilities: Seq[RealNumber], containsVariable: (BooleanFormula, Id) => Boolean): RealNumber =
     val pk = probabilities(k)
@@ -110,14 +115,14 @@ def height(formula: BooleanFormula, probabilities: Seq[RealNumber]): RealNumber 
     height(formula, probabilities, computeLookupBiId())
 
 @main def main(): Unit = {
-//    val formula = And(Or(Variable(0), Variable(1)), Variable(2))
-//    val probabilities = Seq(1D/2D, 1D/3D, 1D/4D)
+    val formula = And(Or(Variable(0), Variable(1)), Variable(2))
+    val probabilities = Seq(1D/2D, 1D/3D, 1D/4D)
 
-    val formula = And(
-        Or(Variable(0), Variable(1)),
-        Or(Variable(2), Variable(3))
-    )
-    val probabilities = Seq(1D/2D, 1D/3D, 1D/4D, 1D/5D)
+//    val formula = And(
+//        Or(Variable(0), Variable(1)),
+//        Or(Variable(2), Variable(3))
+//    )
+//    val probabilities = Seq(1D/2D, 1D/3D, 1D/4D, 1D/5D)
 
     println(height(formula, probabilities, computeLookupBiId()))
 }

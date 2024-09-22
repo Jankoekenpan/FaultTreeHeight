@@ -12,12 +12,12 @@ import scala.compiletime.uninitialized
 @OutputTimeUnit(TimeUnit.MICROSECONDS)
 class MyBenchmark {
 
-    private var decisionTree10: decisiontree.BooleanFormula = uninitialized
-    private var decisionTree10Probabilities: Seq[Double] = uninitialized
-    private var decisionTree10IdLookup: (decisiontree.BooleanFormula, Int) => Boolean = uninitialized
+    private var decisionTree: decisiontree.BooleanFormula = uninitialized
+    private var decisionTreeProbabilities: Seq[Double] = uninitialized
+    private var decisionTreeIdLookup: (decisiontree.BooleanFormula, Int) => Boolean = uninitialized
 
-    private var faultTree10: faulttree.FaultTree = uninitialized
-    private var faultTree10Layers: IArray[Seq[faulttree.FaultTree]] = uninitialized
+    private var faultTree: faulttree.FaultTree = uninitialized
+    private var faultTreeLayers: IArray[Seq[faulttree.FaultTree]] = uninitialized
 
     private var exampleDecisionTree: decisiontree.BooleanFormula = uninitialized
     private var exampleDecisionTreeProbabilities: Seq[Double] = uninitialized
@@ -28,13 +28,15 @@ class MyBenchmark {
 
     @Setup
     def setup(): Unit = {
-        val (decisionTree10, decisionTree10Probabilities, decisionTree10IdChecker) = Setup.makeDecisionTree(Setup.depth10)
-        this.decisionTree10 = decisionTree10
-        this.decisionTree10Probabilities = decisionTree10Probabilities
-        this.decisionTree10IdLookup = decisionTree10IdChecker
+        val recipe = Setup.depth1
 
-        this.faultTree10 = Setup.makeFaultTree(Setup.depth10)
-        this.faultTree10Layers = faulttree.layers(faultTree10)
+        val (decisionTree10, decisionTree10Probabilities, decisionTree10IdChecker) = Setup.makeDecisionTree(recipe)
+        this.decisionTree = decisionTree10
+        this.decisionTreeProbabilities = decisionTree10Probabilities
+        this.decisionTreeIdLookup = decisionTree10IdChecker
+
+        this.faultTree = Setup.makeFaultTree(recipe)
+        this.faultTreeLayers = faulttree.layers(faultTree)
 
         this.exampleDecisionTree = decisiontree.BooleanFormula.And(
             decisiontree.BooleanFormula.Or(decisiontree.BooleanFormula.Variable(0), decisiontree.BooleanFormula.Variable(1)),
@@ -68,12 +70,12 @@ class MyBenchmark {
 
     @Benchmark
     def testHeightDecisionTree10(): Double = {
-        decisiontree.height(decisionTree10, decisionTree10Probabilities, decisionTree10IdLookup)
+        decisiontree.height(decisionTree, decisionTreeProbabilities, decisionTreeIdLookup)
     }
 
     @Benchmark
     def testHeightFaultTree10(): Double = {
-        faulttree.height(faultTree10, faultTree10Layers)
+        faulttree.height(faultTree, faultTreeLayers)
     }
 }
 
@@ -95,32 +97,48 @@ object Setup {
                       branchingWidth: BranchingWidth,
                       probabilityOf: ProbabilityGen)
 
+    val depth1 = Recipe(
+        depth = 1,
+        branching = Seq(Setup.Branching.And, Setup.Branching.Or),
+        childIsBasicProbability = 0,
+        branchingWidth = 2,
+        probabilityOf = id => 1D / id
+    )
+
+    val depth2 = Recipe(
+        depth = 2,
+        branching = Seq(Setup.Branching.And, Setup.Branching.Or),
+        childIsBasicProbability = 0,
+        branchingWidth = 2,
+        probabilityOf = id => 1D / id
+    )
+
+    val depth3 = Recipe(
+        depth = 3,
+        branching = Seq(Setup.Branching.And, Setup.Branching.Or),
+        childIsBasicProbability = 0,
+        branchingWidth = 2,
+        probabilityOf = id => 1D / id
+    )
+
+    val depth4 = Recipe(
+        depth = 4,
+        branching = Seq(Setup.Branching.And, Setup.Branching.Or),
+        childIsBasicProbability = 0,
+        branchingWidth = 2,
+        probabilityOf = id => 1D / id
+    )
+
+    val depth5 = Recipe(
+        depth = 5,
+        branching = Seq(Setup.Branching.And, Setup.Branching.Or),
+        childIsBasicProbability = 0,
+        branchingWidth = 2,
+        probabilityOf = id => 1D / id
+    )
+
     val depth10 = Recipe(
         depth = 10,
-        branching = Seq(Setup.Branching.And, Setup.Branching.Or),
-        childIsBasicProbability = 0,
-        branchingWidth = 2,
-        probabilityOf = id => 1D / id
-    )
-
-    val depth100 = Recipe(
-        depth = 100,
-        branching = Seq(Setup.Branching.And, Setup.Branching.Or),
-        childIsBasicProbability = 0,
-        branchingWidth = 2,
-        probabilityOf = id => 1D / id
-    )
-
-    val depth1000 = Recipe(
-        depth = 1000,
-        branching = Seq(Setup.Branching.And, Setup.Branching.Or),
-        childIsBasicProbability = 0,
-        branchingWidth = 2,
-        probabilityOf = id => 1D / id
-    )
-
-    val depth10000 = Recipe(
-        depth = 10000,
         branching = Seq(Setup.Branching.And, Setup.Branching.Or),
         childIsBasicProbability = 0,
         branchingWidth = 2,
@@ -217,28 +235,29 @@ object Setup {
     }
 
     // main method to manually verify our generators indeed work the same way - the generated trees are 'the same'.
-    @main
-    def main(): Unit = {
-        val (decisionTree10, probabilities10, containsId10) = makeDecisionTree(depth10)
-        println(ppDecisionTree(decisionTree10, probabilities10))
+    def main(args: Array[String]): Unit = {
+        val recipe = depth4;
 
-        val faultTree10 = makeFaultTree(depth10)
-        val layers10 = faulttree.layers(faultTree10)
-        println(ppFaultTree(faultTree10))
+        val (decisionTree, probabilities, containsId) = makeDecisionTree(recipe)
+        println(ppDecisionTree(decisionTree, probabilities))
+
+        val faultTree = makeFaultTree(recipe)
+        val layers = faulttree.layers(faultTree)
+        println(ppFaultTree(faultTree))
 
         // calculate heights, they should be the same also.
-        println(decisiontree.height(decisionTree10, probabilities10, containsId10))
-        println(faulttree.height(faultTree10, layers10))
+        println(decisiontree.height(decisionTree, probabilities, containsId))
+        println(faulttree.height(faultTree, layers))
     }
 
     def ppDecisionTree(tree: decisiontree.BooleanFormula, probabilities: Seq[Probability]): String = tree match {
-        case decisiontree.BooleanFormula.Variable(id) => s"id=${id},prob=${probabilities(id)}"
+        case decisiontree.BooleanFormula.Variable(id) => s"Leaf(id=${id},prob=${probabilities(id)})"
         case decisiontree.BooleanFormula.Or(left, right) => s"Or(${ppDecisionTree(left, probabilities)},${ppDecisionTree(right, probabilities)})"
         case decisiontree.BooleanFormula.And(left, right) => s"And(${ppDecisionTree(left, probabilities)},${ppDecisionTree(right, probabilities)})"
     }
 
     def ppFaultTree(tree: faulttree.FaultTree): String = tree match {
-        case faulttree.FaultTree.BasicEvent(id, prob) => s"id=${id},prob=${prob}"
+        case faulttree.FaultTree.BasicEvent(id, prob) => s"Leaf(id=${id},prob=${prob})"
         case faulttree.FaultTree.OrEvent(id, children) => s"Or(${children.map(ppFaultTree).mkString(",")})"
         case faulttree.FaultTree.AndEvent(id, children) => s"And(${children.map(ppFaultTree).mkString(",")})"
     }
