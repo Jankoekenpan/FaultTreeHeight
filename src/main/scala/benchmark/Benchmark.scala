@@ -28,7 +28,7 @@ class MyBenchmark {
 
     @Setup
     def setup(): Unit = {
-        val recipe = Setup.depth1
+        val recipe = Setup.depth4
 
         val (decisionTree10, decisionTree10Probabilities, decisionTree10IdChecker) = Setup.makeDecisionTree(recipe)
         this.decisionTree = decisionTree10
@@ -69,12 +69,12 @@ class MyBenchmark {
     }
 
     @Benchmark
-    def testHeightDecisionTree10(): Double = {
+    def testHeightDecisionTree4(): Double = {
         decisiontree.height(decisionTree, decisionTreeProbabilities, decisionTreeIdLookup)
     }
 
     @Benchmark
-    def testHeightFaultTree10(): Double = {
+    def testHeightFaultTree4(): Double = {
         faulttree.height(faultTree, faultTreeLayers)
     }
 }
