@@ -32,7 +32,7 @@ def computeLookupBiId()(lookup: BooleanFormula, variableId: Id): Boolean = {
 }
 
 def subsuper(formula: BooleanFormula, superscript: Id, subscript: Boolean): BooleanFormula = formula match {
-    case f @ (True | False) => f
+    case lit @ (True | False) => lit
     case v @ Variable(id) => if id == superscript then literal(subscript) else v
     case And(_, False) => False
     case And(False, _) => False
@@ -42,14 +42,14 @@ def subsuper(formula: BooleanFormula, superscript: Id, subscript: Boolean): Bool
     case And(a, True) => subsuper(a, superscript, subscript)
     case Or(False, b) => subsuper(b, superscript, subscript)
     case Or(a, False) => subsuper(a, superscript, subscript)
-    case And(lhs, rhs) =>
+    case conjunction @ And(lhs, rhs) =>
         val nlhs = subsuper(lhs, superscript, subscript)
         val nrhs = subsuper(rhs, superscript, subscript)
-        if nlhs == lhs && nrhs == rhs then And(lhs, rhs) else subsuper(And(nlhs, nrhs), superscript, subscript)
-    case Or(lhs, rhs) =>
+        if nlhs == lhs && nrhs == rhs then conjunction else subsuper(And(nlhs, nrhs), superscript, subscript)
+    case disjunction @ Or(lhs, rhs) =>
         val nlhs = subsuper(lhs, superscript, subscript)
         val nrhs = subsuper(rhs, superscript, subscript)
-        if nlhs == lhs && nrhs == rhs then Or(lhs, rhs) else subsuper(Or(nlhs, nrhs), superscript, subscript)
+        if nlhs == lhs && nrhs == rhs then disjunction else subsuper(Or(nlhs, nrhs), superscript, subscript)
 }
 
 def literal(boolean: Boolean): BooleanFormula = boolean match

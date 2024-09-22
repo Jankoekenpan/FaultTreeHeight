@@ -13,7 +13,7 @@ Your IDE should now recognise this project as an [SBT](https://www.scala-sbt.org
 - DecisionTree.scala: contains the legacy height calculation for boolean formulae.
 - FaultTree.scala: contains the new height calculation for tree-like fault trees.
 - Benchmark.scala: contains a [JMH](https://openjdk.org/projects/code-tools/jmh/) benchmark for comparing the running times of both algorithms.
-  There is also some auxiliary code for generating random decision trees and fault trees.
+  There is also some auxiliary code for generating decision trees and fault trees.
 
 ## Running the benchmarks
 
