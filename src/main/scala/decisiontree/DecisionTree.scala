@@ -58,6 +58,9 @@ def literal(boolean: Boolean): BooleanFormula = boolean match
 
 type RealNumber = Double    // We use IEEE 754 double precision floating point numbers for speed. Can change it to BigDecimal at any time for better accuracy.
 
+// TODO could we do memoisation of some heights?
+// TODO could probably use a WeakHashMap.
+
 def height(formula: BooleanFormula, probabilities: Seq[RealNumber], containsVariable: (BooleanFormula, Id) => Boolean): RealNumber = formula match
     case BooleanFormula.True => 0   // used to be 1.
     case BooleanFormula.False => 0  // used to be 1.

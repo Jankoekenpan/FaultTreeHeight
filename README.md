@@ -18,3 +18,7 @@ Your IDE should now recognise this project as an [SBT](https://www.scala-sbt.org
 ## Running the benchmarks
 
 Execute `sbt jmh:run` from a terminal.
+
+## Approximation ratios
+
+Execute ApproximationRatios#main in order to generate the approximation ratios csv file.
