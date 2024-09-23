@@ -108,11 +108,12 @@ object ApproximationRatio {
         for (b <- Setup.Branching.values; i <- 1 to 100) {
             printRatio(file, recipe(3, 2, b))
             printRatio(file, recipe(3, 3, b))
+            //recipe of depth 3 and 4 children per vertex is already problematic for the enumeration algorithm
         }
-        //printRatio(recipe(3, 4)) // too slow
 
         for (b <- Setup.Branching.values; i <- 1 to 100) {
             printRatio(file, recipe(4, 2, b))
+            //recipe of depth 4 and 3 children per vertex is already problematic for the enumeration algorithm
         }
     }
 
@@ -123,7 +124,7 @@ object ApproximationRatio {
         val heightFaultTree = faulttree.height(faultTree)
         val heightDecisionTree = decisiontree.height.tupled(decisionTree)
 
-        val line = s"$faultTree;$heightDecisionTree;$heightFaultTree;${ratio(heightFaultTree, heightDecisionTree)}\n"
+        val line = s"\"$faultTree\";$heightDecisionTree;$heightFaultTree;${ratio(heightFaultTree, heightDecisionTree)}\n"
         print(line)
         writeString(file, line)
     }
