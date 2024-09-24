@@ -82,70 +82,6 @@ class MyBenchmark {
 
 }
 
-object ApproximationRatio {
-
-    val outFile = "ratios.csv"
-
-    private def writeString(file: Path, string: String): Unit = {
-        Files.writeString(file, string, StandardOpenOption.CREATE, StandardOpenOption.WRITE, StandardOpenOption.APPEND)
-    }
-
-    def main(args: Array[String]): Unit = {
-        val file = Files.createFile(Path.of(outFile))
-
-        for (b <- Setup.Branching.values; i <- 1 to 100) {
-            printRatio(file, recipe(2, 2, b))
-            printRatio(file, recipe(2, 3, b))
-            printRatio(file, recipe(2, 4, b))
-            printRatio(file, recipe(2, 5, b))
-            printRatio(file, recipe(2, 6, b))
-            printRatio(file, recipe(2, 7, b))
-            printRatio(file, recipe(2, 8, b))
-            printRatio(file, recipe(2, 9, b))
-            printRatio(file, recipe(2, 10, b))
-        }
-
-        for (b <- Setup.Branching.values; i <- 1 to 100) {
-            printRatio(file, recipe(3, 2, b))
-            printRatio(file, recipe(3, 3, b))
-            //recipe of depth 3 and 4 children per vertex is already problematic for the enumeration algorithm
-        }
-
-        for (b <- Setup.Branching.values; i <- 1 to 100) {
-            printRatio(file, recipe(4, 2, b))
-            //recipe of depth 4 and 3 children per vertex is already problematic for the enumeration algorithm
-        }
-    }
-
-    def printRatio(file: Path, recipe: Setup.Recipe): Unit = {
-        val faultTree = Setup.makeAlternatingFaultTree(recipe)
-        val decisionTree = Setup.translateToDecisionTree(faultTree)
-
-        val heightFaultTree = faulttree.height(faultTree)
-        val heightDecisionTree = decisiontree.height.tupled(decisionTree)
-
-        val line = s"\"$faultTree\";$heightDecisionTree;$heightFaultTree;${ratio(heightFaultTree, heightDecisionTree)}\n"
-        print(line)
-        writeString(file, line)
-    }
-
-    def ratio(approximation: Double, realValue: Double): Double = approximation / realValue
-
-    def recipe(depth: Int, width: Int, startNode: Setup.Branching): Setup.Recipe = Setup.Recipe(
-        depth = depth,
-        branching = Seq(startNode),
-        childIsBasicProbability = 0.1,
-        branchingWidth = width,
-        probabilityOf = id => random()
-    )
-
-    @tailrec
-    def random(): Double = {
-        val r = Math.random()
-        if r == 0 then random() else r
-    }
-}
-
 object Setup {
 
     enum Branching extends java.lang.Enum[Branching]:
@@ -181,58 +117,6 @@ object Setup {
         branchingWidth = 2,
         probabilityOf = id => 1D / id
     )
-
-    def translateToDecisionTree(faultTree: faulttree.FaultTree): (decisiontree.BooleanFormula, Seq[Double]) = {
-        val probabilities = Seq.newBuilder[Double]
-        var curId = 0;
-        def nextId(): Int = {
-            val id = curId
-            curId += 1
-            id
-        }
-
-        def matchTree(faultTree: faulttree.FaultTree): decisiontree.BooleanFormula = {
-            faultTree match
-                case faulttree.FaultTree.BasicEvent(_, p) =>
-                    probabilities.addOne(p)
-                    decisiontree.BooleanFormula.Variable(nextId())
-                case faulttree.FaultTree.AndEvent(_, children) =>
-                    createBalancedAnd(children.map(matchTree), nextId)
-                case faulttree.FaultTree.OrEvent(_, children) =>
-                    createBalancedOr(children.map(matchTree), nextId)
-        }
-
-        (matchTree(faultTree), probabilities.result())
-    }
-
-    def makeAlternatingFaultTree(recipe: Recipe): faulttree.FaultTree = {
-        val idGen = new AtomicInteger()
-
-        def makeFaultTree(recipe: Recipe): faulttree.FaultTree = {
-            val id = idGen.getAndIncrement()
-
-            if (recipe.depth == 1) {
-                faulttree.FaultTree.BasicEvent(id, recipe.probabilityOf(id))
-            } else {
-                val branchType = recipe.branching(id % recipe.branching.size)
-                val children = for
-                    _ <- 0 until recipe.branchingWidth
-                yield if Math.random() > recipe.childIsBasicProbability then
-                    // child is and-gate or or-gate
-                    makeFaultTree(recipe.copy(depth = recipe.depth - 1, branching = Seq(other(branchType))))
-                else
-                    // child is basic event
-                    val childId = idGen.getAndIncrement()
-                    faulttree.FaultTree.BasicEvent(childId, recipe.probabilityOf(childId))
-
-                branchType match
-                    case Branching.And => faulttree.FaultTree.AndEvent(id, children)
-                    case Branching.Or => faulttree.FaultTree.OrEvent(id, children)
-            }
-        }
-
-        makeFaultTree(recipe)
-    }
 
     def makeFaultTree(recipe: Recipe): faulttree.FaultTree = {
         val idGen = new AtomicInteger()
@@ -299,7 +183,7 @@ object Setup {
         (tree, probabilities, variableLookup)
     }
 
-    private def createBalancedOr(children: Seq[decisiontree.BooleanFormula], nextId: () => Id): decisiontree.BooleanFormula = children match {
+    def createBalancedOr(children: Seq[decisiontree.BooleanFormula], nextId: () => Id): decisiontree.BooleanFormula = children match {
         case Seq(single) => single
         case _ =>
             val nodeCount = children.size
@@ -311,7 +195,7 @@ object Setup {
             decisiontree.BooleanFormula.Or(createBalancedOr(leftChildren, nextId), createBalancedOr(rightChildren, nextId))
     }
 
-    private def createBalancedAnd(children: Seq[decisiontree.BooleanFormula], nextId: () => Id): decisiontree.BooleanFormula = children match {
+    def createBalancedAnd(children: Seq[decisiontree.BooleanFormula], nextId: () => Id): decisiontree.BooleanFormula = children match {
         case Seq(single) => single
         case _ =>
             val nodeCount = children.size
@@ -344,17 +228,6 @@ object Setup {
         // calculate heights, they should be the same also.
 //        println(decisiontree.height(decisionTree, probabilities, containsId))
 //        println(faulttree.height(faultTree, layers))
-
-        val randomTree = makeAlternatingFaultTree(Recipe(
-            depth = 3,
-            branching = Seq(Branching.And),
-            childIsBasicProbability = 0,
-            branchingWidth = 3,
-            probabilityOf = id => Math.random()
-        ))
-
-        println(ppFaultTree(randomTree))
-        println(ppDecisionTree.tupled(translateToDecisionTree(randomTree)))
     }
 
     def ppDecisionTree(tree: decisiontree.BooleanFormula, probabilities: Seq[Probability]): String = tree match {
