@@ -11,6 +11,8 @@ enum BooleanFormula:
 
 import BooleanFormula.*
 
+import scala.collection.mutable
+
 def computeLookupBiId()(lookup: BooleanFormula, variableId: Id): Boolean = {
     val lookupMap = new java.util.WeakHashMap[BooleanFormula, Set[Id]]()
 
@@ -58,27 +60,46 @@ def literal(boolean: Boolean): BooleanFormula = boolean match
 
 type RealNumber = Double    // We use IEEE 754 double precision floating point numbers for speed. Can change it to BigDecimal at any time for better accuracy.
 
-// TODO could we do memoisation of some heights?
-// TODO could probably use a WeakHashMap.
+case class Cache(
+        heights: mutable.WeakHashMap[BooleanFormula, RealNumber],
+        heightKs: mutable.WeakHashMap[(BooleanFormula, Int), RealNumber]
+)
 
-def height(formula: BooleanFormula, probabilities: Seq[RealNumber], containsVariable: (BooleanFormula, Id) => Boolean): RealNumber = formula match
-    case BooleanFormula.True => 0   // used to be 1.
-    case BooleanFormula.False => 0  // used to be 1.
-    case _ =>
-        val heights = for
-            k <- probabilities.indices
-            if containsVariable(formula, k)
-        yield height(k, formula, probabilities, containsVariable)
-        heights.min
+object Cache:
+    def apply(): Cache = Cache(new mutable.WeakHashMap(), new mutable.WeakHashMap())
 
-def height(k/*zero-based*/: Int, formula: BooleanFormula, probabilities: Seq[RealNumber], containsVariable: (BooleanFormula, Id) => Boolean): RealNumber =
+def height(formula: BooleanFormula, probabilities: Seq[RealNumber], containsVariable: (BooleanFormula, Id) => Boolean, cache: Cache): RealNumber = {
+    val cachedHeight = cache.heights.get(formula)
+    if cachedHeight.isDefined then return cachedHeight.get
+
+    val result = formula match
+        case BooleanFormula.True => 0 // used to be 1.
+        case BooleanFormula.False => 0 // used to be 1.
+        case _ =>
+            val heights = for
+                k <- probabilities.indices
+                if containsVariable(formula, k)
+            yield height(k, formula, probabilities, containsVariable, cache)
+            heights.min
+    cache.heights.put(formula, result)
+    result
+}
+
+def height(k/*zero-based*/: Int, formula: BooleanFormula, probabilities: Seq[RealNumber], containsVariable: (BooleanFormula, Id) => Boolean, cache: Cache): RealNumber = {
+    val cacheKey = (formula, k)
+    val cachedHeightK = cache.heightKs.get(cacheKey)
+    if cachedHeightK.isDefined then return cachedHeightK.get
+
     val pk = probabilities(k)
     val fk1 = subsuper(formula, k, true)
     val fk0 = subsuper(formula, k, false)
-    1 + pk * height(fk1, probabilities, containsVariable) + (1 - pk) * height(fk0, probabilities, containsVariable)
+    val result = 1 + pk * height(fk1, probabilities, containsVariable, cache) + (1 - pk) * height(fk0, probabilities, containsVariable, cache)
+    cache.heightKs.put(cacheKey, result)
+    result
+}
 
 def height(formula: BooleanFormula, probabilities: Seq[RealNumber]): RealNumber =
-    height(formula, probabilities, computeLookupBiId())
+    height(formula, probabilities, computeLookupBiId(), Cache())
 
 @main def main(): Unit = {
     // 1.375
@@ -96,7 +117,7 @@ def height(formula: BooleanFormula, probabilities: Seq[RealNumber]): RealNumber 
     val formula = problematicTree
     val probabilities = Seq(1D/3D, 1D/4D, 1D/6D, 1D/7D, 1D/10D, 1D/11D, 1D/13D, 1D/14D)
 
-    println(height(formula, probabilities, computeLookupBiId()))
+    println(height(formula, probabilities, computeLookupBiId(), Cache()))
 }
 
 val problematicTree: BooleanFormula = And(

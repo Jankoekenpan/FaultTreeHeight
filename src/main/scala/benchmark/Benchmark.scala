@@ -61,7 +61,7 @@ class MyBenchmark {
 
     @Benchmark
     def testHeightDecisionTree(): Double = {
-        decisiontree.height(exampleDecisionTree, exampleDecisionTreeProbabilities, exampleDecisionTreeLookup)
+        decisiontree.height(exampleDecisionTree, exampleDecisionTreeProbabilities, exampleDecisionTreeLookup, decisiontree.Cache())
     }
 
     @Benchmark
@@ -71,14 +71,13 @@ class MyBenchmark {
 
     @Benchmark
     def testHeightDecisionTree4(): Double = {
-        decisiontree.height(decisionTree, decisionTreeProbabilities, decisionTreeIdLookup)
+        decisiontree.height(decisionTree, decisionTreeProbabilities, decisionTreeIdLookup, decisiontree.Cache())
     }
 
     @Benchmark
     def testHeightFaultTree4(): Double = {
         faulttree.height(faultTree, faultTreeLayers)
     }
-
 
 }
 

@@ -17,39 +17,39 @@ object ApproximationRatio {
     def childWidth(depth: Int): Int = (depth: @switch) match
         case 2 => jur.nextInt(2, 11)
         case 3 => jur.nextInt(2, 4)
-        case 4 => 2
+        case 4 => jur.nextInt(2, 4)
 
     def main(args: Array[String]): Unit = {
-        val randomTree = makeAlternatingFaultTree(Recipe(
-            depth = 3,
-            branching = Seq(Branching.And),
-            childIsBasicProbability = 0,
-            branchingWidth = 3,
-            probabilityOf = id => Math.random()
-        ))
-
-        println(ppFaultTree(randomTree))
-        println(ppDecisionTree.tupled(translateToDecisionTree(randomTree)))
+//        val randomTree = makeAlternatingFaultTree(Recipe(
+//            depth = 3,
+//            branching = Seq(Branching.And),
+//            childIsBasicProbability = 0,
+//            branchingWidth = 3,
+//            probabilityOf = id => Math.random()
+//        ))
+//
+//        println(ppFaultTree(randomTree))
+//        println(ppDecisionTree.tupled(translateToDecisionTree(randomTree)))
 
         val file = Files.createFile(Path.of(outFile))
 
-        for (b <- Setup.Branching.values; i <- 1 to 100) {
-            printRatio(file, recipe(2, b))
-            printRatio(file, recipe(2, b))
-            printRatio(file, recipe(2, b))
-            printRatio(file, recipe(2, b))
-            printRatio(file, recipe(2, b))
-            printRatio(file, recipe(2, b))
-            printRatio(file, recipe(2, b))
-            printRatio(file, recipe(2, b))
-            printRatio(file, recipe(2, b))
-        }
-
-        for (b <- Setup.Branching.values; i <- 1 to 100) {
-            printRatio(file, recipe(3, b))
-            printRatio(file, recipe(3, b))
-            //recipe of depth 3 and 4 children per vertex is already problematic for the enumeration algorithm
-        }
+//        for (b <- Setup.Branching.values; i <- 1 to 100) {
+//            printRatio(file, recipe(2, b))
+//            printRatio(file, recipe(2, b))
+//            printRatio(file, recipe(2, b))
+//            printRatio(file, recipe(2, b))
+//            printRatio(file, recipe(2, b))
+//            printRatio(file, recipe(2, b))
+//            printRatio(file, recipe(2, b))
+//            printRatio(file, recipe(2, b))
+//            printRatio(file, recipe(2, b))
+//        }
+//
+//        for (b <- Setup.Branching.values; i <- 1 to 100) {
+//            printRatio(file, recipe(3, b))
+//            printRatio(file, recipe(3, b))
+//            //recipe of depth 3 and 4 children per vertex is already problematic for the enumeration algorithm
+//        }
 
         for (b <- Setup.Branching.values; i <- 1 to 100) {
             printRatio(file, recipe(4, b))
@@ -60,6 +60,8 @@ object ApproximationRatio {
     def printRatio(file: Path, recipe: Setup.Recipe): Unit = {
         val faultTree = makeAlternatingFaultTree(recipe)
         val decisionTree = translateToDecisionTree(faultTree)
+
+        println(s"DEBUG decisiontree = $decisionTree")
 
         val heightFaultTree = faulttree.height(faultTree)
         val heightDecisionTree = decisiontree.height.tupled(decisionTree)
@@ -107,6 +109,11 @@ object ApproximationRatio {
         }
 
         (matchTree(faultTree), probabilities.result())
+    }
+
+    def debug[A](a: A): A = {
+        println(s"DEBUG a=${a}\n")
+        a
     }
 
     def makeAlternatingFaultTree(recipe: Recipe): faulttree.FaultTree = {
