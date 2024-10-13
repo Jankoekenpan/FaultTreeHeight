@@ -8,3 +8,6 @@ lazy val root = (project in file("."))
   .settings(
     name := "FaultTreeHeight"
   )
+
+javacOptions ++= Seq("--release", "23", "--enable-preview")
+javaOptions += "--enable-preview"

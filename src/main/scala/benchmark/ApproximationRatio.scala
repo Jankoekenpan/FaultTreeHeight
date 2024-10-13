@@ -4,6 +4,7 @@ import java.nio.file.{Files, OpenOption, Path, StandardOpenOption}
 import java.util.concurrent.atomic.AtomicInteger
 import scala.annotation.{switch, tailrec}
 import benchmark.Setup.{Branching, Recipe, other, ppDecisionTree, ppFaultTree}
+import faulttree.FaultTree
 
 object ApproximationRatio {
 
@@ -51,20 +52,31 @@ object ApproximationRatio {
 //            //recipe of depth 3 and 4 children per vertex is already problematic for the enumeration algorithm
 //        }
 
-        for (b <- Setup.Branching.values; i <- 1 to 100) {
-            printRatio(file, recipe(4, b))
-            //recipe of depth 4 and 3 children per vertex is already problematic for the enumeration algorithm
-        }
+//        for (b <- Setup.Branching.values; i <- 1 to 100) {
+//            printRatio(file, recipe(4, b))
+//            //recipe of depth 4 and 3 children per vertex is already problematic for the enumeration algorithm
+//        }
+
+        printRatio(file, decisiontree.faultTree)
     }
 
-    def printRatio(file: Path, recipe: Setup.Recipe): Unit = {
-        val faultTree = makeAlternatingFaultTree(recipe)
+    def printRatio(file: Path, recipe: Recipe): Unit =
+        printRatio(file, makeAlternatingFaultTree(recipe))
+
+    def printRatio(file: Path, faultTree: FaultTree): Unit = {
         val decisionTree = translateToDecisionTree(faultTree)
 
+        println(s"DEBUG faulttree = $faultTree")
         println(s"DEBUG decisiontree = $decisionTree")
+        val millisBefore = System.currentTimeMillis();
 
         val heightFaultTree = faulttree.height(faultTree)
         val heightDecisionTree = decisiontree.height.tupled(decisionTree)
+
+        val millisAfter = System.currentTimeMillis()
+
+        val differenceMillis = millisAfter - millisBefore
+        println(s"computation took ${differenceMillis / 1000} seconds.")
 
         val line = s""""$faultTree","$heightDecisionTree","$heightFaultTree","${ratio(heightFaultTree, heightDecisionTree)}"\n"""
         print(line)
