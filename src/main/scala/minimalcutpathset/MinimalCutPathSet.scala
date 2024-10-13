@@ -55,28 +55,16 @@ def approximate1(minimalCutsets: CutSets, minimalPathsets: PathSets, basicEvents
     val hNil: Function0[Double] = new CachedFunction0(() => 1D + (1D - probA) * asDouble(heights(List(Decision.Left))) + probA * asDouble(heights(List(Decision.Right))))
     heights.update(List(), hNil)
 
-    for i <- 0 to (n - 2) do
+    for i <- 0 to (n - 1) do
         if X(i).nonEmpty then
-            println(s"DEBUG X_${i} = ${X.getOrElse(i, Set())}")
-
             for x <- X(i) do
                 for j <- Seq[Decision](Decision.Right, Decision.Left) do
-                    val s: Path = j :: x        // x = 0, j = 1, s = 10
-                    val t: Path = x.dropWhile(_ == other(j))    // t = []
+                    val s: Path = j :: x
+                    val t: Path = x.dropWhile(_ == other(j))
 
                     val etaX: Event = etas(x).asInstanceOf[Event]
                     val Vs: Set[Event] = vertices(t) + etaX
                     vertices.put(s, Vs)
-
-                    if (s == List(Decision.Left, Decision.Left)) {
-                        println(s"V_00 = ${Vs}")
-                    }
-                    if (s == List(Decision.Left)) {
-                        println(s"V_0 = ${Vs}")
-                    }
-                    if (s == List(Decision.Right, Decision.Left)) {
-                        println(s"V_10 = ${Vs}")
-                    }
 
                     // TODO can we compute this more efficiently?
                     val Bs: Seq[Event] = if j == Decision.Right then
@@ -85,19 +73,6 @@ def approximate1(minimalCutsets: CutSets, minimalPathsets: PathSets, basicEvents
                     else
                         // { x | x <- cutset, cutset <- cutsets, Vs subSet cutset, x notIn Vs}
                         for { pathSet <- minimalPathsets; if Vs.subsetOf(pathSet); x <- pathSet; if !Vs.contains(x) } yield x
-
-                    if (s == List(Decision.Left)) {
-                        println(s"B_0 = ${Bs}")
-                    }
-                    if (s == List(Decision.Right)) {
-                        println(s"B_1 = ${Bs}")
-                    }
-                    if (s == List(Decision.Right, Decision.Right)) {
-                        println(s"B_11 = ${Bs}")
-                    }
-                    if (s == List(Decision.Left, Decision.Left)) {
-                        println(s"B_00 = ${Bs}")
-                    }
 
                     val (etaS: Eta, heightS: Height) = if Bs.nonEmpty then
                         val b = if j == Decision.Right then
@@ -113,19 +88,10 @@ def approximate1(minimalCutsets: CutSets, minimalPathsets: PathSets, basicEvents
                             (1 - probB) * asDouble(heights(Decision.Left :: s)) +
                             probB * asDouble(heights(Decision.Right :: s))))
                     else
-                        println("DEBUG!!")
                         (j: Eta, 0: Height)
 
                     etas.update(s, etaS)
                     heights.update(s, heightS)
-
-                    if (s == List(Decision.Right, Decision.Right)) {
-                        println(s"eta_11 = ${etaS}");
-                    }
-                    if (s == List(Decision.Left)) {
-                        println(s"eta_0 = ${etaS}")
-                    }
-
                 end for
             end for
         end if
