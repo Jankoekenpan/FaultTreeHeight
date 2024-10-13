@@ -5,7 +5,9 @@ import java.util.random.RandomGenerator
 type Event = Int
 type Probability = Double
 
-type Decision = 0/*left*/ | 1/*right*/
+enum Decision:
+    case Left   // 0
+    case Right  // 1
 type Path = List[Decision]
 
 type CutSets = Seq[Set[Event]]
@@ -13,7 +15,7 @@ type PathSets = Seq[Set[Event]]
 
 // TODO could probably use Trie data-structure for better efficiency.
 
-type Eta = Event | Boolean
+type Eta = Event | Decision
 type Etas = scala.collection.mutable.Map[Path, Eta]
 
 type Vertices = scala.collection.mutable.Map[Path, Set[Event]]
@@ -31,12 +33,18 @@ def nonZero(height: Height): Boolean = height match
     case 1: 1 => true
     case f: Function0[Double] => true
 
-def other(decision: Decision): Decision = (1 - decision).asInstanceOf[Decision]
+def other(decision: Decision): Decision = decision match
+    case Decision.Left => Decision.Right
+    case Decision.Right => Decision.Left
 
 def approximate1(minimalCutsets: CutSets, minimalPathsets: PathSets, basicEvents: Seq[Probability], random: RandomGenerator): (Etas, Double) = {
+    val n = basicEvents.size
+
     val etas: Etas = scala.collection.mutable.Map.empty
     val vertices: Vertices = scala.collection.mutable.Map.empty[Path, Set[Event]].withDefaultValue(Set())
     val heights: Heights = scala.collection.mutable.Map.empty
+    val X = scala.collection.mutable.Map.empty[Int, Set[Path]].withDefaultValue(Set())  // paths, by layer
+    X.update(0, Set(List()))
 
     // TODO re-enable this
     //val a: Event = random.nextInt(basicEvents.size)
@@ -44,67 +52,84 @@ def approximate1(minimalCutsets: CutSets, minimalPathsets: PathSets, basicEvents
     etas.update(List(), a)
 
     val probA: Probability = basicEvents(a)
-    val hNil: Function0[Double] = new CachedFunction0(() => 1D + (1D - probA) * asDouble(heights(List(0))) + probA * asDouble(heights(List(1))))
+    val hNil: Function0[Double] = new CachedFunction0(() => 1D + (1D - probA) * asDouble(heights(List(Decision.Left))) + probA * asDouble(heights(List(Decision.Right))))
     heights.update(List(), hNil)
 
-    var s: Path = Nil
+    for i <- 0 to (n - 2) do
+        if X(i).nonEmpty then
+            println(s"DEBUG X_${i} = ${X.getOrElse(i, Set())}")
 
-    // TODO remove debug
-    var count = 0
+            for x <- X(i) do
+                for j <- Seq[Decision](Decision.Right, Decision.Left) do
+                    val s: Path = j :: x        // x = 0, j = 1, s = 10
+                    val t: Path = x.dropWhile(_ == other(j))    // t = []
 
-    while nonZero(heights(s)) && count < 10 do
-        println("while")
-        println(s"s = ${s}")
-        val x: Path = s;
-        println(s"x = ${x}")
-        for j <- Seq[Decision](1, 0) do
-            println("for")
-            s = j :: x
-            println(s"s = ${s}")
-            val t: Path = x.dropWhile(_ == other(j))
+                    val etaX: Event = etas(x).asInstanceOf[Event]
+                    val Vs: Set[Event] = vertices(t) + etaX
+                    vertices.put(s, Vs)
 
-            val etaX: Event = etas(x).asInstanceOf[Event]
-            val Vs: Set[Event] = vertices(t) + etaX
-            vertices.put(s, Vs)
+                    if (s == List(Decision.Left, Decision.Left)) {
+                        println(s"V_00 = ${Vs}")
+                    }
+                    if (s == List(Decision.Left)) {
+                        println(s"V_0 = ${Vs}")
+                    }
+                    if (s == List(Decision.Right, Decision.Left)) {
+                        println(s"V_10 = ${Vs}")
+                    }
 
-            println(s"etaX = ${etaX}")  // TODO
-            println(s"Vs = ${Vs}")      // TODO
-            println(s"t = ${t}")        // TODO
+                    // TODO can we compute this more efficiently?
+                    val Bs: Seq[Event] = if j == Decision.Right then
+                        // { x | x <- cutset, cutset <- cutsets, Vs subSet cutset, x notIn Vs}
+                        for { cutSet <- minimalCutsets; if Vs.subsetOf(cutSet); x <- cutSet; if !Vs.contains(x) } yield x
+                    else
+                        // { x | x <- cutset, cutset <- cutsets, Vs subSet cutset, x notIn Vs}
+                        for { pathSet <- minimalPathsets; if Vs.subsetOf(pathSet); x <- pathSet; if !Vs.contains(x) } yield x
 
-            // TODO can we compute this more efficiently?
-            val Bs: Seq[Event] = if j == 1 then
-                // { x | x <- cutset, cutset <- cutsets, Vs subSet cutset, x notIn Vs}
-                for {cutSet <- minimalCutsets; if Vs.subsetOf(cutSet); x <- cutSet; if !Vs.contains(x) } yield x
-            else
-                // { x | x <- cutset, cutset <- cutsets, Vs subSet cutset, x notIn Vs}
-                for { pathSet <- minimalPathsets; if Vs.subsetOf(pathSet); x <- pathSet; if !Vs.contains(x) } yield x
+                    if (s == List(Decision.Left)) {
+                        println(s"B_0 = ${Bs}")
+                    }
+                    if (s == List(Decision.Right)) {
+                        println(s"B_1 = ${Bs}")
+                    }
+                    if (s == List(Decision.Right, Decision.Right)) {
+                        println(s"B_11 = ${Bs}")
+                    }
+                    if (s == List(Decision.Left, Decision.Left)) {
+                        println(s"B_00 = ${Bs}")
+                    }
 
-            println(s"Bs = ${Bs}")
+                    val (etaS: Eta, heightS: Height) = if Bs.nonEmpty then
+                        val b = if j == Decision.Right then
+                            Bs.maxBy(b => basicEvents(b))
+                        else
+                            Bs.minBy(b => basicEvents(b))
+                        val probB = basicEvents(b)
+                        X.updateWith(i + 1) {
+                            case Some(paths) => Some(paths + s);
+                            case None => Some(Set(s))
+                        }
+                        (b: Eta, CachedFunction0(() => 1 +
+                            (1 - probB) * asDouble(heights(Decision.Left :: s)) +
+                            probB * asDouble(heights(Decision.Right :: s))))
+                    else
+                        println("DEBUG!!")
+                        (j: Eta, 0: Height)
 
-            val (etaS: Event, heightS: Height) = if Bs.nonEmpty then
-                val (probB, b) = if j == 1 then
-                    basicEvents.zipWithIndex.maxBy { case (p: Probability, basicEvent: Event) => p }
-                else
-                    basicEvents.zipWithIndex.minBy { case (p: Probability, basicEvents: Event) => p }
-                (b, CachedFunction0(() => 1 + (1 - probB) * asDouble(heights(0 :: s)) + probB * asDouble(heights(1 :: s))))
-            else
-                println("DEBUG!!!") // TODO
-                (List(j), 0: 0)
+                    etas.update(s, etaS)
+                    heights.update(s, heightS)
 
-            etas.update(s, etaS)
-            heights.update(s, heightS)
+                    if (s == List(Decision.Right, Decision.Right)) {
+                        println(s"eta_11 = ${etaS}");
+                    }
+                    if (s == List(Decision.Left)) {
+                        println(s"eta_0 = ${etaS}")
+                    }
 
-            println("end of for body")  // TODO
-        end for
-        //println(s"h = ${heights}")
-
-        // TODO remove
-        count += 1
-
-        println("end of while body")
-        println()
-    end while
-
+                end for
+            end for
+        end if
+    end for
     (etas, hNil())
 }
 
