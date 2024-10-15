@@ -33,27 +33,28 @@ object ApproximationRatio {
 //
 //        println(ppFaultTree(randomTree))
 //        println(ppDecisionTree.tupled(translateToDecisionTree(randomTree)))
+        println(translateToDagTree(faulttree.anotherTree))
 
         val file = Files.createFile(Path.of(outFile))
         printHeader(file)
 
-        for (b <- Setup.Branching.values; i <- 1 to 100) {
-            printRatio(file, recipe(2, b))
-            printRatio(file, recipe(2, b))
-            printRatio(file, recipe(2, b))
-            printRatio(file, recipe(2, b))
-            printRatio(file, recipe(2, b))
-            printRatio(file, recipe(2, b))
-            printRatio(file, recipe(2, b))
-            printRatio(file, recipe(2, b))
-            printRatio(file, recipe(2, b))
-        }
-
-        for (b <- Setup.Branching.values; i <- 1 to 100) {
-            printRatio(file, recipe(3, b))
-            printRatio(file, recipe(3, b))
-            //recipe of depth 3 and 4 children per vertex is already problematic for the enumeration algorithm
-        }
+//        for (b <- Setup.Branching.values; i <- 1 to 100) {
+//            printRatio(file, recipe(2, b))
+//            printRatio(file, recipe(2, b))
+//            printRatio(file, recipe(2, b))
+//            printRatio(file, recipe(2, b))
+//            printRatio(file, recipe(2, b))
+//            printRatio(file, recipe(2, b))
+//            printRatio(file, recipe(2, b))
+//            printRatio(file, recipe(2, b))
+//            printRatio(file, recipe(2, b))
+//        }
+//
+//        for (b <- Setup.Branching.values; i <- 1 to 100) {
+//            printRatio(file, recipe(3, b))
+//            printRatio(file, recipe(3, b))
+//            //recipe of depth 3 and 4 children per vertex is already problematic for the enumeration algorithm
+//        }
 
 //        for (b <- Setup.Branching.values; i <- 1 to 100) {
 //            printRatio(file, recipe(4, b))

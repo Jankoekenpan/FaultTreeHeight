@@ -1,6 +1,6 @@
 package decisiontree
 
-import decisiontree.{BooleanFormula, Id, RealNumber, computeLookupBiId, subsuper}
+import decisiontree.{BooleanFormula, Id, RealNumber, computeLookupById, subsuper}
 import decisiontree.BooleanFormula.*
 import util.ConcurrentReferenceHashMap
 
@@ -79,7 +79,7 @@ def parHeightK(k/*zero-based*/: Int, formula: BooleanFormula, probabilities: Seq
 }
 
 def parHeight(formula: BooleanFormula, probabilities: Seq[RealNumber]): RealNumber =
-    parHeight(formula, probabilities, computeLookupBiId(), CCache())
+    parHeight(formula, probabilities, computeLookupById(), CCache())
 
 @main def parMain(): Unit = {
 

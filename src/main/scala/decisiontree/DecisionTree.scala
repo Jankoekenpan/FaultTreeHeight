@@ -13,7 +13,7 @@ import BooleanFormula.*
 
 import scala.collection.mutable
 
-def computeLookupBiId()(lookup: BooleanFormula, variableId: Id): Boolean = {
+def computeLookupById()(lookup: BooleanFormula, variableId: Id): Boolean = {
     val lookupMap = new java.util.WeakHashMap[BooleanFormula, Set[Id]]()
 
     def variables(formula: BooleanFormula): Set[Id] = {
@@ -99,7 +99,7 @@ def height(k/*zero-based*/: Int, formula: BooleanFormula, probabilities: Seq[Rea
 }
 
 def height(formula: BooleanFormula, probabilities: Seq[RealNumber]): RealNumber =
-    height(formula, probabilities, computeLookupBiId(), Cache())
+    height(formula, probabilities, computeLookupById(), Cache())
 
 @main def main(): Unit = {
     // 1.375
@@ -114,10 +114,13 @@ def height(formula: BooleanFormula, probabilities: Seq[RealNumber]): RealNumber 
 //    val probabilities = Seq(1D/2D, 1D/3D, 1D/4D, 1D/5D)
 
     // 1.08
-    val formula = problematicTree
-    val probabilities = Seq(1D/3D, 1D/4D, 1D/6D, 1D/7D, 1D/10D, 1D/11D, 1D/13D, 1D/14D)
+    var formula = problematicTree
+    var probabilities = Seq(1D/3D, 1D/4D, 1D/6D, 1D/7D, 1D/10D, 1D/11D, 1D/13D, 1D/14D)
+    println(height(formula, probabilities, computeLookupById(), Cache()))
 
-    println(height(formula, probabilities, computeLookupBiId(), Cache()))
+    formula = anotherTree
+    probabilities = Seq(2D/3D, 1D/4D, 1D/3D, 1D/2D)
+    println(height(formula, probabilities, computeLookupById(), Cache()))
 }
 
 val problematicTree: BooleanFormula = And(
@@ -139,6 +142,17 @@ val problematicTree: BooleanFormula = And(
         And(
             Variable(6),
             Variable(7)
+        )
+    )
+)
+
+val anotherTree = Or(
+    Variable(0),
+    And(
+        Variable(1),
+        Or(
+            Variable(2),
+            Variable(3)
         )
     )
 )

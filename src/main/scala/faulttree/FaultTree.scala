@@ -187,3 +187,14 @@ val problematicTree: FaultTree = FaultTree.AndEvent(0, Seq(
         ))
     ))
 ))
+
+val anotherTree = FaultTree.OrEvent(0, Seq(
+    FaultTree.BasicEvent(1, 2D/3D),
+    FaultTree.AndEvent(2, Seq(
+        FaultTree.BasicEvent(3, 1D/4D),
+        FaultTree.OrEvent(4, Seq(
+            FaultTree.BasicEvent(5, 1D/3D),
+            FaultTree.BasicEvent(6, 1D/2D)
+        ))
+    ))
+))

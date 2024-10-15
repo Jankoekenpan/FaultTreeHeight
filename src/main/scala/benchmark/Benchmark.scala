@@ -44,7 +44,7 @@ class MyBenchmark {
             decisiontree.BooleanFormula.Or(decisiontree.BooleanFormula.Variable(2), decisiontree.BooleanFormula.Variable(3))
         )
         this.exampleDecisionTreeProbabilities = Seq(1D / 2D, 1D / 3D, 1D / 4D, 1D / 5D)
-        this.exampleDecisionTreeLookup = decisiontree.computeLookupBiId()
+        this.exampleDecisionTreeLookup = decisiontree.computeLookupById()
 
         this.exampleFaultTree = faulttree.FaultTree.AndEvent('g', Seq(
             faulttree.FaultTree.OrEvent('e', Seq(
@@ -178,7 +178,7 @@ object Setup {
 
         val tree = makeDecisionTree(recipe)
         val probabilities = probabilitiesBuilder.result()
-        val variableLookup: (decisiontree.BooleanFormula, Id) => Boolean = decisiontree.computeLookupBiId()
+        val variableLookup: (decisiontree.BooleanFormula, Id) => Boolean = decisiontree.computeLookupById()
         (tree, probabilities, variableLookup)
     }
 

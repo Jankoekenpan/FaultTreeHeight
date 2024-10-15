@@ -64,7 +64,7 @@ def height(tree: FaultTree, basicEvents: IntMap[Probability]): Double = {
     val pathSets = minimalPathSets(tree)
     val basicEventIds = basicEvents.keys.toIndexedSeq
     val aBasicEvent = basicEventIds(basicEventIds.size / 2)
-    
+
     val (etas, height) = approximate1(cutSets, pathSets, basicEvents, aBasicEvent)
 
     height
@@ -72,6 +72,14 @@ def height(tree: FaultTree, basicEvents: IntMap[Probability]): Double = {
 
 def approximate1(minimalCutsets: CutSets, minimalPathsets: PathSets, basicEvents: IntMap[Probability], a: Event): (Etas, Double) = {
     val n = basicEvents.size
+
+//    var minimumEtas: Etas = scala.collection.mutable.Map.empty
+//    var minimumHeight: Double = Double.PositiveInfinity
+//    // TODO!!!
+//
+//    for (a <- basicEvents.keys) {
+//        // TODO put all of the next code in this block.
+//    }
 
     val etas: Etas = scala.collection.mutable.Map.empty
     val vertices: Vertices = scala.collection.mutable.Map.empty[Path, Set[Event]].withDefaultValue(Set())
@@ -155,12 +163,13 @@ def main(): Unit = {
     val cutsets = Set(Set(0), Set(1, 2), Set(1, 3))
     val pathsets = Set(Set(0, 1), Set(0, 2, 3))
     val probabilities = IntMap(0 -> 2D/3D, 1 -> 1D/4D, 2 -> 1D/3D, 3 -> 1D/2D)
-    val aBasicEvent = new java.util.Random().nextInt(4)
+    val aBasicEvent = new java.util.Random().nextInt(probabilities.size)    // unexpected result for aBasicEvent = 0
+    println(aBasicEvent)
 
     val (etas, hNil) = approximate1(cutsets, pathsets, probabilities, aBasicEvent)
 
     println(etas)
-    println(hNil)
+    println(hNil)   // 1.4583333333333335 for aBasicEvent = 0
 
     val exampleTree = FaultTree(0, Map(
         0 -> TreeNode.Combination(0, Gate.Or, Set(1, 2)),
