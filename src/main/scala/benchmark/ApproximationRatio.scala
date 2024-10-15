@@ -6,6 +6,8 @@ import scala.annotation.{switch, tailrec}
 import benchmark.Setup.{Branching, Recipe, other, ppDecisionTree, ppFaultTree}
 import faulttree.FaultTree
 
+import scala.collection.immutable.IntMap
+
 object ApproximationRatio {
 
     val jur = new java.util.Random()
@@ -33,24 +35,25 @@ object ApproximationRatio {
 //        println(ppDecisionTree.tupled(translateToDecisionTree(randomTree)))
 
         val file = Files.createFile(Path.of(outFile))
+        printHeader(file)
 
-//        for (b <- Setup.Branching.values; i <- 1 to 100) {
-//            printRatio(file, recipe(2, b))
-//            printRatio(file, recipe(2, b))
-//            printRatio(file, recipe(2, b))
-//            printRatio(file, recipe(2, b))
-//            printRatio(file, recipe(2, b))
-//            printRatio(file, recipe(2, b))
-//            printRatio(file, recipe(2, b))
-//            printRatio(file, recipe(2, b))
-//            printRatio(file, recipe(2, b))
-//        }
-//
-//        for (b <- Setup.Branching.values; i <- 1 to 100) {
-//            printRatio(file, recipe(3, b))
-//            printRatio(file, recipe(3, b))
-//            //recipe of depth 3 and 4 children per vertex is already problematic for the enumeration algorithm
-//        }
+        for (b <- Setup.Branching.values; i <- 1 to 100) {
+            printRatio(file, recipe(2, b))
+            printRatio(file, recipe(2, b))
+            printRatio(file, recipe(2, b))
+            printRatio(file, recipe(2, b))
+            printRatio(file, recipe(2, b))
+            printRatio(file, recipe(2, b))
+            printRatio(file, recipe(2, b))
+            printRatio(file, recipe(2, b))
+            printRatio(file, recipe(2, b))
+        }
+
+        for (b <- Setup.Branching.values; i <- 1 to 100) {
+            printRatio(file, recipe(3, b))
+            printRatio(file, recipe(3, b))
+            //recipe of depth 3 and 4 children per vertex is already problematic for the enumeration algorithm
+        }
 
 //        for (b <- Setup.Branching.values; i <- 1 to 100) {
 //            printRatio(file, recipe(4, b))
@@ -60,25 +63,34 @@ object ApproximationRatio {
         printRatio(file, decisiontree.faultTree)
     }
 
+    def printHeader(file: Path): Unit = {
+        val line = "Fault Tree,height (enumeration algorithm),height (vector operations algorithm),height (cutset/pathset algorithm),approximation ratio vector algorithm, approxmiation ratio cutset/pathset algorithm\n"
+        print(line)
+        writeString(file, line)
+    }
+
     def printRatio(file: Path, recipe: Recipe): Unit =
         printRatio(file, makeAlternatingFaultTree(recipe))
 
     def printRatio(file: Path, faultTree: FaultTree): Unit = {
         val decisionTree = translateToDecisionTree(faultTree)
+        val dagTree = translateToDagTree(faultTree)
 
-        println(s"DEBUG faulttree = $faultTree")
+        println(s"DEBUG tree faulttree = $faultTree")
         println(s"DEBUG decisiontree = $decisionTree")
+        println(s"DEBUG dag faulttree = $dagTree")
         val millisBefore = System.currentTimeMillis();
 
         val heightFaultTree = faulttree.height(faultTree)
         val heightDecisionTree = decisiontree.height.tupled(decisionTree)
+        val heightDagTree = minimalcutpathset.height.tupled(dagTree)
 
         val millisAfter = System.currentTimeMillis()
 
         val differenceMillis = millisAfter - millisBefore
         println(s"computation took ${differenceMillis / 1000} seconds.")
 
-        val line = s""""$faultTree","$heightDecisionTree","$heightFaultTree","${ratio(heightFaultTree, heightDecisionTree)}"\n"""
+        val line = s""""$faultTree","$heightDecisionTree","$heightFaultTree","$heightDagTree","${ratio(heightFaultTree, heightDecisionTree)}","${ratio(heightDagTree, heightDecisionTree)}"\n""".stripMargin
         print(line)
         writeString(file, line)
     }
@@ -97,6 +109,38 @@ object ApproximationRatio {
     def random(): Double = {
         val r = Math.random()
         if r == 0 then random() else r
+    }
+
+    def translateToDagTree(tree: faulttree.FaultTree): (minimalcutpathset.FaultTree, IntMap[Double]) = {
+        val eventsBuilder = scala.collection.immutable.Map.newBuilder[Int, minimalcutpathset.TreeNode]
+        val probabilities = IntMap.newBuilder[Double]
+
+        def translateToTree(tree: faulttree.FaultTree): minimalcutpathset.TreeNode = {
+            val treeNode = tree match
+                case faulttree.FaultTree.BasicEvent(id, p) =>
+                    probabilities.addOne(id, p)
+                    minimalcutpathset.TreeNode.BasicEvent(id, p)
+                case faulttree.FaultTree.AndEvent(id, children) =>
+                    children.foreach(translateToTree)
+                    minimalcutpathset.TreeNode.Combination(
+                        id,
+                        minimalcutpathset.Gate.And,
+                        children.map(_.event).toSet
+                    )
+                case faulttree.FaultTree.OrEvent(id, children) =>
+                    children.foreach(translateToTree)
+                    minimalcutpathset.TreeNode.Combination(
+                        id,
+                        minimalcutpathset.Gate.Or,
+                        children.map(_.event).toSet
+                    )
+            eventsBuilder.addOne(tree.event, treeNode)
+            treeNode
+        }
+
+        translateToTree(tree)
+
+        (minimalcutpathset.FaultTree(tree.event, eventsBuilder.result()), probabilities.result())
     }
 
     def translateToDecisionTree(faultTree: faulttree.FaultTree): (decisiontree.BooleanFormula, Seq[Double]) = {

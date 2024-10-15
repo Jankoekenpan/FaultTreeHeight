@@ -1,8 +1,10 @@
 package minimalcutpathset
 
+import faulttree.FaultTree.BasicEvent
 import minimalcutpathset.TreeNode.Combination
 
 import java.util.random.RandomGenerator
+import scala.collection.immutable.IntMap
 import scala.jdk.CollectionConverters.given
 import scala.util.boundary
 import scala.util.boundary.break
@@ -57,7 +59,18 @@ def other(decision: Decision): Decision = decision match
     case Decision.Zero => Decision.One
     case Decision.One => Decision.Zero
 
-def approximate1(minimalCutsets: CutSets, minimalPathsets: PathSets, basicEvents: Seq[Probability], random: RandomGenerator): (Etas, Double) = {
+def height(tree: FaultTree, basicEvents: IntMap[Probability]): Double = {
+    val cutSets = minimalCutSets(tree)
+    val pathSets = minimalPathSets(tree)
+    val basicEventIds = basicEvents.keys.toIndexedSeq
+    val aBasicEvent = basicEventIds(basicEventIds.size / 2)
+    
+    val (etas, height) = approximate1(cutSets, pathSets, basicEvents, aBasicEvent)
+
+    height
+}
+
+def approximate1(minimalCutsets: CutSets, minimalPathsets: PathSets, basicEvents: IntMap[Probability], a: Event): (Etas, Double) = {
     val n = basicEvents.size
 
     val etas: Etas = scala.collection.mutable.Map.empty
@@ -66,9 +79,9 @@ def approximate1(minimalCutsets: CutSets, minimalPathsets: PathSets, basicEvents
     val X = scala.collection.mutable.Map.empty[Int, Set[Path]].withDefaultValue(Set())  // paths, by layer
     X.update(0, Set(List()))
 
-    // TODO re-enable this
+    // original: random basic event. now: the middle basic event
     //val a: Event = random.nextInt(basicEvents.size)
-    val a: Event = 1 // B
+    //val a: Event = 1 // B
     etas.update(List(), a)
 
     val probA: Probability = basicEvents(a)
@@ -141,9 +154,10 @@ def main(): Unit = {
 
     val cutsets = Set(Set(0), Set(1, 2), Set(1, 3))
     val pathsets = Set(Set(0, 1), Set(0, 2, 3))
-    val probabilities = IndexedSeq(2D/3D, 1D/4D, 1D/3D, 1D/2D)
+    val probabilities = IntMap(0 -> 2D/3D, 1 -> 1D/4D, 2 -> 1D/3D, 3 -> 1D/2D)
+    val aBasicEvent = new java.util.Random().nextInt(4)
 
-    val (etas, hNil) = approximate1(cutsets, pathsets, probabilities, new java.util.Random())
+    val (etas, hNil) = approximate1(cutsets, pathsets, probabilities, aBasicEvent)
 
     println(etas)
     println(hNil)
