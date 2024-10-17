@@ -198,3 +198,17 @@ val anotherTree = FaultTree.OrEvent(0, Seq(
         ))
     ))
 ))
+
+val reproTree = FaultTree.OrEvent(0,Vector(
+    FaultTree.BasicEvent(1,0.43227359997383685),
+    FaultTree.AndEvent(2,Vector(
+        FaultTree.BasicEvent(3,0.852759862927743),
+        FaultTree.BasicEvent(4,0.37254938544467475),
+        FaultTree.BasicEvent(5,0.22111687978494943)
+    )),
+    FaultTree.AndEvent(6,Vector(
+        FaultTree.BasicEvent(7,0.7801324848806612),
+        FaultTree.BasicEvent(8,0.9046625728136396),
+        FaultTree.BasicEvent(9,0.9067115560033326)
+    ))
+))

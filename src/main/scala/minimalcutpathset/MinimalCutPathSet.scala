@@ -1,6 +1,7 @@
 package minimalcutpathset
 
 import faulttree.FaultTree.BasicEvent
+import minimalcutpathset.SetComputation.Sum
 import minimalcutpathset.TreeNode.Combination
 
 import java.util.random.RandomGenerator
@@ -62,10 +63,16 @@ def other(decision: Decision): Decision = decision match
 def height(tree: FaultTree, basicEvents: IntMap[Probability]): Double = {
     val cutSets = minimalCutSets(tree)
     val pathSets = minimalPathSets(tree)
+
+    println(s"DEBUG: cutSets = $cutSets")
+    println(s"DEBUG: pathSets = $pathSets")
+
     val basicEventIds = basicEvents.keys.toIndexedSeq
     val aBasicEvent = basicEventIds(basicEventIds.size / 2)
 
     val (etas, height) = approximate1(cutSets, pathSets, basicEvents, aBasicEvent)
+
+    println(s"DEBUG etas: $etas")
 
     height
 }
@@ -78,7 +85,6 @@ def approximate1(minimalCutsets: CutSets, minimalPathsets: PathSets, basicEvents
 //    // TODO!!!
 //
 //    for (a <- basicEvents.keys) {
-//        // TODO put all of the next code in this block.
 //    }
 
     val etas: Etas = scala.collection.mutable.Map.empty
@@ -184,67 +190,90 @@ def main(): Unit = {
     println(minimalCutSets(exampleTree))
     println(minimalPathSets(exampleTree))
 }
+//
+//def cutSetComputation(event: TreeNode, faultTree: FaultTree): SetComputation = event match
+//    case TreeNode.BasicEvent(id, _) => SetComputation.Basic(id)
+//    case TreeNode.Combination(id, Gate.And, children) => SetComputation.Product(children.map(c => cutSetComputation(faultTree.node(c), faultTree)))
+//    case TreeNode.Combination(id, Gate.Or, children) => SetComputation.Sum(children.map(c => cutSetComputation(faultTree.node(c), faultTree)))
+//
+//def pathSetComputation(event: TreeNode, faultTree: FaultTree): SetComputation = event match
+//    case TreeNode.BasicEvent(id, _) => SetComputation.Basic(id)
+//    case TreeNode.Combination(id, Gate.And, children) => SetComputation.Sum(children.map(c => cutSetComputation(faultTree.node(c), faultTree)))
+//    case TreeNode.Combination(id, Gate.Or, children) => SetComputation.Product(children.map(c => cutSetComputation(faultTree.node(c), faultTree)))
+//
+//def minimalCutSets(faultTree: FaultTree): CutSets =
+//    materialiseSet(cutSetComputation(faultTree.topNode, faultTree))
+//
+//def minimalPathSets(faultTree: FaultTree): PathSets =
+//    materialiseSet(pathSetComputation(faultTree.topNode, faultTree))
+//
+//enum SetComputation:
+//    case Basic(id: Event)
+//    case Product(children: Set[SetComputation])
+//    case Sum(children: Set[SetComputation])
+//
+//def materialiseSet(setComputation: SetComputation.Basic): Event = setComputation.id
+//def materialiseSet(setComputation: SetComputation.Product): Set[Event] = setComputation.children.map {
+//    case SetComputation.Basic(event) => event
+//}
+//def materialiseSet(setComputation: SetComputation.Sum): Set[Set[Event]] = setComputation.children.map {
+//    case SetComputation.Product(children) => children.map {
+//        case child : SetComputation.Basic => materialiseSet(child)
+//    }
+//    case SetComputation.Basic(event) => Set(event)
+//}
+//
+//def materialiseSet(setComputation: SetComputation): Set[Set[Event]] = {
+//    val dnf = toDNF(setComputation)
+//    println(s"DEBUG: dnf = $dnf")
+//    dnf match {
+//        case b: SetComputation.Basic => Set(Set(materialiseSet(b)))
+//        case p: SetComputation.Product => Set(materialiseSet(p))
+//        case s: SetComputation.Sum => materialiseSet(s)
+//    }
+//}
+//
+//// disjunctive normal form: sums of products
+//def toDNF(computation: SetComputation): SetComputation = computation match {
+//    case b: SetComputation.Basic => b
+//    case ProductWithSum((SetComputation.Sum(sumTerms), others: Set[SetComputation])) =>
+//        toDNF(SetComputation.Sum(sumTerms.map(sumTerm => toDNF(SetComputation.Product(others.map(toDNF) + sumTerm)))))
+//    case SetComputation.Product(children) =>
+//        val flattenedProducts: Set[SetComputation] = children.flatMap {
+//            case SetComputation.Product(innerTerms) => innerTerms
+//            case other => Set(other)
+//        }
+//        SetComputation.Product(flattenedProducts.map(toDNF))
+//    case SetComputation.Sum(children) =>
+//        val flattenedSums: Set[SetComputation] = children.flatMap {
+//            case SetComputation.Sum(innerTerms) => innerTerms
+//            case other => Set(other)
+//        }
+//        SetComputation.Sum(flattenedSums.map(toDNF))
+//}
 
-def minimalCutSets(faultTree: FaultTree): CutSets = {
-    val events = faultTree.events
+//object ProductWithSum {
+//    def unapply(expr: SetComputation): Option[(SetComputation.Sum, Set[SetComputation])] = expr match {
+//        case SetComputation.Product(children) =>
+//            children
+//                .find(child => child.isInstanceOf[SetComputation.Sum])
+//                .map(sum => (sum.asInstanceOf[SetComputation.Sum], children.excl(sum)))
+//        case _ => None
+//    }
+//}
 
-    def minimalCutSet(event: TreeNode): CutSets = event match {
-        case TreeNode.BasicEvent(id, probability) => Set(Set(id))
-        case TreeNode.Combination(id, Gate.And, children) =>
-            val childCutSets: Set[CutSets] = for {
-                child <- children
-                childNode = faultTree.node(child)
-                childCutSet = minimalCutSet(childNode)
-            } yield childCutSet
-            carthesianUnion(childCutSets)
-        case TreeNode.Combination(id, Gate.Or, children) =>
-            val childCutSets: Set[CutSets] = for {
-                child <- children
-                childNode = faultTree.node(child)
-                childCutSet = minimalCutSet(childNode)
-            } yield childCutSet
-            removeSupersets(childCutSets.flatten)
-    }
-
-    minimalCutSet(faultTree.topNode)
+@main
+def testDistribute(): Unit = {
+    val computation = SetComputation.Product(Set(
+        SetComputation.Sum(Set(SetComputation.Basic(1), SetComputation.Basic(2), SetComputation.Basic(3))),
+        SetComputation.Sum(Set(SetComputation.Basic(4), SetComputation.Basic(5), SetComputation.Basic(6))),
+        SetComputation.Sum(Set(SetComputation.Basic(7), SetComputation.Basic(8), SetComputation.Basic(9)))
+    ))
+    println(computation)
+    println(toDNF(computation))
 }
 
-def minimalPathSets(faultTree: FaultTree): PathSets = {
-    val events = faultTree.events
-
-    def minimalPathSet(event: TreeNode): PathSets = event match {
-        case TreeNode.BasicEvent(id, probability) => Set(Set(id))
-        case TreeNode.Combination(id, Gate.Or, children) =>
-            val childPathSets: Set[PathSets] = for {
-                child <- children
-                childNode = faultTree.node(child)
-                childPathSet = minimalPathSet(childNode)
-            } yield childPathSet
-            carthesianUnion(childPathSets)
-        case TreeNode.Combination(id, Gate.And, children) =>
-            val childPathSets: Set[PathSets] = for {
-                child <- children
-                childNode = faultTree.node(child)
-                childPathSet = minimalPathSet(childNode)
-            } yield childPathSet
-            removeSupersets(childPathSets.flatten)
-    }
-
-    minimalPathSet(faultTree.topNode)
-}
-
-def carthesianUnion(cutSetss: Set[CutSets]): CutSets = {
-    val cutSets: CutSets = for {
-        cutSetsX <- cutSetss
-        cutSetsY <- cutSetss
-        if !(cutSetsX eq cutSetsY)
-        cutSetX <- cutSetsX
-        cutSetY <- cutSetsY
-    } yield cutSetX ++ cutSetY
-    removeSupersets(cutSets)
-}
-
-def removeSupersets(cutSets: CutSets): CutSets = {
+def removeSupersets(cutSets: Set[Set[Event]]): Set[Set[Event]] = {
     val result = new java.util.HashSet[CutSet]()
 
     boundary {
@@ -267,3 +296,26 @@ def removeSupersets(cutSets: CutSets): CutSets = {
     result.asScala.toSet
 }
 
+def MOCUS(faultTree: FaultTree): Seq[Set[Event]] = {
+    var ListOfCutSets = IndexedSeq(Set(faultTree.topEvent))
+
+    var idxC = 0
+    while idxC <= ListOfCutSets.size do
+        val C: Set[Event] = ListOfCutSets(idxC)
+        for E <- C do
+            faultTree.node(E) match
+                case TreeNode.Combination(_, Gate.And, children) =>
+                    val Cnew: Set[Event] = C.excl(E).union(children)
+                    ListOfCutSets = ListOfCutSets.patch(idxC, Nil, 1).appended(Cnew)
+                case TreeNode.Combination(_, Gate.Or, children) =>
+                    ListOfCutSets = ListOfCutSets.patch(idxC, Nil, 1)
+                    for Eprime <- children do
+                        val Cnew = C.excl(E).incl(Eprime)
+                        ListOfCutSets = ListOfCutSets.appended(Cnew)
+                    end for
+                case _ => // basic event, do nothing
+        end for
+        idxC += 1
+    end while
+    ListOfCutSets
+}
