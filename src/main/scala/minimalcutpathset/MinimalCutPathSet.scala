@@ -189,14 +189,13 @@ def main(): Unit = {
     println(minimalPathSets(exampleTree))
 }
 
-
 def minimalCutSets(faultTree: FaultTree): CutSets =
-    removeSupersets(MOCUS(faultTree))
+    MOCUS(faultTree).toSet
 
 def minimalPathSets(faultTree: FaultTree): PathSets =
-    removeSupersets(MOPAS(faultTree))
+    MOPAS(faultTree).toSet
 
-def removeSupersets(cutSets: Seq[Set[Event]]): Set[Set[Event]] = {
+def removeSupersets(cutSets: Seq[Set[Event]]): IndexedSeq[Set[Event]] = {
     val result = new java.util.HashSet[CutSet]()
 
     boundary {
@@ -216,7 +215,7 @@ def removeSupersets(cutSets: Seq[Set[Event]]): Set[Set[Event]] = {
         }
     }
 
-    result.asScala.toSet
+    result.asScala.toIndexedSeq
 }
 
 def MOCUS(faultTree: FaultTree): Seq[Set[Event]] = {
@@ -225,20 +224,26 @@ def MOCUS(faultTree: FaultTree): Seq[Set[Event]] = {
     var idxC = 0
     while idxC < ListOfCutSets.size do
         val C: Set[Event] = ListOfCutSets(idxC)
+        var expanded = false
         for E <- C do
             faultTree.node(E) match
                 case TreeNode.Combination(_, Gate.And, children) =>
                     val Cnew: Set[Event] = C.excl(E).union(children)
-                    ListOfCutSets = ListOfCutSets.patch(idxC, Nil, 1).appended(Cnew)
+                    ListOfCutSets = removeSupersets(ListOfCutSets.patch(idxC, Nil, 1).appended(Cnew))
+                    expanded = true
                 case TreeNode.Combination(_, Gate.Or, children) =>
-                    ListOfCutSets = ListOfCutSets.patch(idxC, Nil, 1)
+                    ListOfCutSets = ListOfCutSets.patch(idxC, Nil, 1)   //pseudo code does this inside for loop body, but we only need to remove C just once.
                     for Eprime <- children do
                         val Cnew = C.excl(E).incl(Eprime)
-                        ListOfCutSets = ListOfCutSets.appended(Cnew)
+                        ListOfCutSets = removeSupersets(ListOfCutSets.appended(Cnew))
                     end for
+                    expanded = true
                 case _ =>
-                    idxC += 1
+                    // basic event, do nothing.
         end for
+        if !expanded then
+            idxC += 1
+        end if
     end while
     ListOfCutSets
 }
@@ -249,20 +254,59 @@ def MOPAS(faultTree: FaultTree): Seq[Set[Event]] = {
     var idxC = 0
     while idxC < ListOfPathSets.size do
         val C: Set[Event] = ListOfPathSets(idxC)
+        var expanded = false
         for E <- C do
             faultTree.node(E) match
                 case TreeNode.Combination(_, Gate.Or, children) =>
                     val Cnew: Set[Event] = C.excl(E).union(children)
-                    ListOfPathSets = ListOfPathSets.patch(idxC, Nil, 1).appended(Cnew)
+                    ListOfPathSets = removeSupersets(ListOfPathSets.patch(idxC, Nil, 1).appended(Cnew))
+                    expanded = true
                 case TreeNode.Combination(_, Gate.And, children) =>
                     ListOfPathSets = ListOfPathSets.patch(idxC, Nil, 1)
                     for Eprime <- children do
                         val Cnew = C.excl(E).incl(Eprime)
-                        ListOfPathSets = ListOfPathSets.appended(Cnew)
+                        ListOfPathSets = removeSupersets(ListOfPathSets.appended(Cnew))
                     end for
+                    expanded = true
                 case _ =>
-                    idxC += 1
+                    // basic event, do nothing.
         end for
+        if !expanded then
+            idxC += 1
+        end if
     end while
     ListOfPathSets
+}
+
+val reproTree = FaultTree(0, Map(
+    0 -> TreeNode.Combination(0,Gate.Or,Set(1, 2, 6)),
+    5 -> TreeNode.BasicEvent(5,0.22111687978494943),
+    1 -> TreeNode.BasicEvent(1,0.43227359997383685),
+    6 -> Combination(6,Gate.And,Set(7, 8, 9)),
+    9 -> TreeNode.BasicEvent(9,0.9067115560033326),
+    2 -> Combination(2,Gate.And,Set(3, 4, 5)),
+    7 -> TreeNode.BasicEvent(7,0.7801324848806612),
+    3 -> TreeNode.BasicEvent(3,0.852759862927743),
+    8 -> TreeNode.BasicEvent(8,0.9046625728136396),
+    4 -> TreeNode.BasicEvent(4,0.37254938544467475))
+)
+
+val inverseTree = FaultTree(0, Map(
+    0 -> TreeNode.Combination(0,Gate.And,Set(1, 2, 6)),
+    1 -> TreeNode.BasicEvent(1,0.43227359997383685),
+    2 -> Combination(2,Gate.Or,Set(3, 4, 5)),
+    3 -> TreeNode.BasicEvent(3,0.852759862927743),
+    4 -> TreeNode.BasicEvent(4,0.37254938544467475),
+    5 -> TreeNode.BasicEvent(5,0.22111687978494943),
+    6 -> Combination(6,Gate.Or,Set(7, 8, 9)),
+    7 -> TreeNode.BasicEvent(7,0.7801324848806612),
+    8 -> TreeNode.BasicEvent(8,0.9046625728136396),
+    9 -> TreeNode.BasicEvent(9, 0.9067115560033326),
+))  // AND(1, OR(3, 4, 5), OR(7, 8, 9)) -- {{1, 3, 7}, {1, 3, 8}, {1, 3, 9}, {1, 4, 7}, {1, 4, 8}, {1, 4, 9}, {1, 5, 7}, {1, 5, 8}, {1, 5, 9}}.
+
+@main def testSets(): Unit = {
+    println(minimalCutSets(reproTree))
+    println(minimalPathSets(reproTree))
+    println(minimalCutSets(inverseTree))
+    println(minimalPathSets(inverseTree))
 }
