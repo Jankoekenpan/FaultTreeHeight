@@ -61,12 +61,7 @@ def height(tree: FaultTree, basicEvents: IntMap[Probability]): Double = {
     val cutSets = minimalCutSets(tree)
     val pathSets = minimalPathSets(tree)
 
-    println(s"DEBUG: cutSets = $cutSets")
-    println(s"DEBUG: pathSets = $pathSets")
-
     val (etas, height) = approximate(cutSets, pathSets, basicEvents)
-
-    println(s"DEBUG etas: $etas")
 
     height
 }
@@ -80,6 +75,7 @@ def approximate(minimalCutSets: CutSets, minimalPathSets: PathSets, basicEvents:
     for bk <- basicEvents.keys do
         val etas: Etas = scala.collection.mutable.Map.empty
         val vertices: Vertices = scala.collection.mutable.Map.empty[Path, Set[Event]].withDefaultValue(Set())
+        val eventsOnPath: Vertices = scala.collection.mutable.Map.empty[Path, Set[Event]].withDefaultValue(Set())
         val heights: Heights = scala.collection.mutable.Map.empty
         val X = scala.collection.mutable.Map.empty[Int, Set[Path]].withDefaultValue(Set())  // paths, by layer
         X.update(0, Set(List()))
@@ -101,6 +97,9 @@ def approximate(minimalCutSets: CutSets, minimalPathSets: PathSets, basicEvents:
                         val Vs: Set[Event] = vertices(t) + etaX
                         vertices.put(s, Vs)
 
+                        val Es: Set[Event] = eventsOnPath(x) + etaX
+                        eventsOnPath.put(s, Es)
+
                         val (etaS: Eta, heightS: Height) =
                             if j == Decision.One then
                                 if minimalCutSets.contains(Vs) || minimalCutSets.exists(cutSet => cutSet.subsetOf(Vs)) then
@@ -109,7 +108,8 @@ def approximate(minimalCutSets: CutSets, minimalPathSets: PathSets, basicEvents:
                                     (etaS, heightS)
                                 else if minimalCutSets.exists(cutset => Vs.subsetOf(cutset)) then
                                     // TODO can we compute Bs more efficiently?
-                                    val Bs = for { cutSet <- minimalCutSets; if Vs.subsetOf(cutSet); x <- cutSet; if !Vs.contains(x) } yield x
+                                    val Bs = for { cutSet <- minimalCutSets; if Vs.subsetOf(cutSet); x <- cutSet; if !Es.contains(x) } yield x
+                                    println(s"DEBUG 1 Bs=${Bs}")  //TODO
                                     val b = Bs.maxBy(b => basicEvents(b))
                                     val probB = basicEvents(b)
 
@@ -124,7 +124,8 @@ def approximate(minimalCutSets: CutSets, minimalPathSets: PathSets, basicEvents:
                                     (etaS, heightS)
                                 else
                                     // TODO can we compute Bs more efficiently?
-                                    val Bs = for { cutSet <- minimalCutSets; x <- cutSet; if !Vs.contains(x); y <- (Vs - x); if cutSet.contains(y) } yield x
+                                    val Bs = for { cutSet <- minimalCutSets; x <- cutSet; if !Es.contains(x); y <- (Vs - x); if cutSet.contains(y) } yield x
+                                    println(s"DEBUG 2 Bs=${Bs}")  //TODO
                                     val b = Bs.maxBy(b => basicEvents(b))
                                     val probB = basicEvents(b)
 
@@ -145,7 +146,8 @@ def approximate(minimalCutSets: CutSets, minimalPathSets: PathSets, basicEvents:
                                     (etaS, heightS)
                                 else if minimalPathSets.exists(pathSet => Vs.subsetOf(pathSet)) then
                                     // TODO can we compute Bs more efficiently?
-                                    val Bs = for { pathSet <- minimalPathSets; if Vs.subsetOf(pathSet); x <- pathSet; if !Vs.contains(x) } yield x
+                                    val Bs = for { pathSet <- minimalPathSets; if Vs.subsetOf(pathSet); x <- pathSet; if !Es.contains(x) } yield x
+                                    println(s"DEBUG 3 Bs=${Bs}")  //TODO
                                     val b = Bs.minBy(b => basicEvents(b))
                                     val probB = basicEvents(b)
 
@@ -160,7 +162,8 @@ def approximate(minimalCutSets: CutSets, minimalPathSets: PathSets, basicEvents:
                                     (etaS, heightS)
                                 else
                                     // TODO can we compute Bs more efficiently?
-                                    val Bs = for { pathSet <- minimalPathSets; x <- pathSet; if !Vs.contains(x); y <- (Vs - x); if pathSet.contains(y) } yield x
+                                    val Bs = for { pathSet <- minimalPathSets; x <- pathSet; if !Es.contains(x); y <- (Vs - x); if pathSet.contains(y) } yield x
+                                    println(s"DEBUG 4 Bs=${Bs}")  //TODO
                                     val b = Bs.minBy(b => basicEvents(b))
                                     val probB = basicEvents(b)
 
