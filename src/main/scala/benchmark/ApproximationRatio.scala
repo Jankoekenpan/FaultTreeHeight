@@ -30,16 +30,17 @@ object ApproximationRatio {
 //            branchingWidth = 3,
 //            probabilityOf = id => Math.random()
 //        ))
-//
-//        println(ppFaultTree(randomTree))
-//        println(ppDecisionTree.tupled(translateToDecisionTree(randomTree)))
+
+        println(ppFaultTree(faulttree.reproTree))
+        println(ppDecisionTree.tupled(translateToDecisionTree(faulttree.reproTree)))
         val (dagTree, probabilities) = translateToDagTree(faulttree.reproTree)
         println(s"DEBUG dagtree = $dagTree")
         println(s"DEBUG height = ${minimalcutpathset.height(dagTree, probabilities)}")
 
-
         val file = Files.createFile(Path.of(outFile))
         printHeader(file)
+
+        printRatio(file, faulttree.reproTree)
 
 //        for (b <- Setup.Branching.values; i <- 1 to 100) {
 //            printRatio(file, recipe(2, b))
@@ -64,7 +65,7 @@ object ApproximationRatio {
 //            //recipe of depth 4 and 3 children per vertex is already problematic for the enumeration algorithm
 //        }
 
-        printRatio(file, decisiontree.faultTree)
+//        printRatio(file, decisiontree.faultTree)
     }
 
     def printHeader(file: Path): Unit = {

@@ -64,84 +64,132 @@ def height(tree: FaultTree, basicEvents: IntMap[Probability]): Double = {
     println(s"DEBUG: cutSets = $cutSets")
     println(s"DEBUG: pathSets = $pathSets")
 
-    val basicEventIds = basicEvents.keys.toIndexedSeq
-    val aBasicEvent = basicEventIds(basicEventIds.size / 2)
-
-    val (etas, height) = approximate1(cutSets, pathSets, basicEvents, aBasicEvent)
+    val (etas, height) = approximate(cutSets, pathSets, basicEvents)
 
     println(s"DEBUG etas: $etas")
 
     height
 }
 
-def approximate1(minimalCutsets: CutSets, minimalPathsets: PathSets, basicEvents: IntMap[Probability], a: Event): (Etas, Double) = {
+def approximate(minimalCutSets: CutSets, minimalPathSets: PathSets, basicEvents: IntMap[Probability]): (Etas, Double) = {
     val n = basicEvents.size
 
-//    var minimumEtas: Etas = scala.collection.mutable.Map.empty
-//    var minimumHeight: Double = Double.PositiveInfinity
-//    // TODO!!!
-//
-//    for (a <- basicEvents.keys) {
-//          TODO perform entire algorithm here. collect minima.
-//    }
+    var minimumEtas: Etas = scala.collection.mutable.Map.empty
+    var minimumHeight: Double = Double.PositiveInfinity
 
-    val etas: Etas = scala.collection.mutable.Map.empty
-    val vertices: Vertices = scala.collection.mutable.Map.empty[Path, Set[Event]].withDefaultValue(Set())
-    val heights: Heights = scala.collection.mutable.Map.empty
-    val X = scala.collection.mutable.Map.empty[Int, Set[Path]].withDefaultValue(Set())  // paths, by layer
-    X.update(0, Set(List()))
+    for bk <- basicEvents.keys do
+        val etas: Etas = scala.collection.mutable.Map.empty
+        val vertices: Vertices = scala.collection.mutable.Map.empty[Path, Set[Event]].withDefaultValue(Set())
+        val heights: Heights = scala.collection.mutable.Map.empty
+        val X = scala.collection.mutable.Map.empty[Int, Set[Path]].withDefaultValue(Set())  // paths, by layer
+        X.update(0, Set(List()))
 
-    // original: random basic event. now: the middle basic event
-    //val a: Event = random.nextInt(basicEvents.size)
-    //val a: Event = 1 // B
-    etas.update(List(), a)
+        etas.update(List(), bk)
 
-    val probA: Probability = basicEvents(a)
-    val hNil: Function0[Double] = new CachedFunction0(() => 1D + (1D - probA) * asDouble(heights(List(Decision.Zero))) + probA * asDouble(heights(List(Decision.One))))
-    heights.update(List(), hNil)
+        val probK: Probability = basicEvents(bk)
+        val hNil: Function0[Double] = new CachedFunction0(() => 1D + (1D - probK) * asDouble(heights(List(Decision.Zero))) + probK * asDouble(heights(List(Decision.One))))
+        heights.update(List(), hNil)
 
-    for i <- 0 to (n - 1) do
-        if X(i).nonEmpty then
-            for x <- X(i) do
-                for j <- Seq[Decision](Decision.One, Decision.Zero) do
-                    val s: Path = j :: x
-                    val t: Path = x.dropWhile(_ == other(j))
+        for i <- 0 to (n - 1) do
+            if X(i).nonEmpty then
+                for x <- X(i) do
+                    for j <- Seq[Decision](Decision.One, Decision.Zero) do
+                        val s: Path = j :: x
+                        val t: Path = x.dropWhile(_ == other(j))
 
-                    val etaX: Event = etas(x).asInstanceOf[Event]
-                    val Vs: Set[Event] = vertices(t) + etaX
-                    vertices.put(s, Vs)
+                        val etaX: Event = etas(x).asInstanceOf[Event]
+                        val Vs: Set[Event] = vertices(t) + etaX
+                        vertices.put(s, Vs)
 
-                    // TODO can we compute this more efficiently?
-                    val Bs: Set[Event] = if j == Decision.One then
-                        // { x | x <- cutset, cutset <- cutsets, Vs subSet cutset, x notIn Vs}
-                        for { cutSet <- minimalCutsets; if Vs.subsetOf(cutSet); x <- cutSet; if !Vs.contains(x) } yield x
-                    else
-                        // { x | x <- cutset, cutset <- cutsets, Vs subSet cutset, x notIn Vs}
-                        for { pathSet <- minimalPathsets; if Vs.subsetOf(pathSet); x <- pathSet; if !Vs.contains(x) } yield x
+                        val (etaS: Eta, heightS: Height) =
+                            if j == Decision.One then
+                                if minimalCutSets.contains(Vs) || minimalCutSets.exists(cutSet => cutSet.subsetOf(Vs)) then
+                                    val etaS: Eta = Decision.One
+                                    val heightS: Height = 0
+                                    (etaS, heightS)
+                                else if minimalCutSets.exists(cutset => Vs.subsetOf(cutset)) then
+                                    // TODO can we compute Bs more efficiently?
+                                    val Bs = for { cutSet <- minimalCutSets; if Vs.subsetOf(cutSet); x <- cutSet; if !Vs.contains(x) } yield x
+                                    val b = Bs.maxBy(b => basicEvents(b))
+                                    val probB = basicEvents(b)
 
-                    val (etaS: Eta, heightS: Height) = if Bs.nonEmpty then
-                        val b = if j == Decision.One then
-                            Bs.maxBy(b => basicEvents(b))
-                        else
-                            Bs.minBy(b => basicEvents(b))
-                        val probB = basicEvents(b)
-                        X.updateWith(i + 1) {
-                            case Some(paths) => Some(paths + s);
-                            case None => Some(Set(s))
-                        }
-                        (b: Eta, CachedFunction0(() => 1 +
-                            (1 - probB) * asDouble(heights(Decision.Zero :: s)) +
-                            probB * asDouble(heights(Decision.One :: s))))
-                    else
-                        (j: Eta, 0: Height)
+                                    val etaS: Eta = b
+                                    val heightS: Height = CachedFunction0(() => 1 +
+                                        (1 - probB) * asDouble(heights(Decision.Zero :: s)) +
+                                        probB * asDouble(heights(Decision.One :: s)))
+                                    X.updateWith(i + 1) {
+                                        case Some(paths) => Some(paths + s)
+                                        case None => Some(Set(s))
+                                    }
+                                    (etaS, heightS)
+                                else
+                                    // TODO can we compute Bs more efficiently?
+                                    val Bs = for { cutSet <- minimalCutSets; x <- cutSet; if !Vs.contains(x); y <- (Vs - x); if cutSet.contains(y) } yield x
+                                    val b = Bs.maxBy(b => basicEvents(b))
+                                    val probB = basicEvents(b)
 
-                    etas.update(s, etaS)
-                    heights.update(s, heightS)
+                                    val etaS: Eta = b
+                                    val heightS: Height = CachedFunction0(() => 1 +
+                                        (1 - probB) * asDouble(heights(Decision.Zero :: s)) +
+                                        probB * asDouble(heights(Decision.One :: s)))
+                                    X.updateWith(i + 1) {
+                                        case Some(paths) => Some(paths + s)
+                                        case None => Some(Set(s))
+                                    }
+                                    (etaS, heightS)
+                                end if
+                            else
+                                if minimalPathSets.contains(Vs) || minimalPathSets.exists(pathSet => pathSet.subsetOf(Vs)) then
+                                    val etaS: Eta = Decision.Zero
+                                    val heightS: Height = 0
+                                    (etaS, heightS)
+                                else if minimalPathSets.exists(pathSet => Vs.subsetOf(pathSet)) then
+                                    // TODO can we compute Bs more efficiently?
+                                    val Bs = for { pathSet <- minimalPathSets; if Vs.subsetOf(pathSet); x <- pathSet; if !Vs.contains(x) } yield x
+                                    val b = Bs.minBy(b => basicEvents(b))
+                                    val probB = basicEvents(b)
+
+                                    val etaS: Eta = b
+                                    val heightS: Height = CachedFunction0(() => 1 +
+                                        (1 - probB) * asDouble(heights(Decision.Zero :: s)) +
+                                        probB * asDouble(heights(Decision.One :: s)))
+                                    X.updateWith(i + 1) {
+                                        case Some(paths) => Some(paths + s)
+                                        case None => Some(Set(s))
+                                    }
+                                    (etaS, heightS)
+                                else
+                                    // TODO can we compute Bs more efficiently?
+                                    val Bs = for { pathSet <- minimalPathSets; x <- pathSet; if !Vs.contains(x); y <- (Vs - x); if pathSet.contains(y) } yield x
+                                    val b = Bs.minBy(b => basicEvents(b))
+                                    val probB = basicEvents(b)
+
+                                    val etaS: Eta = b
+                                    val heightS: Height = CachedFunction0(() => 1 +
+                                        (1 - probB) * asDouble(heights(Decision.Zero :: s)) +
+                                        probB * asDouble(heights(Decision.One :: s)))
+                                    X.updateWith(i + 1) {
+                                        case Some(paths) => Some(paths + s)
+                                        case None => Some(Set(s))
+                                    }
+                                    (etaS, heightS)
+                                end if
+                            end if
+                        etas.update(s, etaS)
+                        heights.update(s, heightS)
+                    end for
                 end for
-            end for
+            end if
+        end for
+
+        val heightNil = hNil()
+        if heightNil < minimumHeight then
+            minimumHeight = heightNil
+            minimumEtas = etas
         end if
     end for
-    (etas, hNil())
+
+    (minimumEtas, minimumHeight)
 }
 
 // TODO JDK 25: use StableValue api.
@@ -170,7 +218,7 @@ def main(): Unit = {
     val aBasicEvent = new java.util.Random().nextInt(probabilities.size)    // unexpected result for aBasicEvent = 0
     println(aBasicEvent)
 
-    val (etas, hNil) = approximate1(cutsets, pathsets, probabilities, aBasicEvent)
+    val (etas, hNil) = approximate(cutsets, pathsets, probabilities)
 
     println(etas)
     println(hNil)   // 1.4583333333333335 for aBasicEvent = 0
