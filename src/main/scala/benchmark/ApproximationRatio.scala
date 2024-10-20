@@ -20,7 +20,7 @@ object ApproximationRatio {
     def childWidth(depth: Int): Int = (depth: @switch) match
         case 2 => jur.nextInt(2, 11)
         case 3 => jur.nextInt(2, 4)
-        case 4 => jur.nextInt(2, 4)
+        case 4 => jur.nextInt(2, 3)
 
     def main(args: Array[String]): Unit = {
 //        val randomTree = makeAlternatingFaultTree(Recipe(
@@ -69,7 +69,7 @@ object ApproximationRatio {
     }
 
     def printHeader(file: Path): Unit = {
-        val line = "Fault Tree,height (enumeration algorithm),height (vector operations algorithm),height (cutset/pathset algorithm),approximation ratio vector algorithm, approxmiation ratio cutset/pathset algorithm\n"
+        val line = "Fault Tree,height (enumeration algorithm),height (vector operations algorithm),height (cutset/pathset algorithm),approximation ratio vector algorithm,approxmiation ratio cutset/pathset algorithm\n"
         print(line)
         writeString(file, line)
     }
