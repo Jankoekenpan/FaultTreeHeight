@@ -104,12 +104,6 @@ def approximate(minimalCutSets: CutSets, minimalPathSets: PathSets, basicEvents:
                         val Es: Set[Event] = eventsOnPath(x) + etaX
                         eventsOnPath.put(s, Es)
 
-                        println(s"DEBUG s=" + s)
-                        println(s"DEBUG Vs=$Vs")
-                        println(s"DEBUG Es=$Es")
-                        println(s"DEBUG eta_{[]}=${etas.get(Nil)}")
-                        println(s"DEBUG eta_{11010}=${etas.get(List(Decision.One, Decision.One, Decision.Zero, Decision.One, Decision.Zero))}")
-
                         val (etaS: Eta, heightS: Height) =
                             if j == Decision.One then
                                 if minimalCutSets.contains(Vs) || minimalCutSets.exists(cutSet => cutSet.subsetOf(Vs)) then
@@ -119,8 +113,7 @@ def approximate(minimalCutSets: CutSets, minimalPathSets: PathSets, basicEvents:
                                 else if minimalCutSets.exists(cutSet => Vs.subsetOf(cutSet)) then
                                     // TODO can we compute Bs more efficiently?
                                     val Bs = for { cutSet <- minimalCutSets; if Vs.subsetOf(cutSet); x <- cutSet; if !Es.contains(x) } yield x
-                                    println(s"DEBUG 1 Bs=${Bs}")  //TODO
-                                    val b = Bs.maxBy(b => basicEvents(b))   // TODO key not found. A cutset contains a non-basic event?
+                                    val b = Bs.maxBy(b => basicEvents(b))
                                     val probB = basicEvents(b)
 
                                     val etaS: Eta = b
@@ -134,8 +127,11 @@ def approximate(minimalCutSets: CutSets, minimalPathSets: PathSets, basicEvents:
                                     (etaS, heightS)
                                 else
                                     // TODO can we compute Bs more efficiently?
-                                    val Bs = for { cutSet <- minimalCutSets; x <- cutSet; if !Es.contains(x); y <- (Vs - x); if cutSet.contains(y) } yield x
-                                    println(s"DEBUG 2 Bs=${Bs}")  //TODO
+                                    var Bs = for { cutSet <- minimalCutSets; x <- cutSet; if !Es.contains(x); y <- (Vs - x); if cutSet.contains(y) } yield x
+                                    if Bs.isEmpty then
+                                       Bs = basicEvents.keySet -- Es
+                                    end if
+
                                     val b = Bs.maxBy(b => basicEvents(b))
                                     val probB = basicEvents(b)
 
@@ -157,7 +153,7 @@ def approximate(minimalCutSets: CutSets, minimalPathSets: PathSets, basicEvents:
                                 else if minimalPathSets.exists(pathSet => Vs.subsetOf(pathSet)) then
                                     // TODO can we compute Bs more efficiently?
                                     val Bs = for { pathSet <- minimalPathSets; if Vs.subsetOf(pathSet); x <- pathSet; if !Es.contains(x) } yield x
-                                    println(s"DEBUG 3 Bs=${Bs}")  //TODO
+
                                     val b = Bs.minBy(b => basicEvents(b))
                                     val probB = basicEvents(b)
 
@@ -172,10 +168,11 @@ def approximate(minimalCutSets: CutSets, minimalPathSets: PathSets, basicEvents:
                                     (etaS, heightS)
                                 else
                                     // TODO can we compute Bs more efficiently?
-                                    val Bs = for { pathSet <- minimalPathSets; x <- pathSet; if !Es.contains(x); y <- (Vs - x); if pathSet.contains(y) } yield x
-                                    println(s"DEBUG minimal path sets = $minimalPathSets")
-                                    println(s"DEBUG 4 Bs=${Bs}")  //TODO
-                                    val b = Bs.minBy(b => basicEvents(b))   //TODO Bs is empty!
+                                    var Bs = for { pathSet <- minimalPathSets; x <- pathSet; if !Es.contains(x); y <- (Vs - x); if pathSet.contains(y) } yield x
+                                    if Bs.isEmpty then
+                                        Bs = basicEvents.keySet -- Es
+                                    end if
+                                    val b = Bs.minBy(b => basicEvents(b))
                                     val probB = basicEvents(b)
 
                                     val etaS: Eta = b
@@ -397,7 +394,7 @@ val inverseTree = FaultTree(0, Map(
 
 val reproTree2 = FaultTree(0, Map(
     0 -> TreeNode.Combination(0,Gate.And,Set(1, 5, 8)),
-    5 -> TreeNode.Combination(5,Gate.Or,Set(6, 7)),         // TODO why does 5 end up in a cut set? it is not a basic event.
+    5 -> TreeNode.Combination(5,Gate.Or,Set(6, 7)),
     10 -> TreeNode.BasicEvent(10,0.29221086224595927),
     1 -> TreeNode.Combination(1,Gate.Or,Set(2, 3, 4)),
     6 -> TreeNode.BasicEvent(6,0.9054326731384866),
