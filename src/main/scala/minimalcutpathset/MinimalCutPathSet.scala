@@ -57,11 +57,15 @@ def other(decision: Decision): Decision = decision match
     case Decision.Zero => Decision.One
     case Decision.One => Decision.Zero
 
-def height(tree: FaultTree, basicEvents: IntMap[Probability]): Double = {
-    val cutSets = minimalCutSets(tree)
-    val pathSets = minimalPathSets(tree)
+def height(tree: FaultTree, probabilities: IntMap[Probability]): Double = {
+    val basicEvents = getBasicEvents(tree)
+    val cutSets = minimalCutSets(tree)(basicEvents)
+    val pathSets = minimalPathSets(tree)(basicEvents)
 
-    val (etas, height) = approximate(cutSets, pathSets, basicEvents)
+    println(s"DEBUG cutSets = ${cutSets}")
+    println(s"DEBUG pathSets = ${pathSets}")
+
+    val (etas, height) = approximate(cutSets, pathSets, probabilities)
 
     height
 }
@@ -100,17 +104,23 @@ def approximate(minimalCutSets: CutSets, minimalPathSets: PathSets, basicEvents:
                         val Es: Set[Event] = eventsOnPath(x) + etaX
                         eventsOnPath.put(s, Es)
 
+                        println(s"DEBUG s=" + s)
+                        println(s"DEBUG Vs=$Vs")
+                        println(s"DEBUG Es=$Es")
+                        println(s"DEBUG eta_{[]}=${etas.get(Nil)}")
+                        println(s"DEBUG eta_{11010}=${etas.get(List(Decision.One, Decision.One, Decision.Zero, Decision.One, Decision.Zero))}")
+
                         val (etaS: Eta, heightS: Height) =
                             if j == Decision.One then
                                 if minimalCutSets.contains(Vs) || minimalCutSets.exists(cutSet => cutSet.subsetOf(Vs)) then
                                     val etaS: Eta = Decision.One
                                     val heightS: Height = 0
                                     (etaS, heightS)
-                                else if minimalCutSets.exists(cutset => Vs.subsetOf(cutset)) then
+                                else if minimalCutSets.exists(cutSet => Vs.subsetOf(cutSet)) then
                                     // TODO can we compute Bs more efficiently?
                                     val Bs = for { cutSet <- minimalCutSets; if Vs.subsetOf(cutSet); x <- cutSet; if !Es.contains(x) } yield x
                                     println(s"DEBUG 1 Bs=${Bs}")  //TODO
-                                    val b = Bs.maxBy(b => basicEvents(b))
+                                    val b = Bs.maxBy(b => basicEvents(b))   // TODO key not found. A cutset contains a non-basic event?
                                     val probB = basicEvents(b)
 
                                     val etaS: Eta = b
@@ -163,8 +173,9 @@ def approximate(minimalCutSets: CutSets, minimalPathSets: PathSets, basicEvents:
                                 else
                                     // TODO can we compute Bs more efficiently?
                                     val Bs = for { pathSet <- minimalPathSets; x <- pathSet; if !Es.contains(x); y <- (Vs - x); if pathSet.contains(y) } yield x
+                                    println(s"DEBUG minimal path sets = $minimalPathSets")
                                     println(s"DEBUG 4 Bs=${Bs}")  //TODO
-                                    val b = Bs.minBy(b => basicEvents(b))
+                                    val b = Bs.minBy(b => basicEvents(b))   //TODO Bs is empty!
                                     val probB = basicEvents(b)
 
                                     val etaS: Eta = b
@@ -215,38 +226,43 @@ object Unset
 @main
 def main(): Unit = {
 
-    val cutsets = Set(Set(0), Set(1, 2), Set(1, 3))
-    val pathsets = Set(Set(0, 1), Set(0, 2, 3))
-    val probabilities = IntMap(0 -> 2D/3D, 1 -> 1D/4D, 2 -> 1D/3D, 3 -> 1D/2D)
-    val aBasicEvent = new java.util.Random().nextInt(probabilities.size)    // unexpected result for aBasicEvent = 0
-    println(aBasicEvent)
+    val tree = reproTree3
+    val probabilities = IntMap.from(tree.events.collect { case (_, TreeNode.BasicEvent(e, p)) => (e, p) })
 
-    val (etas, hNil) = approximate(cutsets, pathsets, probabilities)
+    println(height(tree, probabilities))
 
-    println(etas)
-    println(hNil)   // 1.4583333333333335 for aBasicEvent = 0
+//    val cutSets = Set(Set(0), Set(1, 2), Set(1, 3))
+//    val pathSets = Set(Set(0, 1), Set(0, 2, 3))
+//    val probabilities = IntMap(0 -> 2D/3D, 1 -> 1D/4D, 2 -> 1D/3D, 3 -> 1D/2D)
+//    val aBasicEvent = new java.util.Random().nextInt(probabilities.size)    // unexpected result for aBasicEvent = 0
+//    println(aBasicEvent)
+//
+//    val (etas, hNil) = approximate(cutSets, pathSets, probabilities)
+//
+//    println(etas)
+//    println(hNil)   // 1.4583333333333335 for aBasicEvent = 0
+//
+//    val exampleTree = FaultTree(0, Map(
+//        0 -> TreeNode.Combination(0, Gate.Or, Set(1, 2)),
+//        1 -> TreeNode.BasicEvent(1, 0D),    // A
+//        2 -> TreeNode.Combination(2, Gate.And, Set(3, 4)),
+//        3 -> TreeNode.BasicEvent(3, 0D),    // B
+//        4 -> TreeNode.Combination(4, Gate.Or, Set(5, 6)),
+//        5 -> TreeNode.BasicEvent(5, 0D),    // C
+//        6 -> TreeNode.BasicEvent(6, 0D),    // D
+//    ))
 
-    val exampleTree = FaultTree(0, Map(
-        0 -> TreeNode.Combination(0, Gate.Or, Set(1, 2)),
-        1 -> TreeNode.BasicEvent(1, 0D),    // A
-        2 -> TreeNode.Combination(2, Gate.And, Set(3, 4)),
-        3 -> TreeNode.BasicEvent(3, 0D),    // B
-        4 -> TreeNode.Combination(4, Gate.Or, Set(5, 6)),
-        5 -> TreeNode.BasicEvent(5, 0D),    // C
-        6 -> TreeNode.BasicEvent(6, 0D),    // D
-    ))
-
-    println(minimalCutSets(exampleTree))
-    println(minimalPathSets(exampleTree))
+//    println(minimalCutSets(exampleTree))
+//    println(minimalPathSets(exampleTree))
 }
 
-def minimalCutSets(faultTree: FaultTree): CutSets =
-    MOCUS(faultTree).toSet
+def minimalCutSets(faultTree: FaultTree)(basicEvents: Set[Event] = getBasicEvents(faultTree)): CutSets =
+    MOCUS(faultTree)(basicEvents).toSet
 
-def minimalPathSets(faultTree: FaultTree): PathSets =
-    MOPAS(faultTree).toSet
+def minimalPathSets(faultTree: FaultTree)(basicEvents: Set[Event] = getBasicEvents(faultTree)): PathSets =
+    MOPAS(faultTree)(basicEvents).toSet
 
-def removeSupersets(cutSets: Seq[Set[Event]]): IndexedSeq[Set[Event]] = {
+def removeSupersets(cutSets: Seq[Set[Event]]): Seq[Set[Event]] = {
     val result = new java.util.HashSet[CutSet]()
 
     boundary {
@@ -266,67 +282,91 @@ def removeSupersets(cutSets: Seq[Set[Event]]): IndexedSeq[Set[Event]] = {
         }
     }
 
-    result.asScala.toIndexedSeq
+    result.asScala.toList
 }
 
-def MOCUS(faultTree: FaultTree): Seq[Set[Event]] = {
-    var ListOfCutSets = IndexedSeq(Set(faultTree.topEvent))
+def getBasicEvents(faultTree: FaultTree): Set[Event] =
+    faultTree.events.filter {
+            case (event: Event, basic: TreeNode.BasicEvent) => true
+            case _ => false
+        }
+        .map((event, _) => event)
+        .toSet
 
-    var idxC = 0
-    while idxC < ListOfCutSets.size do
-        val C: Set[Event] = ListOfCutSets(idxC)
-        var expanded = false
-        for E <- C do
-            faultTree.node(E) match
-                case TreeNode.Combination(_, Gate.And, children) =>
-                    val Cnew: Set[Event] = C.excl(E).union(children)
-                    ListOfCutSets = removeSupersets(ListOfCutSets.patch(idxC, Nil, 1).appended(Cnew))
-                    expanded = true
-                case TreeNode.Combination(_, Gate.Or, children) =>
-                    ListOfCutSets = ListOfCutSets.patch(idxC, Nil, 1)   //pseudo code does this inside for loop body, but we only need to remove C just once.
-                    for Eprime <- children do
-                        val Cnew = C.excl(E).incl(Eprime)
-                        ListOfCutSets = removeSupersets(ListOfCutSets.appended(Cnew))
-                    end for
-                    expanded = true
-                case _ =>
-                    // basic event, do nothing.
-        end for
-        if !expanded then
-            idxC += 1
+def MOCUS(faultTree: FaultTree)(basicEvents: Set[Event] = getBasicEvents(faultTree)): Seq[Set[Event]] = {
+
+    // contains only sets which completely consist of basic evens
+    val resultBuilder = Seq.newBuilder[Set[Event]]
+
+    // contains sets which contain non-basic events
+    var ListOfCutSets: Seq[Set[Event]] = List(Set(faultTree.topEvent))
+
+    while ListOfCutSets.nonEmpty do
+        val C: Set[Event] = ListOfCutSets.head
+        ListOfCutSets = ListOfCutSets.tail
+
+        if C.subsetOf(basicEvents) then
+            resultBuilder.addOne(C)
+        else
+            val eventIterator = C.iterator
+            boundary:
+                while eventIterator.hasNext do
+                    val E = eventIterator.next()
+                    faultTree.node(E) match
+                        case TreeNode.Combination(_, Gate.And, children) =>
+                            val Cnew: Set[Event] = C.excl(E).union(children)
+                            ListOfCutSets = removeSupersets(Cnew +: ListOfCutSets)
+                            break()
+                        case TreeNode.Combination(_, Gate.Or, children) =>
+                            val CwithoutE = C.excl(E)
+                            val expandedSets = for c <- children yield CwithoutE.incl(c)
+                            ListOfCutSets = removeSupersets(ListOfCutSets.prependedAll(expandedSets))
+                            break()
+                        case _: TreeNode.BasicEvent =>
+                            // nothing to do
+                    end match
+                end while
         end if
     end while
-    ListOfCutSets
+    resultBuilder.result()
 }
 
-def MOPAS(faultTree: FaultTree): Seq[Set[Event]] = {
-    var ListOfPathSets = IndexedSeq(Set(faultTree.topEvent))
+def MOPAS(faultTree: FaultTree)(basicEvents: Set[Event] = getBasicEvents(faultTree)): Seq[Set[Event]] = {
 
-    var idxC = 0
-    while idxC < ListOfPathSets.size do
-        val C: Set[Event] = ListOfPathSets(idxC)
-        var expanded = false
-        for E <- C do
-            faultTree.node(E) match
-                case TreeNode.Combination(_, Gate.Or, children) =>
-                    val Cnew: Set[Event] = C.excl(E).union(children)
-                    ListOfPathSets = removeSupersets(ListOfPathSets.patch(idxC, Nil, 1).appended(Cnew))
-                    expanded = true
-                case TreeNode.Combination(_, Gate.And, children) =>
-                    ListOfPathSets = ListOfPathSets.patch(idxC, Nil, 1)
-                    for Eprime <- children do
-                        val Cnew = C.excl(E).incl(Eprime)
-                        ListOfPathSets = removeSupersets(ListOfPathSets.appended(Cnew))
-                    end for
-                    expanded = true
-                case _ =>
-                    // basic event, do nothing.
-        end for
-        if !expanded then
-            idxC += 1
+    // contains only sets which completely consist of basic evens
+    val resultBuilder = Seq.newBuilder[Set[Event]]
+
+    // contains sets which contain non-basic events
+    var ListOfPathSets: Seq[Set[Event]] = List(Set(faultTree.topEvent))
+
+    while ListOfPathSets.nonEmpty do
+        val P: Set[Event] = ListOfPathSets.head
+        ListOfPathSets = ListOfPathSets.tail
+
+        if P.subsetOf(basicEvents) then
+            resultBuilder.addOne(P)
+        else
+            val eventIterator = P.iterator
+            boundary:
+                while eventIterator.hasNext do
+                    val E = eventIterator.next()
+                    faultTree.node(E) match
+                        case TreeNode.Combination(_, Gate.Or, children) =>
+                            val Pnew: Set[Event] = P.excl(E).union(children)
+                            ListOfPathSets = removeSupersets(Pnew +: ListOfPathSets)
+                            break()
+                        case TreeNode.Combination(_, Gate.And, children) =>
+                            val PwithoutE = P.excl(E)
+                            val expandedSets = for c <- children yield PwithoutE.incl(c)
+                            ListOfPathSets = removeSupersets(ListOfPathSets.prependedAll(expandedSets))
+                            break()
+                        case _: TreeNode.BasicEvent =>
+                            // nothing to do
+                    end match
+                end while
         end if
     end while
-    ListOfPathSets
+    resultBuilder.result()
 }
 
 val reproTree = FaultTree(0, Map(
@@ -355,9 +395,38 @@ val inverseTree = FaultTree(0, Map(
     9 -> TreeNode.BasicEvent(9, 0.9067115560033326),
 ))  // AND(1, OR(3, 4, 5), OR(7, 8, 9)) -- {{1, 3, 7}, {1, 3, 8}, {1, 3, 9}, {1, 4, 7}, {1, 4, 8}, {1, 4, 9}, {1, 5, 7}, {1, 5, 8}, {1, 5, 9}}.
 
+val reproTree2 = FaultTree(0, Map(
+    0 -> TreeNode.Combination(0,Gate.And,Set(1, 5, 8)),
+    5 -> TreeNode.Combination(5,Gate.Or,Set(6, 7)),         // TODO why does 5 end up in a cut set? it is not a basic event.
+    10 -> TreeNode.BasicEvent(10,0.29221086224595927),
+    1 -> TreeNode.Combination(1,Gate.Or,Set(2, 3, 4)),
+    6 -> TreeNode.BasicEvent(6,0.9054326731384866),
+    9 -> TreeNode.BasicEvent(9,0.45262926590945163),
+    2 -> TreeNode.BasicEvent(2,0.49269513586680935),
+    7 -> TreeNode.BasicEvent(7,0.5186968563256549),
+    3 -> TreeNode.BasicEvent(3,0.48008922637336704),
+    11 -> TreeNode.BasicEvent(11,0.8682779082769414),
+    8 -> TreeNode.Combination(8,Gate.Or,Set(9, 10, 11)),
+    4 -> TreeNode.BasicEvent(4,0.4289924531062296)
+))
+
+val reproTree3 = FaultTree(0, Map(
+    0 -> TreeNode.Combination(0,Gate.And,Set(1, 2, 6)),
+    5 -> TreeNode.BasicEvent(5,0.0748941995542074),
+    1 -> TreeNode.BasicEvent(1,0.2434053844309706),
+    6 -> TreeNode.Combination(6,Gate.Or,Set(7, 8, 9)),
+    9 -> TreeNode.BasicEvent(9,0.2846316951156139),
+    2 -> TreeNode.Combination(2,Gate.Or,Set(3, 4, 5)),
+    7 -> TreeNode.BasicEvent(7,0.43658420342890947),
+    3 -> TreeNode.BasicEvent(3,0.9142663475183694),
+    8 -> TreeNode.BasicEvent(8,0.6186034134816778),
+    4 -> TreeNode.BasicEvent(4,0.20182555017352477)
+))
+
 @main def testSets(): Unit = {
-    println(minimalCutSets(reproTree))
-    println(minimalPathSets(reproTree))
-    println(minimalCutSets(inverseTree))
-    println(minimalPathSets(inverseTree))
+    println(minimalCutSets(reproTree)())
+    println(minimalPathSets(reproTree)())
+
+    println(minimalCutSets(reproTree2)())
+    println(minimalPathSets(reproTree2)())
 }
