@@ -1,6 +1,7 @@
 package minimalcutpathset
 
 import scala.collection.immutable.IntMap
+import scala.jdk.CollectionConverters.given
 
 def doubleEqual(one: Double, two: Double): Boolean =
     Math.abs(one - two) < 0.00_000_1
@@ -8,8 +9,17 @@ def doubleEqual(one: Double, two: Double): Boolean =
 def cutSetProbability(cutSet: CutSet, probabilities: IntMap[Probability]): Probability =
     cutSet.map(basicEvent => probabilities(basicEvent)).product
 
+// TODO still necessary?
 def implies(lhs: Boolean, rhs: Boolean): Boolean =
     !lhs || rhs
+
+def height6(faultTree: FaultTree, probabilities: IntMap[Probability]): Double = {
+    val cutSets = minimalCutSets(faultTree)()
+
+    val (etas, height) = algorithm6(cutSets, probabilities)
+
+    height
+}
 
 def algorithm6(cutSets: CutSets, basicEvents: IntMap[Probability]): (Etas, Double) = {
 
@@ -42,20 +52,61 @@ def algorithm6(cutSets: CutSets, basicEvents: IntMap[Probability]): (Etas, Doubl
             for (x <- Xi) {
                 for (j <- Seq(Decision.One, Decision.Zero)) {
                     val s: Path = j :: x
-                    val Cs: CutSets = (for {
-                        t: Path <- s.tails.drop(1)
-                        etaT: Eta = etas(t)
-                        if etaT.isInstanceOf[Event]
-                        etaTEvent = etaT.asInstanceOf[Event]
-                        C: CutSet <- cutSets
-                        if implies(s.endsWith(Decision.One :: t), C.contains(etaTEvent))
-                        if implies(s.endsWith(Decision.Zero :: t), !C.contains(etaTEvent))
-                    } yield C).toSet
+                    // TODO can we define Cs using a for-comprehension?
+//                    val Cs: CutSets = (for {
+//                        t: Path <- s.tails.drop(1)
+//                        etaT: Eta = etas(t)
+//                        if etaT.isInstanceOf[Event]
+//                        etaTEvent = etaT.asInstanceOf[Event]
+//                        C <- cutSets
+//                        if implies(s.endsWith(Decision.One :: t), C.contains(etaTEvent))
+//                        if implies(s.endsWith(Decision.Zero :: t), C.contains(etaTEvent))
+//                    } yield C).toSet
 
-                    val minProductProbability: Probability = Cs.map(Cprime => cutSetProbability(Cprime, basicEvents)).min
+                    val CsBuilder = new java.util.HashSet[CutSet]()
+                    for (t <- s.tails.drop(1)) {
+                        etas(t) match {
+                            case etaT: Event =>
+                                if (s.endsWith(Decision.One :: t)) {
+                                    for (C <- cutSets) {
+                                        if (C.contains(etaT)) {
+                                            CsBuilder.add(C)
+                                        }
+                                    }
+                                } else if (s.endsWith(Decision.Zero :: t)) {
+                                    for (C <- cutSets) {
+                                        if (!C.contains(etaT)) {
+                                            CsBuilder.add(C)
+                                        }
+                                    }
+                                }
+                            case _ =>
+                        }
+                    }
+                    for (t <- s.tails.drop(1)) {
+                        etas(t) match {
+                            case etaT: Event if s.endsWith(Decision.Zero :: t) =>
+                                val it = CsBuilder.iterator()
+                                while (it.hasNext) {
+                                    val C = it.next()
+                                    if (C.contains(etaT)) {
+                                        it.remove()
+                                    }
+                                }
+                            case _ =>
+                        }
+                    }
+                    val Cs: CutSets = CsBuilder.asScala.toSet
+
+                    // TODO: remove.
+                    if (s == List(Decision.Zero, Decision.One)) {
+                        println(s"DEBUG: Cs=${Cs}")
+                    }
+
+                    val minProductProbability: Function0[Probability] = new CachedFunction0(() => Cs.map(Cprime => cutSetProbability(Cprime, basicEvents)).min)
                     val CsStar = for {
                         C <- Cs
-                        if doubleEqual(cutSetProbability(C, basicEvents), minProductProbability)
+                        if doubleEqual(cutSetProbability(C, basicEvents), asDouble(minProductProbability))
                     } yield C
 
                     val cSprime: Set[Event] = (for {
@@ -95,5 +146,6 @@ def testAlgo6(): Unit = {
         IntMap(0 -> 1D/4D, 1 -> 1D/2D, 2 -> 1D/3D)
     )
     println(etas)
+    println(etas.size)
     println(height)
 }

@@ -69,7 +69,7 @@ object ApproximationRatio {
     }
 
     def printHeader(file: Path): Unit = {
-        val line = "Fault Tree,height (enumeration algorithm),height (vector operations algorithm),height (cutset/pathset algorithm),approximation ratio vector algorithm,approxmiation ratio cutset/pathset algorithm\n"
+        val line = "Fault Tree,height (enumeration algorithm),height (vector operations algorithm),height (cutset/pathset algorithm),height (algorithm 6),approximation ratio vector algorithm,approxmiation ratio cutset/pathset algorithm,algorithm 6\n"
         print(line)
         writeString(file, line)
     }
@@ -89,13 +89,14 @@ object ApproximationRatio {
         val heightFaultTree = faulttree.height(faultTree)
         val heightDecisionTree = decisiontree.height.tupled(decisionTree)
         val heightDagTree = minimalcutpathset.height.tupled(dagTree)
+        val heightAlgo6 = minimalcutpathset.height6.tupled(dagTree)
 
         val millisAfter = System.currentTimeMillis()
 
         val differenceMillis = millisAfter - millisBefore
         println(s"computation took ${differenceMillis / 1000} seconds.")
 
-        val line = s""""$faultTree","$heightDecisionTree","$heightFaultTree","$heightDagTree","${ratio(heightFaultTree, heightDecisionTree)}","${ratio(heightDagTree, heightDecisionTree)}"\n""".stripMargin
+        val line = s""""$faultTree","$heightDecisionTree","$heightFaultTree","$heightDagTree","$heightAlgo6","${ratio(heightFaultTree, heightDecisionTree)}","${ratio(heightDagTree, heightDecisionTree)}","${ratio(heightAlgo6, heightDecisionTree)}"\n""".stripMargin
         print(line)
         writeString(file, line)
     }
@@ -173,7 +174,7 @@ object ApproximationRatio {
     }
 
     def debug[A](a: A): A = {
-        println(s"DEBUG a=${a}\n")
+        println(s"DEBUG a=${a}")
         a
     }
 
