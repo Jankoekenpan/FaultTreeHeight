@@ -175,11 +175,6 @@ object ApproximationRatio {
         (matchTree(faultTree), probabilities.result())
     }
 
-    def debug[A](a: A): A = {
-        println(s"DEBUG a=${a}")
-        a
-    }
-
     def makeAlternatingFaultTree(recipe: Recipe): faulttree.FaultTree = {
         val idGen = new AtomicInteger()
 
