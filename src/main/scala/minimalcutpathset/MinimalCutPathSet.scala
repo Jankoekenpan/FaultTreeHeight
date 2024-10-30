@@ -288,6 +288,11 @@ def removeSupersets(cutSets: Seq[Set[Event]]): Seq[Set[Event]] = {
     result.asScala.toList
 }
 
+def getProbabilities(faultTree: FaultTree)(basicEvents: Set[Event] = getBasicEvents(faultTree)): IntMap[Probability] =
+    IntMap.from(basicEvents.map(e => faultTree.node(e)).map {
+        case TreeNode.BasicEvent(be, prob) => (be, prob)
+    })
+
 def getBasicEvents(faultTree: FaultTree): Set[Event] =
     faultTree.events.filter {
             case (event: Event, basic: TreeNode.BasicEvent) => true

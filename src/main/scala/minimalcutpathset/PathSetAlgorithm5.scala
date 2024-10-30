@@ -6,10 +6,13 @@ def pathSetProbability(pathSet: PathSet, probabilities: IntMap[Probability]): Pr
     pathSet.map(basicEvent => (1D - probabilities(basicEvent))).product
 
 def height5(faultTree: FaultTree): Double = {
-    val pathSets = minimalPathSets(faultTree)()
-    val probabilities = IntMap.from(getBasicEvents(faultTree).map(e => faultTree.node(e)).map {
-        case TreeNode.BasicEvent(be, prob) => (be, prob)
-    })
+    val basicEvents = getBasicEvents(faultTree)
+    val probabilities = getProbabilities(faultTree)(basicEvents)
+    height5(faultTree, basicEvents, probabilities)
+}
+
+def height5(faultTree: FaultTree, basicEvents: Set[Event], probabilities: IntMap[Probability]): Double = {
+    val pathSets = minimalPathSets(faultTree)(basicEvents)
 
     val (etas, height) = algorithm5(pathSets, probabilities)
 

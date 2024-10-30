@@ -3,10 +3,13 @@ package minimalcutpathset
 import scala.collection.immutable.IntMap
 
 def height4(faultTree: FaultTree): Double = {
-    val cutSets = minimalCutSets(faultTree)()
-    val probabilities = IntMap.from(getBasicEvents(faultTree).map(e => faultTree.node(e)).map {
-        case TreeNode.BasicEvent(be, prob) => (be, prob)
-    })
+    val basicEvents = getBasicEvents(faultTree)
+    val probabilities = getProbabilities(faultTree)(basicEvents)
+    height4(faultTree, basicEvents, probabilities)
+}
+
+def height4(faultTree: FaultTree, basicEvents: Set[Event], probabilities: IntMap[Probability]): Double = {
+    val cutSets = minimalCutSets(faultTree)(basicEvents)
 
     val (etas, height) = algorithm4(cutSets, probabilities)
 
