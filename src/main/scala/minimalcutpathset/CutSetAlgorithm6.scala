@@ -9,10 +9,6 @@ def doubleEqual(one: Double, two: Double): Boolean =
 def cutSetProbability(cutSet: CutSet, probabilities: IntMap[Probability]): Probability =
     cutSet.map(basicEvent => probabilities(basicEvent)).product
 
-// TODO still necessary?
-def implies(lhs: Boolean, rhs: Boolean): Boolean =
-    !lhs || rhs
-
 def height6(faultTree: FaultTree, probabilities: IntMap[Probability]): Double = {
     val cutSets = minimalCutSets(faultTree)()
 

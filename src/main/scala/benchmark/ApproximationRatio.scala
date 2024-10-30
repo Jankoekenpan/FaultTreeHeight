@@ -69,7 +69,7 @@ object ApproximationRatio {
     }
 
     def printHeader(file: Path): Unit = {
-        val line = "Fault Tree,height (enumeration algorithm),height (vector operations algorithm),height (cutset/pathset algorithm),height (algorithm 6),height (algorithm 4),height (algorithm 5),approximation ratio vector algorithm,approxmiation ratio cutset/pathset algorithm,algorithm 6,algorithm 4, algorithm 5\n"
+        val line = "Fault Tree,height (enumeration algorithm),height (vector operations algorithm),height (cutset/pathset algorithm),height (algorithm 6),height (algorithm 4),height (algorithm 5),height (algorithm 7),approximation ratio vector algorithm,approxmiation ratio cutset/pathset algorithm,algorithm 6,algorithm 4,algorithm 5,algorithm 7\n"
         print(line)
         writeString(file, line)
     }
@@ -86,19 +86,20 @@ object ApproximationRatio {
         println(s"DEBUG dag faulttree = $dagTree")
         val millisBefore = System.currentTimeMillis();
 
-        val heightFaultTree = faulttree.height(faultTree)
         val heightDecisionTree = decisiontree.height.tupled(decisionTree)
+        val heightFaultTree = faulttree.height(faultTree)
         val heightDagTree = minimalcutpathset.height.tupled(dagTree)
         val heightAlgo6 = minimalcutpathset.height6.tupled(dagTree)
         val heightAlgo4 = minimalcutpathset.height4(dagTree._1)
         val heightAlgo5 = minimalcutpathset.height5(dagTree._1)
+        val heightAlgo7 = faulttree.height7(faultTree)
 
         val millisAfter = System.currentTimeMillis()
 
         val differenceMillis = millisAfter - millisBefore
         println(s"computation took ${differenceMillis / 1000} seconds.")
 
-        val line = s""""$faultTree","$heightDecisionTree","$heightFaultTree","$heightDagTree","$heightAlgo6","$heightAlgo4","$heightAlgo5","${ratio(heightFaultTree, heightDecisionTree)}","${ratio(heightDagTree, heightDecisionTree)}","${ratio(heightAlgo6, heightDecisionTree)}","${ratio(heightAlgo4, heightDecisionTree)}","${ratio(heightAlgo5, heightDecisionTree)}"\n""".stripMargin
+        val line = s""""$faultTree","$heightDecisionTree","$heightFaultTree","$heightDagTree","$heightAlgo6","$heightAlgo4","$heightAlgo5","$heightAlgo7","${ratio(heightFaultTree, heightDecisionTree)}","${ratio(heightDagTree, heightDecisionTree)}","${ratio(heightAlgo6, heightDecisionTree)}","${ratio(heightAlgo4, heightDecisionTree)}","${ratio(heightAlgo5, heightDecisionTree)}","${ratio(heightAlgo7, heightDecisionTree)}"\n""".stripMargin
         print(line)
         writeString(file, line)
     }
