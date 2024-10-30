@@ -22,3 +22,7 @@ Execute `sbt jmh:run` from a terminal.
 ## Approximation ratios
 
 Execute ApproximationRatios#main in order to generate the approximation ratios csv file.
+
+## Random trees
+
+To generate the plots, run RandomTrees#main. Use JVM arguments `--add-exports java.base/java.lang=ALL-UNNAMED --add-exports java.desktop/sun.awt=ALL-UNNAMED --add-exports java.desktop/sun.java2d=ALL-UNNAMED`.
