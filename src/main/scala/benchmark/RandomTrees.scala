@@ -163,52 +163,57 @@ object Plot3D {
 
 // 2d line plot example: https://doc.jzy3d.org/guide/docs/chapter5.html
 object Plot2D {
+    import java.awt.Font
+    import org.jzy3d.chart.AWTChart
     import org.jzy3d.colors.Color
-    import org.jzy3d.maths.{Coord3d}
-    import org.jzy3d.plot3d.primitives.{LineStrip}
     import org.jzy3d.plot3d.rendering.canvas.Quality
     import org.jzy3d.plot3d.rendering.view.modes.ViewBoundMode
     import org.jzy3d.chart.factories.{AWTChartFactory, IChartFactory}
-    import org.jzy3d.maths.{BoundingBox3d}
+    import org.jzy3d.maths.BoundingBox3d
     import org.jzy3d.plot3d.rendering.legends.overlay.{Legend, OverlayLegendRenderer}
+    import org.jzy3d.plot2d.primitives.LineSerie2d
 
     def draw2d(averages: IterableOnce[Average]): Unit = {
-        val lineStripRecursive = new LineStrip()
-        val lineStripCutSet = new LineStrip()
-        val lineStripPathSet = new LineStrip()
+        val lineRecursive = new LineSerie2d("Recursive");
+        val lineCutSet = new LineSerie2d("CutSet")
+        val linePathSet = new LineSerie2d("PathSet")
 
-        lineStripRecursive.setWireframeColor(Color.RED)
-        lineStripCutSet.setWireframeColor(Color.GREEN)
-        lineStripPathSet.setWireframeColor(Color.BLUE)
+        lineRecursive.setColor(Color.RED)
+        lineCutSet.setColor(Color.GREEN)
+        linePathSet.setColor(Color.BLUE)
 
         for (Average(basicEvents, averageRecursive, averageCutSet, averagePathSet) <- averages) {
-            lineStripRecursive.add(new Coord3d(basicEvents, averageRecursive, 0))
-            lineStripCutSet.add(new Coord3d(basicEvents, averageCutSet, 0))
-            lineStripPathSet.add(new Coord3d(basicEvents, averagePathSet, 0))
+            lineRecursive.add(basicEvents, averageRecursive)
+            lineCutSet.add(basicEvents, averageCutSet)
+            linePathSet.add(basicEvents, averagePathSet)
         }
 
         val chartFactory: IChartFactory = new AWTChartFactory()
-        val chart = chartFactory.newChart(Quality.Advanced())
+        val chart = chartFactory.newChart(Quality.Advanced()).asInstanceOf[AWTChart]
         chart.getView.setBoundMode(ViewBoundMode.MANUAL) // Alternatively, MANUAL, AUTO_FIT
         chart.getView.setBoundsManual(new BoundingBox3d(0, 60, 0, 2, 0, 0))
         chart.getAxisLayout.setXAxisLabel("# Basic events")
         chart.getAxisLayout.setYAxisLabel("# Approximated height")
 
-        chart.getScene.add(lineStripRecursive)
-        chart.getScene.add(lineStripCutSet)
-        chart.getScene.add(lineStripPathSet)
+        chart.add(lineRecursive)
+        chart.add(lineCutSet)
+        chart.add(linePathSet)
 
-        val legendRecursive = new Legend("Recursive", Color.RED)
-        val legendCutSet = new Legend("CutSet", Color.GREEN)
-        val legendPathSet = new Legend("PathSet", Color.BLUE)
-        //TODO how to add these legends?
+        val legendRecursive = new Legend(lineRecursive.getName, lineRecursive.getColor)
+        val legendCutSet = new Legend(lineCutSet.getName, lineCutSet.getColor)
+        val legendPathSet = new Legend(linePathSet.getName, linePathSet.getColor)
+        val legendRenderer = new OverlayLegendRenderer(legendRecursive, legendCutSet, legendPathSet)
+        val layout = legendRenderer.getLayout
 
-//        val legendRenderer = new OverlayLegendRenderer(legendRecursive, legendCutSet, legendPathSet)
-//        chart.add(legendRecursive)
-//        chart.add(legendRenderer)
+        layout.getMargin.setWidth(10)
+        layout.getMargin.setHeight(10)
+        layout.setBackgroundColor(Color.WHITE)
+        layout.setFont(new Font("Helvetica", java.awt.Font.PLAIN, 11))
 
+        chart.addRenderer(legendRenderer)
+
+        chart.view2d()
         chart.open()
-        chart.addMouse()
     }
 
 }
