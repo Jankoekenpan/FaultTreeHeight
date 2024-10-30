@@ -136,7 +136,7 @@ object Plot3D {
 
         val chartFactory: IChartFactory = new AWTChartFactory()
         val chart = chartFactory.newChart(Quality.Advanced())
-        chart.getView.setBoundMode(ViewBoundMode.MANUAL) // Alternatively, MANUAL, AUTO_FIT
+        chart.getView.setBoundMode(ViewBoundMode.MANUAL)
         chart.getView.setBoundsManual(new BoundingBox3d(new Range(1, 2), new Range(1, 2), new Range(1, 2)))
         chart.getAxisLayout.setXAxisLabel("Recursion Algorithm Height")
         chart.getAxisLayout.setYAxisLabel("CutSet Algorithm Height")
@@ -161,7 +161,6 @@ object Plot3D {
 
 }
 
-// 2d line plot example: https://doc.jzy3d.org/guide/docs/chapter5.html
 object Plot2D {
     import java.awt.Font
     import org.jzy3d.chart.AWTChart
@@ -190,10 +189,10 @@ object Plot2D {
 
         val chartFactory: IChartFactory = new AWTChartFactory()
         val chart = chartFactory.newChart(Quality.Advanced()).asInstanceOf[AWTChart]
-        chart.getView.setBoundMode(ViewBoundMode.MANUAL) // Alternatively, MANUAL, AUTO_FIT
+        chart.getView.setBoundMode(ViewBoundMode.MANUAL)
         chart.getView.setBoundsManual(new BoundingBox3d(0, 60, 0, 2, 0, 0))
         chart.getAxisLayout.setXAxisLabel("# Basic events")
-        chart.getAxisLayout.setYAxisLabel("# Approximated height")
+        chart.getAxisLayout.setYAxisLabel("Approximated height")
 
         chart.add(lineRecursive)
         chart.add(lineCutSet)
