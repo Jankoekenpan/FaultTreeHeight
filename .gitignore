@@ -6,3 +6,4 @@ target
 *.docx
 ratios*.csv
 points*.csv
+timings*.csv
