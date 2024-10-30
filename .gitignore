@@ -5,3 +5,4 @@ project/project/target
 target
 *.docx
 ratios*.csv
+points*.csv
