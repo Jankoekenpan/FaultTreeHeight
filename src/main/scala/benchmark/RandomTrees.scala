@@ -83,7 +83,7 @@ object Plots {
         CSVOutput.printTimingsHeader(csvTimeOutput)
 
         val nIterations = 50
-        for (basicEvents <- 5 to 30/*TODO 100*/ by 5) {
+        for (basicEvents <- 5 to 100/*TODO 100*/ by 5) {
 
             var sumRecursive1 = 0.0
             var sumCutSet = 0.0
