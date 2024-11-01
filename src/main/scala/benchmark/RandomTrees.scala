@@ -100,23 +100,33 @@ object Plots {
                 val (dagTree, probabilities) = Conversion.translateToDagTree(faultTree)
                 val dagBasicEvents = minimalcutpathset.getBasicEvents(dagTree)
 
+                println("Calculating cut sets...")
                 val minimalCutSets = minimalcutpathset.minimalCutSets(dagTree)(dagBasicEvents)
+                println("Calculating path sets...")
                 val minimalPathSets = minimalcutpathset.minimalPathSets(dagTree)(dagBasicEvents)
 
-                val time_1 = System.nanoTime()
+//                val time_1 = System.nanoTime()
 //                val heightRecursive1 = faulttree.height(faultTree)
-                val time_2 = System.nanoTime()
-                val heightCutSet = minimalcutpathset.algorithm4(minimalCutSets, probabilities)._2
-                val time_3 = System.nanoTime()
-                val heightPathSet = minimalcutpathset.algorithm5(minimalPathSets, probabilities)._2
+
+                println("Calculate height using Recursive algorithm...")
                 val time_4 = System.nanoTime()
                 val heightRecursive2 = faulttree.height7(faultTree)
-                val time_5 = System.nanoTime()
+                val time4_end = System.nanoTime()
+                println("Calculate height using CutSet algorithm...")
+                val time_2 = System.nanoTime()
+                val heightCutSet = minimalcutpathset.algorithm4(minimalCutSets, probabilities)._2
+                val time2_end = System.nanoTime()
+                println("Calculate height using PathSet algorithm...")
+                val time_3 = System.nanoTime()
+                val heightPathSet = minimalcutpathset.algorithm5(minimalPathSets, probabilities)._2
+                val time3_end = System.nanoTime()
+//                val time_5 = System.nanoTime()
+                println("Finished height calculations!")
 
-                val recursive1_ns = time_2 - time_1
-                val cutset_ns = time_3 - time_2
-                val pathset_ns = time_4 - time_3
-                val recursive2_ns = time_5 - time_4
+//                val recursive1_ns = time_2 - time_1
+                val cutset_ns = time2_end - time_2
+                val pathset_ns = time3_end - time_3
+                val recursive2_ns = time4_end - time_4
 
                 val point = Coordinate(basicEvents, heightCutSet, heightPathSet, heightRecursive2)
                 val time = Time(basicEvents, cutset_ns, pathset_ns, recursive2_ns)
