@@ -70,7 +70,7 @@ object Plots {
         given random: RandomGenerator = new java.util.Random()
 
 //        val points = new ListBuffer[Coordinate]() // only used for 3d plot
-        val averages = new ListBuffer[Average]()            //TODO might not need this.
+//        val averages = new ListBuffer[Average]()            //TODO might not need this.
 //        val averageTimes = new ListBuffer[AverageTime]()  //TODO might not need this.
 
 //        val (chart, scatter) = Plot3D.drawScatter()
@@ -83,7 +83,7 @@ object Plots {
         CSVOutput.printTimingsHeader(csvTimeOutput)
 
         val nIterations = 50
-        for (basicEvents <- 5 to 100/*TODO 100*/ by 5) {
+        for (basicEvents <- 70 to 100/*TODO 100*/ by 5) {
 
             var sumRecursive1 = 0.0
             var sumCutSet = 0.0
@@ -164,12 +164,12 @@ object Plots {
             println()
 
             val averageHeights = Average(basicEvents, averageRecursive1, averageCutSet, averagePathSet, averageRecursive2)
-            averages.addOne(averageHeights)     //TODO might not need this.
+//            averages.addOne(averageHeights)     //TODO might not need this.
             val averageTime = AverageTime(basicEvents, averageTimeRecursive1_ms, averageTimeCutSet_ms, averageTimePatSet_ms, averageTimeRecursive2_ms)
 //            averageTimes.addOne(averageTime)  //TODO might not need this.
 
             Plot2D.addHeights(heightsChart, heightLines, averageHeights)
-            Plot2D.addTimes(timesChart, timesLines, averageTime)    //TODO does not seem to work?
+            Plot2D.addTimes(timesChart, timesLines, averageTime)
         }
 
         //Plot3D.draw3d(points)
