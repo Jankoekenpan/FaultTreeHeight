@@ -9,6 +9,11 @@ enum BinaryDecisionTree:
     case One
     case NonLeaf(id: Event, left: BinaryDecisionTree, right: BinaryDecisionTree)
 
+    override def toString: String = this match
+        case Zero => "0"
+        case One => "1"
+        case NonLeaf(id, left, right) => s"b_${id}(${left},${right})"
+
 def isLeafNode(binaryDecisionTree: BinaryDecisionTree): Boolean = binaryDecisionTree match
     case BinaryDecisionTree.Zero | BinaryDecisionTree.One => true
     case _ => false
@@ -50,10 +55,6 @@ enum Path:
         case Leaf(id) => ConsRight(id, Leaf(event))
         case ConsLeft(id, tail) => ConsLeft(id, tail.addLastRight(event))
         case ConsRight(id, tail) => ConsRight(id, tail.addLastRight(event))
-
-//enum Direction:
-//    case Left
-//    case Right
 
 def getPaths(bdt: BinaryDecisionTree): LazyList[Path] = bdt match
     case BinaryDecisionTree.Zero => LazyList.empty
