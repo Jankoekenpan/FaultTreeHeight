@@ -3,7 +3,7 @@ package faulttree
 import scala.collection.mutable
 
 def height7(tree: FaultTree): Real = {
-    height(tree, layers(tree))
+    height7(tree, layers(tree))
 }
 
 def height7(tree: FaultTree, layers: IArray[Seq[FaultTree]]): Real = {

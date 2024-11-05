@@ -23,12 +23,17 @@ enum Path:
     case ConsLeft(id: Event, tail: Path)
     case ConsRight(id: Event, tail: Path)
 
+    override def toString: String = this match
+        case Leaf(id) => s"b_${id}"
+        case ConsLeft(id, tail) => s"b_${id}l${tail}"
+        case ConsRight(id, tail) => s"b_${id}r${tail}"
+
     def head: Event = this match
         case Leaf(id) => id
         case ConsLeft(id, _) => id
         case ConsRight(id, _) => id
 
-    // TODO can cache results if computation becomes slow. Can use something like CachedFunction0.
+    // TODO can cache results if computation becomes slow. Can use something like CachedFunction0, or lazy val.
     def last: Event = this match
         case Leaf(id) => id
         case ConsLeft(_, tail) => tail.last
@@ -169,6 +174,7 @@ def eliminateOne(bdt: BinaryDecisionTree, path: Path): BinaryDecisionTree = {
         val BinaryDecisionTree.NonLeaf(v, _, right) = traverse(bdt, path): @unchecked
         replaceViaPath(bdt, path, right)
     else
+        // top...u
         val pathUpToU = path.upTo(duplicateEvent)
 
         pathInBetween match
