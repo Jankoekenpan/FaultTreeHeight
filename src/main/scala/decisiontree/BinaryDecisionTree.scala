@@ -29,13 +29,6 @@ enum Path:
         case ConsLeft(_, tail) => tail.last
         case ConsRight(_, tail) => tail.last
 
-//    def init: Path = this match
-//        case Leaf(_) => throw new NoSuchElementException("init of Leaf")
-//        case ConsLeft(id, Leaf(_)) => Leaf(id)
-//        case ConsLeft(id, tail) => ConsLeft(id, tail.init)
-//        case ConsRight(id, Leaf(_)) => Leaf(id)
-//        case ConsRight(id, tail) => ConsRight(id, tail.init)
-
     def upTo(event: Event): Path = this match
         case p@Leaf(id) => if event == id then p else throw new NoSuchElementException("Not found: " + event)
         case ConsLeft(id, _) if event == id => Leaf(id)
@@ -82,17 +75,6 @@ def isOnlyRight(path: Path): Boolean = path match
     case Path.Leaf(_) => true
     case Path.ConsLeft(_, _) => false
     case Path.ConsRight(_, tail) => isOnlyRight(tail)
-
-def repeatedVertex(path: Path): Option[Event] = {
-    @tailrec
-    def repeatedVertex(path: Path, seen: Set[Event]): Option[Event] = path match {
-        case Path.Leaf(id) => if seen.contains(id) then Some(id) else None
-        case Path.ConsLeft(id, tail) => repeatedVertex(tail, seen + id)
-        case Path.ConsRight(id, tail) => repeatedVertex(tail, seen + id)
-    }
-
-    repeatedVertex(path, Set())
-}
 
 @tailrec
 def traverse(binaryDecisionTree: BinaryDecisionTree, path: Path): BinaryDecisionTree = {
@@ -145,11 +127,30 @@ def replaceAfterPathRight(top: BinaryDecisionTree, path: Path, replacement: Bina
             case Path.ConsRight(_, tail) => BinaryDecisionTree.NonLeaf(id, left, replaceAfterPathRight(right, tail, replacement))
 }
 
-// returned paths will always end with the duplicate event
+def getPathsUpToRepeatedEvent(bdt: BinaryDecisionTree): LazyList[Path] = {
+
+    def getPathsUpToRepeatedEvent(bdt: BinaryDecisionTree, seen: Set[Event]): LazyList[Path] = bdt match {
+        case BinaryDecisionTree.One | BinaryDecisionTree.Zero => LazyList.empty
+        case BinaryDecisionTree.NonLeaf(id, left, right) =>
+            if seen.contains(id) then
+                // event was already seen in a parent node, cut off the search.
+                LazyList(Path.Leaf(id))
+            else if isLeafNode(left) && isLeafNode(right) then
+                // we reached a dead end in our search - this path has no repeated events.
+                LazyList.empty
+            else
+                // not at a leaf node yet, continue searching.
+                val biggerSeen = seen + id
+                val leftPaths = getPathsUpToRepeatedEvent(left, biggerSeen)
+                val rightPaths = getPathsUpToRepeatedEvent(right, biggerSeen)
+                leftPaths.map(lp => Path.ConsLeft(id, lp)) ++ rightPaths.map(rp => Path.ConsRight(id, rp))
+    }
+
+    getPathsUpToRepeatedEvent(bdt, Set())
+}
+
 def getRepeatingPath(bdt: BinaryDecisionTree): Option[Path] =
-    getPaths(bdt)
-        .map(path => (path, repeatedVertex(path)))
-        .collectFirst { case (path, Some(duplicateEvent)) if path.last == duplicateEvent => path }
+    getPathsUpToRepeatedEvent(bdt).headOption
 
 def eliminateOne(bdt: BinaryDecisionTree, path: Path): BinaryDecisionTree = {
     // v (but it's also equal to u)
@@ -159,11 +160,11 @@ def eliminateOne(bdt: BinaryDecisionTree, path: Path): BinaryDecisionTree = {
     val pathInBetween = path.from(duplicateEvent)
 
     if isOnlyLeft(pathInBetween) then
-        // replace v and its left and right branches by the left branch of v
+        // replace v and its left and right branches by the left branch of v.
         val BinaryDecisionTree.NonLeaf(v, left, _) = traverse(bdt, path): @unchecked
         replaceViaPath(bdt, path, left)
     else if isOnlyRight(pathInBetween) then
-        // replace v and its left and right branches by the right branch of v
+        // replace v and its left and right branches by the right branch of v.
         val BinaryDecisionTree.NonLeaf(v, _, right) = traverse(bdt, path): @unchecked
         replaceViaPath(bdt, path, right)
     else
@@ -171,11 +172,11 @@ def eliminateOne(bdt: BinaryDecisionTree, path: Path): BinaryDecisionTree = {
 
         pathInBetween match
             case Path.ConsRight(u, _) =>
-                // replace the right branch of u by the right branch of v
+                // replace the right branch of u by the right branch of v.
                 val BinaryDecisionTree.NonLeaf(v, _, right) = traverse(bdt, path): @unchecked
                 replaceAfterPathRight(bdt, pathUpToU, right)
             case Path.ConsLeft(u, _) =>
-                // replace the left branch of u by the left branch of v
+                // replace the left branch of u by the left branch of v.
                 val BinaryDecisionTree.NonLeaf(v, left, _) = traverse(bdt, path): @unchecked
                 replaceAfterPathLeft(bdt, pathUpToU, left)
 }
