@@ -192,3 +192,19 @@ def eliminateRepeatedly(bdt: BinaryDecisionTree): BinaryDecisionTree = {
 
     tree
 }
+
+object ExampleBDT {
+
+    def main(args: Array[String]): Unit = {
+        val tree = b(2, b(1, b(2, _0, _1), _1), b(1, b(1, b(2, _0, _1), _1), _1))
+
+        val reducedTree = eliminateRepeatedly(tree)
+
+        println(reducedTree)
+    }
+
+    inline def b(id: Event, left: BinaryDecisionTree, right: BinaryDecisionTree): BinaryDecisionTree =
+        BinaryDecisionTree.NonLeaf(id, left, right)
+    inline def _0: BinaryDecisionTree = BinaryDecisionTree.Zero
+    inline def _1: BinaryDecisionTree = BinaryDecisionTree.One
+}
