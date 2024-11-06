@@ -238,6 +238,43 @@ def algorithm7(bdt: BinaryDecisionTree, basicEvents: BasicEvents): (OccurrencePr
     (rho, height)
 }
 
+import minimalcutpathset.FaultTree
+
+def replaceZeros(tree: BinaryDecisionTree, replacement: BinaryDecisionTree): BinaryDecisionTree = tree match {
+    case BinaryDecisionTree.Zero => replacement
+    case BinaryDecisionTree.One => BinaryDecisionTree.One
+    case BinaryDecisionTree.NonLeaf(id, left, right) => BinaryDecisionTree.NonLeaf(id, replaceZeros(left, replacement), replaceZeros(right, replacement))
+}
+
+def replaceOnes(tree: BinaryDecisionTree, replacement: BinaryDecisionTree): BinaryDecisionTree = tree match {
+    case BinaryDecisionTree.Zero => BinaryDecisionTree.Zero
+    case BinaryDecisionTree.One => replacement
+    case BinaryDecisionTree.NonLeaf(id, left, right) => BinaryDecisionTree.NonLeaf(id, replaceOnes(left, replacement), replaceOnes(right, replacement))
+}
+
+def algorithm2(Tis: Seq[BinaryDecisionTree]): (BinaryDecisionTree, BinaryDecisionTree) = {
+    def tau0(Tis: Seq[BinaryDecisionTree]): BinaryDecisionTree = Tis match {
+        case Seq(tk) => tk
+        case ti +: tis => replaceZeros(ti, tau0(tis))
+    }
+
+    def tau1(Tis: Seq[BinaryDecisionTree]): BinaryDecisionTree = Tis match {
+        case Seq(tk) => tk
+        case ti +: tis => replaceOnes(ti, tau1(tis))
+    }
+
+    (tau0(Tis), tau1(Tis))
+}
+
+def T(basicEvent: Event): BinaryDecisionTree.NonLeaf =
+    BinaryDecisionTree.NonLeaf(basicEvent, BinaryDecisionTree.Zero, BinaryDecisionTree.One)
+
+def algorithm8(faultTree: FaultTree, basicEvens: BasicEvents): (BinaryDecisionTree, Height) = {
+
+
+    ???
+}
+
 object ExampleBDT {
 
     def main(args: Array[String]): Unit = {
