@@ -18,72 +18,46 @@ def isLeafNode(binaryDecisionTree: BinaryDecisionTree): Boolean = binaryDecision
     case BinaryDecisionTree.Zero | BinaryDecisionTree.One => true
     case _ => false
 
-enum Path:
-    case Leaf(id: Event)
-    case ConsLeft(id: Event, tail: Path)
-    case ConsRight(id: Event, tail: Path)
+object Path {
+    case class Leaf[L](leaf: L) extends Path[L]:
+        override def last: L = leaf
+    case class ConsLeft[L](id: Event, tail: Path[L]) extends Path[L]:
+        override lazy val last: L = tail.last
+    case class ConsRight[L](id: Event, tail: Path[L]) extends Path[L]:
+        override lazy val last: L = tail.last
+}
+
+trait Path[L] {
+    import Path.*
 
     override def toString: String = this match
         case Leaf(id) => s"b_${id}"
         case ConsLeft(id, tail) => s"b_${id}l${tail}"
         case ConsRight(id, tail) => s"b_${id}r${tail}"
 
-    def head: Event = this match
+    def head: Event | L = this match
         case Leaf(id) => id
         case ConsLeft(id, _) => id
         case ConsRight(id, _) => id
 
     // TODO can cache results if computation becomes slow. Can use something like CachedFunction0, or lazy val.
-    def last: Event = this match
-        case Leaf(id) => id
-        case ConsLeft(_, tail) => tail.last
-        case ConsRight(_, tail) => tail.last
+    def last: L
 
-    def upTo(event: Event): Path = this match
-        case p@Leaf(id) => if event == id then p else throw new NoSuchElementException("Not found: " + event)
+    def upTo(event: Event): Path[Event] = this match
+        case p@Leaf(id) => if event == id then p.asInstanceOf[Path[Event]] else throw new NoSuchElementException("Not found: " + event)
         case ConsLeft(id, _) if event == id => Leaf(id)
         case ConsLeft(id, tail) => ConsLeft(id, tail.upTo(event))
         case ConsRight(id, _) if event == id => Leaf(id)
         case ConsRight(id, tail) => ConsRight(id, tail.upTo(event))
 
-    def from(event: Event): Path = this match
-        case p@Leaf(id) => if event == id then p else throw new NoSuchElementException("Not found: " + event)
-        case p@ConsLeft(id, tail) => if event == id then p else tail.from(event)
-        case p@ConsRight(id, tail) => if event == id then p else tail.from(event)
-
-    def addLastLeft(event: Event): Path = this match
-        case Leaf(id) => ConsLeft(id, Leaf(event))
-        case ConsLeft(id, tail) => ConsLeft(id, tail.addLastLeft(event))
-        case ConsRight(id, tail) => ConsRight(id, tail.addLastLeft(event))
-
-    def addLastRight(event: Event): Path = this match
-        case Leaf(id) => ConsRight(id, Leaf(event))
-        case ConsLeft(id, tail) => ConsLeft(id, tail.addLastRight(event))
-        case ConsRight(id, tail) => ConsRight(id, tail.addLastRight(event))
-
-def getPaths(bdt: BinaryDecisionTree): LazyList[Path] = bdt match
-    case BinaryDecisionTree.Zero => LazyList.empty
-    case BinaryDecisionTree.One => LazyList.empty
-    case BinaryDecisionTree.NonLeaf(id, l, r) =>
-        if isLeafNode(l) && isLeafNode(r) then
-            LazyList(Path.Leaf(id))
-        else
-            getPaths(l).map(pl => Path.ConsLeft(id, pl)) ++ getPaths(r).map(pr => Path.ConsRight(id, pr))
+    def from(event: Event): Path[Event] = this match
+        case p@Leaf(id) => if event == id then p.asInstanceOf[Path[Event]] else throw new NoSuchElementException("Not found: " + event)
+        case p@ConsLeft(id, tail) => if event == id then p.asInstanceOf[Path[Event]] else tail.from(event)
+        case p@ConsRight(id, tail) => if event == id then p.asInstanceOf[Path[Event]] else tail.from(event)
+}
 
 @tailrec
-def isOnlyLeft(path: Path): Boolean = path match
-    case Path.Leaf(_) => true
-    case Path.ConsLeft(_, tail) => isOnlyLeft(tail)
-    case Path.ConsRight(_, _) => false
-
-@tailrec
-def isOnlyRight(path: Path): Boolean = path match
-    case Path.Leaf(_) => true
-    case Path.ConsLeft(_, _) => false
-    case Path.ConsRight(_, tail) => isOnlyRight(tail)
-
-@tailrec
-def traverse(binaryDecisionTree: BinaryDecisionTree, path: Path): BinaryDecisionTree = {
+def traverse(binaryDecisionTree: BinaryDecisionTree, path: Path[Event]): BinaryDecisionTree = {
     assert:
         binaryDecisionTree match
             case BinaryDecisionTree.NonLeaf(treeNodeId, _, _) => treeNodeId == path.head
@@ -97,7 +71,7 @@ def traverse(binaryDecisionTree: BinaryDecisionTree, path: Path): BinaryDecision
         case Path.ConsRight(_, tail) => traverse(right, tail)
 }
 
-def replaceViaPath(top: BinaryDecisionTree, path: Path, replacement: BinaryDecisionTree): BinaryDecisionTree = top match {
+def replaceViaPath(top: BinaryDecisionTree, path: Path[Event], replacement: BinaryDecisionTree): BinaryDecisionTree = top match {
     case BinaryDecisionTree.Zero | BinaryDecisionTree.One => top
     case BinaryDecisionTree.NonLeaf(id, left, right) =>
         assert:
@@ -109,7 +83,7 @@ def replaceViaPath(top: BinaryDecisionTree, path: Path, replacement: BinaryDecis
             case Path.ConsRight(_, tail) => BinaryDecisionTree.NonLeaf(id, left, replaceViaPath(right, tail, replacement))
 }
 
-def replaceAfterPathLeft(top: BinaryDecisionTree, path: Path, replacement: BinaryDecisionTree): BinaryDecisionTree = top match {
+def replaceAfterPathLeft(top: BinaryDecisionTree, path: Path[Event], replacement: BinaryDecisionTree): BinaryDecisionTree = top match {
     case BinaryDecisionTree.Zero | BinaryDecisionTree.One => replacement
     case BinaryDecisionTree.NonLeaf(id, left, right) =>
         assert:
@@ -121,7 +95,7 @@ def replaceAfterPathLeft(top: BinaryDecisionTree, path: Path, replacement: Binar
             case Path.ConsRight(_, tail) => BinaryDecisionTree.NonLeaf(id, left, replaceAfterPathLeft(right, tail, replacement))
 }
 
-def replaceAfterPathRight(top: BinaryDecisionTree, path: Path, replacement: BinaryDecisionTree): BinaryDecisionTree = top match {
+def replaceAfterPathRight(top: BinaryDecisionTree, path: Path[Event], replacement: BinaryDecisionTree): BinaryDecisionTree = top match {
     case BinaryDecisionTree.Zero | BinaryDecisionTree.One => replacement
     case BinaryDecisionTree.NonLeaf(id, left, right) =>
         assert:
@@ -133,9 +107,9 @@ def replaceAfterPathRight(top: BinaryDecisionTree, path: Path, replacement: Bina
             case Path.ConsRight(_, tail) => BinaryDecisionTree.NonLeaf(id, left, replaceAfterPathRight(right, tail, replacement))
 }
 
-def getPathsUpToRepeatedEvent(bdt: BinaryDecisionTree): LazyList[Path] = {
+def getPathsUpToRepeatedEvent(bdt: BinaryDecisionTree): LazyList[Path[Event]] = {
 
-    def getPathsUpToRepeatedEvent(bdt: BinaryDecisionTree, seen: Set[Event]): LazyList[Path] = bdt match {
+    def getPathsUpToRepeatedEvent(bdt: BinaryDecisionTree, seen: Set[Event]): LazyList[Path[Event]] = bdt match {
         case BinaryDecisionTree.One | BinaryDecisionTree.Zero => LazyList.empty
         case BinaryDecisionTree.NonLeaf(id, left, right) =>
             if seen.contains(id) then
@@ -155,10 +129,10 @@ def getPathsUpToRepeatedEvent(bdt: BinaryDecisionTree): LazyList[Path] = {
     getPathsUpToRepeatedEvent(bdt, Set())
 }
 
-def getRepeatingPath(bdt: BinaryDecisionTree): Option[Path] =
+def getRepeatingPath(bdt: BinaryDecisionTree): Option[Path[Event]] =
     getPathsUpToRepeatedEvent(bdt).headOption
 
-def eliminateOne(bdt: BinaryDecisionTree, path: Path): BinaryDecisionTree = {
+def eliminateOne(bdt: BinaryDecisionTree, path: Path[Event]): BinaryDecisionTree = {
     // v (but it's also equal to u)
     val duplicateEvent = path.last
 
@@ -177,7 +151,6 @@ def eliminateOne(bdt: BinaryDecisionTree, path: Path): BinaryDecisionTree = {
             // replace the right branch of u by the right branch of v.
             val BinaryDecisionTree.NonLeaf(v, _, right) = traverse(bdt, path): @unchecked
             replaceViaPath(bdt, path, right)
-
 }
 
 def eliminateRepeatedly(bdt: BinaryDecisionTree): BinaryDecisionTree = {
@@ -205,6 +178,30 @@ def cleanupLeaves(bdt: BinaryDecisionTree): BinaryDecisionTree = {
 
 def algorithm6(bdt: BinaryDecisionTree): BinaryDecisionTree =
     cleanupLeaves(eliminateRepeatedly(bdt))
+
+type OccurrenceProbability = Double
+type Height = Double
+
+enum Last:
+    case Zero, One
+type Path7 = Path[Last]
+
+def getPaths(bdt: BinaryDecisionTree): LazyList[Path7] = bdt match
+    case BinaryDecisionTree.Zero => LazyList(Path.Leaf(Last.Zero))
+    case BinaryDecisionTree.One => LazyList(Path.Leaf(Last.One))
+    case BinaryDecisionTree.NonLeaf(id, l, r) =>
+        getPaths(l).map(pl => Path.ConsLeft(id, pl)) ++ getPaths(r).map(pr => Path.ConsRight(id, pr))
+
+def isPath0(path: Path7): Boolean = path.last == Last.Zero
+def isPath1(path: Path7): Boolean = path.last == Last.One
+
+def algorithm7(bdt: BinaryDecisionTree): (OccurrenceProbability, Height) = {
+    val paths = getPaths(bdt)
+
+
+
+    ???
+}
 
 object ExampleBDT {
 
