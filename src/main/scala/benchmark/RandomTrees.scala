@@ -81,14 +81,14 @@ object Plots {
         CSVOutput.printTimingsHeader(csvTimeOutput)
 
         val nIterations = 50
-        for (basicEvents <- 90 to 100/*TODO 100*/ by 5) {
+        for (basicEvents <- 5 to 70/*TODO 100*/ by 5) {
 
-//            var sumRecursive1 = 0.0
+            var sumRecursive1 = 0.0
             var sumCutSet = 0.0
             var sumPathSet = 0.0
             var sumRecursive2 = 0.0
 
-//            var sumTimeRecursive1_ns = 0L
+            var sumTimeRecursive1_ns = 0L
             var sumTimeCutSet_ns = 0L
             var sumTimePathSet_ns = 0L
             var sumTimeRecursive2_ns = 0L
@@ -100,15 +100,16 @@ object Plots {
                 val (dagTree, probabilities) = Conversion.translateToDagTree(faultTree)
                 val dagBasicEvents = minimalcutpathset.getBasicEvents(dagTree)
 
-                println("Calculating cut sets...")
+//                println("Calculating cut sets...")
                 val minimalCutSets = minimalcutpathset.minimalCutSets(dagTree)(dagBasicEvents)
-                println("Calculating path sets...")
+//                println("Calculating path sets...")
                 val minimalPathSets = minimalcutpathset.minimalPathSets(dagTree)(dagBasicEvents)
 
-//                val time_1 = System.nanoTime()
-//                val heightRecursive1 = faulttree.height(faultTree)
-
-                println("Calculate height using Recursive algorithm...")
+                println("Calculate height using Recursive algorithm 1...")
+                val time_1 = System.nanoTime()
+                val heightRecursive1 = faulttree.height(faultTree)
+                val time1_end = System.nanoTime()
+                println("Calculate height using Recursive algorithm 2...")
                 val time_4 = System.nanoTime()
                 val heightRecursive2 = faulttree.height7(faultTree)
                 val time4_end = System.nanoTime()
@@ -123,13 +124,13 @@ object Plots {
 //                val time_5 = System.nanoTime()
                 println("Finished height calculations!")
 
-//                val recursive1_ns = time_2 - time_1
+                val recursive1_ns = time1_end - time_1
                 val cutset_ns = time2_end - time_2
                 val pathset_ns = time3_end - time_3
                 val recursive2_ns = time4_end - time_4
 
-                val point = Coordinate(basicEvents, heightCutSet, heightPathSet, heightRecursive2)
-                val time = Time(basicEvents, cutset_ns, pathset_ns, recursive2_ns)
+                val point = Coordinate(basicEvents, heightRecursive1, heightCutSet, heightPathSet, heightRecursive2)
+                val time = Time(basicEvents, recursive1_ns, cutset_ns, pathset_ns, recursive2_ns)
 
 //                points.addOne(point)  // only for 3d plot
 //                Plot3D.plotHeights(chart, scatter, points)
@@ -137,43 +138,43 @@ object Plots {
                 CSVOutput.printData(csvOutput, point)
                 CSVOutput.printTimings(csvTimeOutput, time)
 
-//                sumRecursive1 += heightRecursive1
+                sumRecursive1 += heightRecursive1
                 sumCutSet += heightCutSet
                 sumPathSet += heightPathSet
                 sumRecursive2 += heightRecursive2
 
-//                sumTimeRecursive1_ns += recursive1_ns
+                sumTimeRecursive1_ns += recursive1_ns
                 sumTimeCutSet_ns += cutset_ns
                 sumTimePathSet_ns += pathset_ns
                 sumTimeRecursive2_ns += recursive2_ns
             }
 
-//            val averageRecursive1 = sumRecursive1 / nIterations
+            val averageRecursive1 = sumRecursive1 / nIterations
             val averageCutSet = sumCutSet / nIterations
             val averagePathSet = sumPathSet / nIterations
             val averageRecursive2 = sumRecursive2 / nIterations
 
-//            val averageTimeRecursive1_ms = sumTimeRecursive1_ns / nIterations / 10_000_000D
+            val averageTimeRecursive1_ms = sumTimeRecursive1_ns / nIterations / 10_000_000D
             val averageTimeCutSet_ms = sumTimeCutSet_ns / nIterations / 10_000_000D
             val averageTimePatSet_ms = sumTimePathSet_ns / nIterations / 10_000_000D
             val averageTimeRecursive2_ms = sumTimeRecursive2_ns / nIterations / 10_000_000D
 
             println(s"#basic events: ${basicEvents}")
-//            println(s"averageRecursive1 = ${averageRecursive1}")
+            println(s"averageRecursive1 = ${averageRecursive1}")
             println(s"averageCutSet = ${averageCutSet}")
             println(s"averagePathSet = ${averagePathSet}")
             println(s"averageRecursive2 = ${averageRecursive2}")
             println()
-//            println(s"averageTimeRecursive1 = ${averageTimeRecursive1_ms} ms")
+            println(s"averageTimeRecursive1 = ${averageTimeRecursive1_ms} ms")
             println(s"averageTimeCutSet = ${averageTimeCutSet_ms} ms")
             println(s"averageTimePathSet = ${averageTimePatSet_ms} ms")
             println(s"averageTimeRecursive2 = ${averageTimeRecursive2_ms} ms")
             println()
             println()
 
-            val averageHeights = Average(basicEvents, averageCutSet, averagePathSet, averageRecursive2)
+            val averageHeights = Average(basicEvents, averageRecursive1, averageCutSet, averagePathSet, averageRecursive2)
 //            averages.addOne(averageHeights)     //TODO might not need this.
-            val averageTime = AverageTime(basicEvents, averageTimeCutSet_ms, averageTimePatSet_ms, averageTimeRecursive2_ms)
+            val averageTime = AverageTime(basicEvents, averageTimeRecursive1_ms, averageTimeCutSet_ms, averageTimePatSet_ms, averageTimeRecursive2_ms)
 //            averageTimes.addOne(averageTime)  //TODO might not need this.
 
             Plot2D.addHeights(heightsChart, heightLines, averageHeights)
@@ -186,10 +187,10 @@ object Plots {
 
 }
 
-case class Coordinate(basicEvents: Int, heightCutSet: Double, heightPathSet: Double, heightRecursive2: Double)
-case class Time(basicEvents: Int, timeCutSet_ns: Long, timePathSet_ns: Long, timeRecursive2_ns: Long)
-case class Average(basicEvents: Int, averageCutSet: Double, averagePathSet: Double, averageRecursive2: Double)
-case class AverageTime(basicEvents: Int, averageTimeCutSet_ms: Double, averageTimePathSet_ms: Double, averageTimeRecursive2_ms: Double)
+case class Coordinate(basicEvents: Int, heightRecursive1: Double, heightCutSet: Double, heightPathSet: Double, heightRecursive2: Double)
+case class Time(basicEvents: Int, timeRecursive1_ns: Long, timeCutSet_ns: Long, timePathSet_ns: Long, timeRecursive2_ns: Long)
+case class Average(basicEvents: Int, averageRecursive1: Double, averageCutSet: Double, averagePathSet: Double, averageRecursive2: Double)
+case class AverageTime(basicEvents: Int, averageTimeRecursive1_ms: Double, averageTimeCutSet_ms: Double, averageTimePathSet_ms: Double, averageTimeRecursive2_ms: Double)
 
 @Deprecated
 object Plot3D {
@@ -208,9 +209,9 @@ object Plot3D {
         val colours = new Array[Color](averages.size)
 
         var i = 0
-        for (Coordinate(basicEvents, heightCutSet, heightPathSet, heightRecursive2) <- averages) {
+        for (Coordinate(basicEvents, heightRecursive1, heightCutSet, heightPathSet, heightRecursive2) <- averages) {
             colours(i) = colour(basicEvents)
-            coordinates(i) = new Coord3d(heightRecursive2, heightCutSet, heightPathSet)
+            coordinates(i) = new Coord3d(heightRecursive1, heightCutSet, heightPathSet)
             i += 1
         }
 
@@ -256,7 +257,7 @@ object Plot3D {
 
     // helpers
     def coord(coordinate: Coordinate): Coord3d = coordinate match
-        case Coordinate(basicEvents, heightCutSet, heightPathSet, heightRecursive2) => new Coord3d(heightRecursive2, heightCutSet, heightPathSet)
+        case Coordinate(basicEvents, heightRecursive1, heightCutSet, heightPathSet, heightRecursive2) => new Coord3d(heightRecursive1, heightCutSet, heightPathSet)
 
     def colour(coordinate: Coordinate): Color = colour(coordinate.basicEvents)
 
@@ -289,18 +290,18 @@ object Plot2D {
     // Code adapted from: https://github.com/jzy3d/jzy3d-api/blob/master/jzy3d-tutorials/src/main/java/org/jzy3d/demos/chart2d/Line2D_DemoAWT.java
     // one-shot
     def draw2d(averages: IterableOnce[Average]): Unit = {
-//        val lineRecursive1 = new LineSerie2d("Recursive 1")
+        val lineRecursive1 = new LineSerie2d("Recursive 1")
         val lineCutSet = new LineSerie2d("CutSet")
         val linePathSet = new LineSerie2d("PathSet")
         val lineRecursive2 = new LineSerie2d("Recursive 2")
 
-//        lineRecursive1.setColor(Color.RED)
+        lineRecursive1.setColor(Color.RED)
         lineCutSet.setColor(Color.GREEN)
         linePathSet.setColor(Color.BLUE)
         lineRecursive2.setColor(new Color(255, 0, 255))
 
-        for (Average(basicEvents, averageCutSet, averagePathSet, averageRecursive2) <- averages) {
-//            lineRecursive1.add(basicEvents, averageRecursive1)
+        for (Average(basicEvents, averageRecursive1, averageCutSet, averagePathSet, averageRecursive2) <- averages) {
+            lineRecursive1.add(basicEvents, averageRecursive1)
             lineCutSet.add(basicEvents, averageCutSet)
             linePathSet.add(basicEvents, averagePathSet)
             lineRecursive2.add(basicEvents, averageRecursive2)
@@ -313,16 +314,16 @@ object Plot2D {
         chart.getAxisLayout.setXAxisLabel("# Basic events")
         chart.getAxisLayout.setYAxisLabel("Average approximated height")    // 50 samples
 
-//        chart.add(lineRecursive1)
+        chart.add(lineRecursive1)
         chart.add(lineCutSet)
         chart.add(linePathSet)
         chart.add(lineRecursive2)
 
-//        val legendRecursive1 = new Legend(lineRecursive1.getName, lineRecursive1.getColor)
+        val legendRecursive1 = new Legend(lineRecursive1.getName, lineRecursive1.getColor)
         val legendCutSet = new Legend(lineCutSet.getName, lineCutSet.getColor)
         val legendPathSet = new Legend(linePathSet.getName, linePathSet.getColor)
         val legendRecursive2 = new Legend(lineRecursive2.getName, lineRecursive2.getColor)
-        val legendRenderer = new OverlayLegendRenderer(/*legendRecursive1, */legendCutSet, legendPathSet, legendRecursive2)
+        val legendRenderer = new OverlayLegendRenderer(legendRecursive1, legendCutSet, legendPathSet, legendRecursive2)
         val layout = legendRenderer.getLayout
 
         layout.getMargin.setWidth(10)
@@ -337,15 +338,15 @@ object Plot2D {
     }
 
     // continuous
-    case class Lines(cutset: LineSerie2d, pathset: LineSerie2d, recursive2: LineSerie2d)
+    case class Lines(recursive1: LineSerie2d, cutset: LineSerie2d, pathset: LineSerie2d, recursive2: LineSerie2d)
 
     def drawHeights(): (Chart, Lines) = {
-//        val lineRecursive1 = new LineSerie2d("Recursive 1")
+        val lineRecursive1 = new LineSerie2d("Recursive 1")
         val lineCutSet = new LineSerie2d("CutSet")
         val linePathSet = new LineSerie2d("PathSet")
         val lineRecursive2 = new LineSerie2d("Recursive 2")
 
-//        lineRecursive1.setColor(Color.RED)
+        lineRecursive1.setColor(Color.RED)
         lineCutSet.setColor(Color.GREEN)
         linePathSet.setColor(Color.BLUE)
         lineRecursive2.setColor(new Color(255, 0, 255))
@@ -357,16 +358,16 @@ object Plot2D {
         chart.getAxisLayout.setXAxisLabel("# Basic events")
         chart.getAxisLayout.setYAxisLabel("Average approximated height") // 50 samples
 
-//        chart.add(lineRecursive1)
+        chart.add(lineRecursive1)
         chart.add(lineCutSet)
         chart.add(linePathSet)
         chart.add(lineRecursive2)
 
-//        val legendRecursive1 = new Legend(lineRecursive1.getName, lineRecursive1.getColor)
+        val legendRecursive1 = new Legend(lineRecursive1.getName, lineRecursive1.getColor)
         val legendCutSet = new Legend(lineCutSet.getName, lineCutSet.getColor)
         val legendPathSet = new Legend(linePathSet.getName, linePathSet.getColor)
         val legendRecursive2 = new Legend(lineRecursive2.getName, lineRecursive2.getColor)
-        val legendRenderer = new OverlayLegendRenderer(/*legendRecursive1, */legendCutSet, legendPathSet, legendRecursive2)
+        val legendRenderer = new OverlayLegendRenderer(legendRecursive1, legendCutSet, legendPathSet, legendRecursive2)
         val layout = legendRenderer.getLayout
 
         layout.getMargin.setWidth(10)
@@ -379,12 +380,12 @@ object Plot2D {
         chart.view2d()
         chart.open()
 
-        (chart, Lines(lineCutSet, linePathSet, lineRecursive2))
+        (chart, Lines(lineRecursive1, lineCutSet, linePathSet, lineRecursive2))
     }
 
     def addHeights(chart: Chart, lines: Lines, average: Average): Unit = (lines, average) match {
-        case (Lines(l2, l3, l4), Average(be, h2, h3, h4)) =>
-//            l1.add(be, h1)
+        case (Lines(l1, l2, l3, l4), Average(be, h1, h2, h3, h4)) =>
+            l1.add(be, h1)
             l2.add(be, h2)
             l3.add(be, h3)
             l4.add(be, h4)
@@ -430,12 +431,12 @@ object Plot2D {
         chart.view2d()
         chart.open()
 
-        (chart, Lines(lineCutSet, linePathSet, lineRecursive2))
+        (chart, Lines(lineRecursive1, lineCutSet, linePathSet, lineRecursive2))
     }
 
     def addTimes(chart: Chart, lines: Lines, average: AverageTime): Unit = (lines, average) match {
-        case (Lines(l2, l3, l4), AverageTime(be, t2, t3, t4)) =>
-//            l1.add(be, t1)
+        case (Lines(l1, l2, l3, l4), AverageTime(be, t1, t2, t3, t4)) =>
+            l1.add(be, t1)
             l2.add(be, t2)
             l3.add(be, t3)
             l4.add(be, t4)
@@ -460,22 +461,22 @@ object CSVOutput {
     }
 
     def printDataHeader(file: Path): Unit = {
-        val line = "# Basic events,Height (cut set algorithm),Height (path set algorithm),Height (recursive algorithm 2)\r\n"
+        val line = "# Basic events,Height (recursive algorithm 1),Height (cut set algorithm),Height (path set algorithm),Height (recursive algorithm 2)\r\n"
         writeString(file, line)
     }
 
     def printTimingsHeader(file: Path): Unit = {
-        val line = "# Basic events,Execution time (cut set algorithm) (ns),Execution time (path set algorithm) (ns),Execution time (recursive algorithm 2) (ns)\r\n"
+        val line = "# Basic events,Execution time (recursive algorithm 1) (ns),Execution time (cut set algorithm) (ns),Execution time (path set algorithm) (ns),Execution time (recursive algorithm 2) (ns)\r\n"
         writeString(file, line)
     }
 
     def printData(file: Path, point: Coordinate): Unit = point match
-        case Coordinate(events, cutset, pathset, recursive2) =>
-            writeString(file, s""""$events","$cutset","$pathset","$recursive2"\r\n""")
+        case Coordinate(events, recursive1, cutset, pathset, recursive2) =>
+            writeString(file, s""""$events","$recursive1","$cutset","$pathset","$recursive2"\r\n""")
 
     def printTimings(file: Path, timings: Time): Unit = timings match
-        case Time(events, cutset_ns, pathset_ns, recursive2_ns) =>
-            writeString(file, s""""$events","${cutset_ns}","${pathset_ns}","${recursive2_ns}"\r\n""")
+        case Time(events, recursive1_ns, cutset_ns, pathset_ns, recursive2_ns) =>
+            writeString(file, s""""$events","${recursive1_ns}","${cutset_ns}","${pathset_ns}","${recursive2_ns}"\r\n""")
 
     private def writeString(file: Path, string: String): Unit = {
         Files.writeString(file, string, StandardOpenOption.CREATE, StandardOpenOption.WRITE, StandardOpenOption.APPEND)
