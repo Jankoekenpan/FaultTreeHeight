@@ -165,27 +165,19 @@ def eliminateOne(bdt: BinaryDecisionTree, path: Path): BinaryDecisionTree = {
     // u...v
     val pathInBetween = path.from(duplicateEvent)
 
-    if isOnlyLeft(pathInBetween) then
-        // replace v and its left and right branches by the left branch of v.
-        val BinaryDecisionTree.NonLeaf(v, left, _) = traverse(bdt, path): @unchecked
-        replaceViaPath(bdt, path, left)
-    else if isOnlyRight(pathInBetween) then
-        // replace v and its left and right branches by the right branch of v.
-        val BinaryDecisionTree.NonLeaf(v, _, right) = traverse(bdt, path): @unchecked
-        replaceViaPath(bdt, path, right)
-    else
-        // top...u
-        val pathUpToU = path.upTo(duplicateEvent)
+    // top...u
+    val pathUpToU = path.upTo(duplicateEvent)
 
-        pathInBetween match
-            case Path.ConsRight(u, _) =>
-                // replace the right branch of u by the right branch of v.
-                val BinaryDecisionTree.NonLeaf(v, _, right) = traverse(bdt, path): @unchecked
-                replaceAfterPathRight(bdt, pathUpToU, right)
-            case Path.ConsLeft(u, _) =>
-                // replace the left branch of u by the left branch of v.
-                val BinaryDecisionTree.NonLeaf(v, left, _) = traverse(bdt, path): @unchecked
-                replaceAfterPathLeft(bdt, pathUpToU, left)
+    pathInBetween match
+        case Path.ConsLeft(u, _) =>
+            // replace the left branch of u by the left branch of v.
+            val BinaryDecisionTree.NonLeaf(v, left, _) = traverse(bdt, path): @unchecked
+            replaceViaPath(bdt, path, left)
+        case Path.ConsRight(u, _) =>
+            // replace the right branch of u by the right branch of v.
+            val BinaryDecisionTree.NonLeaf(v, _, right) = traverse(bdt, path): @unchecked
+            replaceViaPath(bdt, path, right)
+
 }
 
 def eliminateRepeatedly(bdt: BinaryDecisionTree): BinaryDecisionTree = {
@@ -200,12 +192,26 @@ def eliminateRepeatedly(bdt: BinaryDecisionTree): BinaryDecisionTree = {
     tree
 }
 
+def cleanupLeaves(bdt: BinaryDecisionTree): BinaryDecisionTree = {
+    def tighten(bdt: BinaryDecisionTree): BinaryDecisionTree = bdt match
+        case BinaryDecisionTree.NonLeaf(_, BinaryDecisionTree.Zero, BinaryDecisionTree.Zero) => BinaryDecisionTree.Zero
+        case BinaryDecisionTree.NonLeaf(_, BinaryDecisionTree.One, BinaryDecisionTree.One) => BinaryDecisionTree.One
+        case _ => bdt
+
+    bdt match
+        case BinaryDecisionTree.NonLeaf(x, left, right) => tighten(BinaryDecisionTree.NonLeaf(x, cleanupLeaves(left), cleanupLeaves(right)))
+        case _ => bdt
+}
+
+def algorithm6(bdt: BinaryDecisionTree): BinaryDecisionTree =
+    cleanupLeaves(eliminateRepeatedly(bdt))
+
 object ExampleBDT {
 
     def main(args: Array[String]): Unit = {
         val tree = b(2, b(1, b(2, _0, _1), _1), b(1, b(1, b(2, _0, _1), _1), _1))
 
-        val reducedTree = eliminateRepeatedly(tree)
+        val reducedTree = algorithm6(tree)
 
         println(reducedTree)
     }
