@@ -227,25 +227,32 @@ def algorithm7(bdt: BinaryDecisionTree, basicEvents: BasicEvents): (OccurrencePr
     val paths = getPaths(bdt)
 
     val (paths0, paths1) = paths.partition(isPath0)
-    val h0 = for path0 <- paths0 yield h(path0)
-    val h1 = for path1 <- paths1 yield h(path1)
+    val h0 = for path0 <- paths0 yield h(path0).toDouble
+    val h1 = for path1 <- paths1 yield h(path1).toDouble
 
     val p0 = for path0 <- paths0 yield P(path0, basicEvents)
     val p1 = for path1 <- paths1 yield P(path1, basicEvents)
 
     val rho: OccurrenceProbability = p1.sum
-    val h: Height = vectorMultiply(h0, p0) + vectorMultiply(h1, p1)
-    (rho, h)
+    val height: Height = vectorMultiply(h0, p0) + vectorMultiply(h1, p1)
+    (rho, height)
 }
 
 object ExampleBDT {
 
     def main(args: Array[String]): Unit = {
-        val tree = b(2, b(1, b(2, _0, _1), _1), b(1, b(1, b(2, _0, _1), _1), _1))
+        val tree1 = b(2, b(1, b(2, _0, _1), _1), b(1, b(1, b(2, _0, _1), _1), _1))
 
-        val reducedTree = algorithm6(tree)
+        val reducedTree = algorithm6(tree1)
 
         println(reducedTree)
+
+        // Figure 5, Example 8.
+        val tree2 = b(3, b(1, _0, b(2, _0, _1)), b(2, b(1, _0, _1), _1))
+        val probabilities = IntMap(1 -> 1D/4D, 2 -> 1D/2D, 3 -> 1D/3D)
+        val (rho, h) = algorithm7(tree2, probabilities)
+        println(rho)
+        println(h)
     }
 
     inline def b(id: Event, left: BinaryDecisionTree, right: BinaryDecisionTree): BinaryDecisionTree =
