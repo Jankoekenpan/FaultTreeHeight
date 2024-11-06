@@ -1,6 +1,7 @@
 package decisiontree
 
 import scala.annotation.tailrec
+import scala.collection.immutable.IntMap
 
 type Event = Int
 
@@ -21,10 +22,13 @@ def isLeafNode(binaryDecisionTree: BinaryDecisionTree): Boolean = binaryDecision
 object Path {
     case class Leaf[L](leaf: L) extends Path[L]:
         override def last: L = leaf
+        override def length: Int = 1
     case class ConsLeft[L](id: Event, tail: Path[L]) extends Path[L]:
         override lazy val last: L = tail.last
+        override lazy val length: Int = 1 + tail.length
     case class ConsRight[L](id: Event, tail: Path[L]) extends Path[L]:
         override lazy val last: L = tail.last
+        override lazy val length: Int = 1 + tail.length
 }
 
 trait Path[L] {
@@ -40,8 +44,8 @@ trait Path[L] {
         case ConsLeft(id, _) => id
         case ConsRight(id, _) => id
 
-    // TODO can cache results if computation becomes slow. Can use something like CachedFunction0, or lazy val.
     def last: L
+    def length: Int
 
     def upTo(event: Event): Path[Event] = this match
         case p@Leaf(id) => if event == id then p.asInstanceOf[Path[Event]] else throw new NoSuchElementException("Not found: " + event)
@@ -186,21 +190,52 @@ enum Last:
     case Zero, One
 type Path7 = Path[Last]
 
-def getPaths(bdt: BinaryDecisionTree): LazyList[Path7] = bdt match
+def getPaths(bdt: BinaryDecisionTree): Seq[Path7] = bdt match
     case BinaryDecisionTree.Zero => LazyList(Path.Leaf(Last.Zero))
     case BinaryDecisionTree.One => LazyList(Path.Leaf(Last.One))
     case BinaryDecisionTree.NonLeaf(id, l, r) =>
         getPaths(l).map(pl => Path.ConsLeft(id, pl)) ++ getPaths(r).map(pr => Path.ConsRight(id, pr))
 
 def isPath0(path: Path7): Boolean = path.last == Last.Zero
-def isPath1(path: Path7): Boolean = path.last == Last.One
 
-def algorithm7(bdt: BinaryDecisionTree): (OccurrenceProbability, Height) = {
+// h just counts basic events (so no leaf nodes).
+def h(path: Path7): Int = path.length - 1
+//
+//enum Direction:
+//    case L, R
+//case class Edge(start: Event, direction: Direction, dest: Event | Last)
+//type Edges = Seq[Edge]
+
+//def edges(path: Path7): List[Edge] = path match
+//    case Path.Leaf(_) => Nil
+//    case Path.ConsLeft(x, xs) => Edge(x, Direction.L, xs.head) :: edges(xs)
+//    case Path.ConsRight(x, xs) => Edge(x, Direction.R, xs.head) :: edges(xs)
+
+type Probability = Double
+type BasicEvents = IntMap[Probability]
+
+def vectorMultiply(one: Seq[Double], two: Seq[Double]): Double =
+    one.lazyZip(two).map(_ * _).sum
+
+def P(path: Path7, basicEventProbabilities: BasicEvents): Probability = path match {
+    case Path.Leaf(_) => 1D
+    case Path.ConsRight(event, tail) => basicEventProbabilities(event) * P(tail, basicEventProbabilities)
+    case Path.ConsLeft(event, tail) => (1D - basicEventProbabilities(event)) * P(tail, basicEventProbabilities)
+}
+
+def algorithm7(bdt: BinaryDecisionTree, basicEvents: BasicEvents): (OccurrenceProbability, Height) = {
     val paths = getPaths(bdt)
 
+    val (paths0, paths1) = paths.partition(isPath0)
+    val h0 = for path0 <- paths0 yield h(path0)
+    val h1 = for path1 <- paths1 yield h(path1)
 
+    val p0 = for path0 <- paths0 yield P(path0, basicEvents)
+    val p1 = for path1 <- paths1 yield P(path1, basicEvents)
 
-    ???
+    val rho: OccurrenceProbability = p1.sum
+    val h: Height = vectorMultiply(h0, p0) + vectorMultiply(h1, p1)
+    (rho, h)
 }
 
 object ExampleBDT {
