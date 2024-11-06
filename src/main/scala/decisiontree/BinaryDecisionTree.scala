@@ -279,9 +279,7 @@ object ExampleBDT {
 
     def main(args: Array[String]): Unit = {
         val tree1 = b(2, b(1, b(2, _0, _1), _1), b(1, b(1, b(2, _0, _1), _1), _1))
-
         val reducedTree = algorithm6(tree1)
-
         println(reducedTree)
 
         // Figure 5, Example 8.
@@ -290,6 +288,13 @@ object ExampleBDT {
         val (rho, h) = algorithm7(tree2, probabilities)
         println(rho)
         println(h)
+
+        val tree3 = b(1, b(2, _0, _1), _1)
+        val tree4 = b(3, b(4, _0, _1), _1)
+        val tree5 = b(2, _0, _1)
+        val (tau0, tau1) = algorithm2(Seq(tree3, tree4, tree5))
+        println(tau0)
+        println(tau1)
     }
 
     inline def b(id: Event, left: BinaryDecisionTree, right: BinaryDecisionTree): BinaryDecisionTree =
