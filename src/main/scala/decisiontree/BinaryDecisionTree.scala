@@ -359,6 +359,21 @@ object ExampleBDT {
         val (tau0, tau1) = algorithm2(Seq(tree3, tree4, tree5))
         println(tau0)
         println(tau1)
+
+        import minimalcutpathset.getProbabilities
+        val testTree = FaultTree(1, Map(
+            1 -> TreeNode.Combination(1, Gate.Or, Set(2, 3)),
+            2 -> TreeNode.Combination(2, Gate.And, Set(4, 5, 6)),
+            3 -> TreeNode.Combination(3, Gate.And, Set(7, 8)),
+            4 -> TreeNode.BasicEvent(4, 0.5),
+            5 -> TreeNode.BasicEvent(5, 0.7),
+            6 -> TreeNode.BasicEvent(6, 0.4),
+            7 -> TreeNode.BasicEvent(7, 0.6),
+            8 -> TreeNode.BasicEvent(8, 0.2)
+        ))
+        val basicEvents = getProbabilities(testTree)()
+        val (bdt, height) = algorithm8(testTree, basicEvents)
+        println(height) // expected: 2.632
     }
 
     inline def b(id: Event, left: BinaryDecisionTree, right: BinaryDecisionTree): BinaryDecisionTree =
