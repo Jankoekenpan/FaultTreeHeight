@@ -67,7 +67,7 @@ object ApproximationRatio {
     }
 
     def printHeader(file: Path): Unit = {
-        val line = "Fault Tree,height (algorithm 1 - enumeration),height (algorithm 2 - vector),height (algorithm 4 - cutset),height (algorithm 5 - pathset),height (algorithm 7 - vector algorithm 2),approximation ratio algorithm 2,approximation ratio algorithm 4,approximation ratio algorithm 5,approximation ratio algorithm 7\n"
+        val line = "Fault Tree,height (algorithm 1 - enumeration),height (algorithm 2 - vector),height (algorithm 4 - cutset),height (algorithm 5 - pathset),height (algorithm 7 - vector algorithm 2),height (algorithm 8 - binary decision tree algorithm),approximation ratio algorithm 2,approximation ratio algorithm 4,approximation ratio algorithm 5,approximation ratio algorithm 7,approximation ratio algorithm 8\n"
         print(line)
         writeString(file, line)
     }
@@ -84,20 +84,21 @@ object ApproximationRatio {
         println(s"DEBUG dag faulttree = $dagTree")
         val millisBefore = System.currentTimeMillis();
 
-        val heightDecisionTree = decisiontree.height.tupled(decisionTree)   // enumeration algorithm
-        val heightFaultTree = faulttree.height(faultTree)                   // recursive algorithm 1
-//        val heightDagTree = minimalcutpathset.height.tupled(dagTree)        // UNUSED: cutset/pathset algorithm
-//        val heightAlgo6 = minimalcutpathset.height6.tupled(dagTree)         // UNUSED: cutset algorithm with problem
-        val heightAlgo4 = minimalcutpathset.height4(dagTree._1)             // cutset algorithm
-        val heightAlgo5 = minimalcutpathset.height5(dagTree._1)             // pathset algorithm
-        val heightAlgo7 = faulttree.height7(faultTree)                      // recursive algorithm 2
+        val heightDecisionTree = decisiontree.height.tupled(decisionTree)           // enumeration algorithm
+        val heightFaultTree = faulttree.height(faultTree)                           // recursive algorithm 1
+//        val heightDagTree = minimalcutpathset.height.tupled(dagTree)                // UNUSED: cutset/pathset algorithm
+//        val heightAlgo6 = minimalcutpathset.height6.tupled(dagTree)                 // UNUSED: cutset algorithm with problem
+        val heightAlgo4 = minimalcutpathset.height4(dagTree._1)                     // cutset algorithm
+        val heightAlgo5 = minimalcutpathset.height5(dagTree._1)                     // pathset algorithm
+        val heightAlgo7 = faulttree.height7(faultTree)                              // recursive algorithm 2
+        val (bdt, heightAlgo8) = decisiontree.algorithm8(dagTree._1, dagTree._2)    // dag-to-binary_decision_tree algorithm
 
         val millisAfter = System.currentTimeMillis()
 
         val differenceMillis = millisAfter - millisBefore
         println(s"computation took ${differenceMillis / 1000} seconds.")
 
-        val line = s""""$faultTree","$heightDecisionTree","$heightFaultTree","$heightAlgo4","$heightAlgo5","$heightAlgo7","${ratio(heightFaultTree, heightDecisionTree)}","${ratio(heightAlgo4, heightDecisionTree)}","${ratio(heightAlgo5, heightDecisionTree)}","${ratio(heightAlgo7, heightDecisionTree)}"\n""".stripMargin
+        val line = s""""$faultTree","$heightDecisionTree","$heightFaultTree","$heightAlgo4","$heightAlgo5","$heightAlgo7","$heightAlgo8","${ratio(heightFaultTree, heightDecisionTree)}","${ratio(heightAlgo4, heightDecisionTree)}","${ratio(heightAlgo5, heightDecisionTree)}","${ratio(heightAlgo7, heightDecisionTree)}","${ratio(heightAlgo8, heightDecisionTree)}"\n""".stripMargin
         print(line)
         writeString(file, line)
     }
