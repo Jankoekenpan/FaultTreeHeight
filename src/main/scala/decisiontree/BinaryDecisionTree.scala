@@ -2,6 +2,7 @@ package decisiontree
 
 import scala.annotation.tailrec
 import scala.collection.immutable.IntMap
+import scala.collection.mutable
 
 type Event = Int
 
@@ -239,6 +240,8 @@ def algorithm7(bdt: BinaryDecisionTree, basicEvents: BasicEvents): (OccurrencePr
 }
 
 import minimalcutpathset.FaultTree
+import minimalcutpathset.TreeNode
+import minimalcutpathset.Gate
 
 def replaceZeros(tree: BinaryDecisionTree, replacement: BinaryDecisionTree): BinaryDecisionTree = tree match {
     case BinaryDecisionTree.Zero => replacement
@@ -266,13 +269,74 @@ def algorithm2(Tis: Seq[BinaryDecisionTree]): (BinaryDecisionTree, BinaryDecisio
     (tau0(Tis), tau1(Tis))
 }
 
-def T(basicEvent: Event): BinaryDecisionTree.NonLeaf =
+def layers(tree: FaultTree): IArray[Seq[TreeNode]] = {
+    val layersReversed: mutable.Map[Int, mutable.Seq[TreeNode]] = new mutable.TreeMap()
+
+    def layerOf(t: TreeNode): Int = {
+        val layer = t match {
+            case TreeNode.BasicEvent(_, _) => 0
+            case TreeNode.Combination(_, _, children) => children.map(event => layerOf(tree.node(event))).max + 1
+        }
+
+        layersReversed.updateWith(layer) {
+            case None => Some(mutable.IndexedSeq(t))
+            case Some(seq) => Some(seq.appended(t))
+        }
+
+        layer
+    }
+
+    layerOf(tree.topNode)
+
+    IArray.from(layersReversed.values.map(_.toSeq))
+}
+
+def basicTree(basicEvent: Event): BinaryDecisionTree.NonLeaf =
     BinaryDecisionTree.NonLeaf(basicEvent, BinaryDecisionTree.Zero, BinaryDecisionTree.One)
 
-def algorithm8(faultTree: FaultTree, basicEvens: BasicEvents): (BinaryDecisionTree, Height) = {
+def algorithm8(faultTree: FaultTree, basicEvents: BasicEvents): (BinaryDecisionTree, Height) =
+    algorithm8(faultTree, basicEvents, layers(faultTree))
 
+def algorithm8(faultTree: FaultTree, basicEvents: BasicEvents, layers: IArray[Seq[TreeNode]]): (BinaryDecisionTree, Height) = {
+    val l = layers.length - 1
 
-    ???
+    val trees: mutable.Map[Event, BinaryDecisionTree] = new mutable.HashMap()
+    for be <- basicEvents.keys do
+        trees.put(be, basicTree(be))
+    end for
+
+    for j <- 1 to l do
+        for TreeNode.Combination(x, gate, children) <- layers(j) do
+            gate match
+                case Gate.Or =>
+                    val sortedChildTrees = children.toSeq
+                        .map(c => (c, trees(c)))
+                        .sortBy { case (event, tree) =>
+                            val (rho, _) = algorithm7(tree, basicEvents); rho
+                        } (using summon[Ordering[OccurrenceProbability]].reverse)
+                        .map { case (_, tree) => tree }
+                    val (tau0, _) = algorithm2(sortedChildTrees)
+                    val Tx = algorithm6(tau0)
+                    trees.put(x, Tx)
+                case Gate.And =>
+                    val sortedChildTrees = children.toSeq
+                        .map(c => (c, trees(c)))
+                        .sortBy { case (event, tree) =>
+                            val (rho, _) = algorithm7(tree, basicEvents); rho
+                        }
+                        .map { case (_, tree) => tree }
+                    val (_, tau1) = algorithm2(sortedChildTrees)
+                    val Tx = algorithm6(tau1)
+                    trees.put(x, Tx)
+            end match
+        end for
+    end for
+
+    val x = faultTree.topEvent
+    val Tx = trees(x)
+    val (_, heightX) = algorithm7(Tx, basicEvents)
+
+    (Tx, heightX)
 }
 
 object ExampleBDT {
