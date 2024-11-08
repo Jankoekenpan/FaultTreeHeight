@@ -111,7 +111,7 @@ object RandomDags {
                         else
                             // try to force a new child
                             val from = mutable.ArrayBuffer.from(descendants)
-                            from.remove(downwardRelations(parent).head)
+                            from.subtractOne(downwardRelations(parent).head)
                             if from.nonEmpty then
                                 // add the new child
                                 val child = pickRandomly(from)
@@ -171,5 +171,13 @@ object RandomDags {
             TreeNode.BasicEvent(event, randomProbability())
         else
             TreeNode.Combination(event, randomGate(), children.toSet)
+    }
+
+    def main(args: Array[String]): Unit = {
+        given random: RandomGenerator = new java.util.Random()
+
+        for (_ <- 0 until 10) {
+            println(makeRandomDag(10))
+        }
     }
 }
