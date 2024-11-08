@@ -14,6 +14,7 @@ def randomGate()(using random: RandomGenerator): Gate =
 
 object RandomDags {
 
+    // TODO test using ScalaCheck that the number of basic events of the generated DAG-like fault tree always equals nBasicEvents!
     def makeRandomDag(nBasicEvents: Int)(using random: RandomGenerator): FaultTree = {
         var id = 0
 
@@ -23,34 +24,23 @@ object RandomDags {
             oldId
         }
 
-        // TODO we have to ensure this is only a single top event
-        // TODO and we have to ensure there are no cycles in the graph.
-        // TODO we also have to ensure every basic event is reached
-        // TODO and we have to randomise the number edges.
-        // TODO also make sure that basic event's cannot have children.
+        // we have to ensure this is only a single top event
+        // and we have to ensure there are no cycles in the graph.
+        // we also have to ensure every basic event is reached
+        // and we have to randomise the number edges.
+        // also make sure that basic event's cannot have children.
 
-        // TODO idea:
-        // TODO construct graph layer by layer, each new top layer connects to all nodes on the underlying layer,
-        // TODO and additionally to some nodes below (50% chance?).
-        // TODO each layer size is determined by a random number between 1 and the size of the layer below (inclusive).
-        // TODO type of layer node (AND/OR) is determined randomly.
-        // TODO continue adding layers until the top layer size is 1.
-
-        // TODO in one intermediate layer, how do we make sure all the nodes in the layer below are reached?
-        // TODO in our logic, we can maybe reason the other way around:
-        // TODO Each vertex from the child layer picks one or more vertices from the layer above.
-        // TODO I think I can make this simpler:
-        // TODO each vertex from the child layer picks *exactly one* parent.
-        // TODO then each parent connects randomly to any vertex which is below.
+        // idea:
+        // build graph layer by layer.
+        // each vertex from the child layer picks *exactly one* parent.
+        // then each parent connects randomly to any vertex which is below.
         //
-        // TODO If a node in the new layer has only a single child at this point, we either have to
-        // TODO     - remove it
-        // TODO     - or force another child
-        // TODO we can decide it randomly (50% chance)
-
-        // TODO at the end: for all nodes which have only a single child: remove them and reconnect the parents to the grandchild directly.
-        // TODO can this happen? I don't think so.
-
+        // if a node in the new layer has only a single child at this point, we either have to
+        //  - remove it
+        //  - or force another child
+        // we can decide it randomly (50% chance)
+        //
+        // stop after a layer of size 1 is generated
 
         val basicEvents: Seq[Event] = for _ <- 0 until nBasicEvents yield nextId()
 
@@ -101,30 +91,31 @@ object RandomDags {
                 end for
 
                 // If a node in the new layer has only one child at this point, we either have to remove it or force a second child
-                val removeFromLayer = new mutable.HashSet[Event]()
-                for parent <- newLayerEvents do
-                    if hasSingleChild(parent) then
-                        if random.nextBoolean() then
-                            // remove it
-                            removeLinks(parent)
-                            removeFromLayer.add(parent)
-                        else
-                            // try to force a new child
-                            val from = mutable.ArrayBuffer.from(descendants)
-                            from.subtractOne(downwardRelations(parent).head)
-                            if from.nonEmpty then
-                                // add the new child
-                                val child = pickRandomly(from)
-                                addLink(parent, child)
-                            else
-                                // unfortunately, still have to remove it, because no potential other child exists!
-                                removeLinks(parent)
-                                removeFromLayer.add(parent)
-                            end if
-                        end if
-                    end if
-                end for
-                newLayerEvents.subtractAll(removeFromLayer)
+                // TODO should probably remove this part. may need to do some tuning at the end (remove intermediate nodes with only 1 child)
+//                val removeFromLayer = new mutable.HashSet[Event]()
+//                for parent <- newLayerEvents do
+//                    if hasSingleChild(parent) then
+//                        if random.nextBoolean() then
+//                            // remove it
+//                            removeLinks(parent)
+//                            removeFromLayer.add(parent)
+//                        else
+//                            // try to force a new child
+//                            val from = mutable.ArrayBuffer.from(descendants)
+//                            from.subtractOne(downwardRelations(parent).head)
+//                            if from.nonEmpty then
+//                                // add the new child
+//                                val child = pickRandomly(from)
+//                                addLink(parent, child)
+//                            else
+//                                // unfortunately, still have to remove it, because no potential other child exists!
+//                                removeLinks(parent)
+//                                removeFromLayer.add(parent)
+//                            end if
+//                        end if
+//                    end if
+//                end for
+//                newLayerEvents.subtractAll(removeFromLayer)
 
                 // If the new layer is only size 1, then we finish generating layers.
                 if newLayerEvents.size == 1 then
@@ -139,9 +130,9 @@ object RandomDags {
             -1 // Unreachable
         }
 
-        // TODO do we need to check for events with only a single child? I don't think so, we already took care of that.
+        // TODO it seems that some
 
-        // Generate DAG-like fault tree based on links :)
+        // Create DAG-like fault tree based on links :)
         val nodes = makeTreeNodes(nBasicEvents, topEvent, downwardRelations)
         FaultTree(topEvent, nodes)
     }

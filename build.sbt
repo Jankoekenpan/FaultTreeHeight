@@ -10,6 +10,7 @@ ThisBuild / javaOptions ++= Seq(
 
 resolvers += "Jzy3d Releases" at "https://maven.jzy3d.org/releases/"
 libraryDependencies += "org.jzy3d" % "jzy3d-everything" % "2.2.1"
+libraryDependencies += "guru.nidi" % "graphviz-java" % "0.18.1"
 
 enablePlugins(JmhPlugin)
 

@@ -12,7 +12,7 @@ def randomProbability()(using random: RandomGenerator): Double =
 
 object RandomTrees {
 
-    //TODO test this method using ScalaTest property-based testing.
+    //TODO test this method using ScalaCheck property-based testing.
     def makeRandomTree(basicEvents: Int)(using random: RandomGenerator): FaultTree = {
         var id = 0
 
