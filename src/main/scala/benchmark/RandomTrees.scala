@@ -7,9 +7,6 @@ import faulttree.FaultTree.*
 enum NodeType:
     case Basic, And, Or
 
-object NodeType:
-    val Values: Seq[NodeType] = Seq(NodeType.Basic, NodeType.And, NodeType.Or)
-
 def randomProbability()(using random: RandomGenerator): Double =
     random.nextDouble(Double.MinPositiveValue, 1D)
 
@@ -81,7 +78,7 @@ object Plots {
         CSVOutput.printTimingsHeader(csvTimeOutput)
 
         val nIterations = 50
-        for (basicEvents <- 5 to 70/*TODO 100*/ by 5) {
+        for (basicEvents <- 85/*TODO 5*/ to 85/*TODO 100*/ by 5) {
 
             var sumRecursive1 = 0.0
             var sumCutSet = 0.0
