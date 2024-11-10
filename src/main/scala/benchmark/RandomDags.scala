@@ -2,6 +2,7 @@ package benchmark
 
 import minimalcutpathset.{FaultTree, Gate, TreeNode}
 
+import java.nio.file.{Files, Path, StandardOpenOption}
 import java.util.random.RandomGenerator
 import scala.collection.mutable
 import scala.util.boundary
@@ -170,5 +171,124 @@ object RandomDags {
         for (_ <- 0 until 10) {
             println(makeRandomDag(10))
         }
+    }
+}
+
+object DagPlots {
+
+    def main(args: Array[String]): Unit = {
+        given random: RandomGenerator = new java.util.Random()
+
+        val csvOutput = DagCSVOutput.newDataFile()
+        DagCSVOutput.printDataHeader(csvOutput)
+        val csvTimeOutput = DagCSVOutput.newTimingsFile()
+        DagCSVOutput.printTimingsHeader(csvTimeOutput)
+
+        val nIterations = 50
+        for (basicEvents <- 5 to 70/*TODO 85*/ by 5) {
+
+//            var sumCutSet = 0.0
+//            var sumPathSet = 0.0
+//            var sumBDT = 0.0
+
+//            var sumTimeCutSet_ns = 0L
+//            var sumTimePathSet_ns = 0L
+//            var sumTimeBDT_ns = 0L
+
+            for (it <- 1 to nIterations) {
+                println(s"Iteration: ${it}")
+
+                val dagLikeFaultTree = RandomDags.makeRandomDag(basicEvents)
+                val dagBasicEvents = minimalcutpathset.getBasicEvents(dagLikeFaultTree)
+                val dagProbabilities = minimalcutpathset.getProbabilities(dagLikeFaultTree)(dagBasicEvents)
+
+                val minimalCutSets = minimalcutpathset.minimalCutSets(dagLikeFaultTree)(dagBasicEvents)
+                val minimalPathSets = minimalcutpathset.minimalPathSets(dagLikeFaultTree)(dagBasicEvents)
+
+                println("Calculate height using CutSet algorithm...")
+                val time1 = System.nanoTime()
+                val heightCutSet = minimalcutpathset.algorithm4(minimalCutSets, dagProbabilities)._2
+                val time1_end = System.nanoTime()
+                println("Calculate height using PathSet algorithm...")
+                val time2 = System.nanoTime()
+                val heightPathSet = minimalcutpathset.algorithm5(minimalCutSets, dagProbabilities)._2
+                val time2_end = System.nanoTime()
+                println("Calculate height using Binary Decision Tree algorithm...")
+                val time3 = System.nanoTime()
+                val heightBDT = decisiontree.algorithm8(dagLikeFaultTree, dagProbabilities)._2
+                val time3_end = System.nanoTime()
+                println("Finished height calculations!")
+
+                val cutset_ns = time1_end - time1
+                val pathset_ns = time2_end - time2
+                val bdt_ns = time3_end - time3
+
+                val point = DagCoordinate(basicEvents, heightCutSet, heightPathSet, heightBDT)
+                val time = DagTime(basicEvents, cutset_ns, pathset_ns, bdt_ns)
+
+                DagCSVOutput.printData(csvOutput, point)
+                DagCSVOutput.printTimings(csvTimeOutput, time)
+
+//                sumCutSet += heightCutSet
+//                sumPathSet += heightPathSet
+//                sumBDT += heightBDT
+
+//                sumTimeCutSet_ns += cutset_ns
+//                sumTimePathSet_ns += pathset_ns
+//                sumTimeBDT_ns += bdt_ns
+            }
+
+//            val averageHeightCutSet = sumCutSet / nIterations
+//            val averageHeightPathSet = sumPathSet / nIterations
+//            val averageHeightBDT = sumBDT / nIterations
+
+            // TODO calculate average times too.
+
+            // print to heights chart and timings chart...
+
+            println(s"#basic events: ${basicEvents}")
+            // TODO print some variables..
+            println()
+            println()
+        }
+    }
+}
+
+case class DagCoordinate(events: Int, heightCutSet: Double, heightPathSet: Double, heightBDT: Double)
+case class DagTime(events: Int, timeCutSet_ns: Long, timePathSet_ns: Long, timeBDT_ns: Long)
+
+object DagCSVOutput {
+
+    private val outFile = "dag-points.csv"
+    private val timingsFile = "dag-timings.csv"
+
+    def newDataFile(): Path = {
+        Files.createFile(Path.of(outFile))
+    }
+
+    def newTimingsFile(): Path = {
+        Files.createFile(Path.of(timingsFile))
+    }
+
+    def printDataHeader(file: Path): Unit = {
+        val line = "# Basic events,Height (cut set algorithm),Height (path set algorithm),Height (binary decision tree algorithm)\r\n"
+        writeString(file, line)
+    }
+
+    def printTimingsHeader(file: Path): Unit = {
+        val line = "# Basic events,Execution time (cut set algorithm) (ns),Execution time (path set algorithm) (ns),Execution time (binary decision tree algorithm) (ns)\r\n"
+        writeString(file, line)
+    }
+
+    def printData(file: Path, point: DagCoordinate): Unit = point match
+        case DagCoordinate(events, cutset, pathset, bdt) =>
+            writeString(file, s""""$events","$cutset","$pathset","$bdt"\r\n""")
+
+    def printTimings(file: Path, timings: DagTime): Unit = timings match
+        case DagTime(events, cutset_ns, pathset_ns, bdt_ns) =>
+            writeString(file, s""""$events","$cutset_ns","$pathset_ns","$bdt_ns"\r\n""")
+
+    private def writeString(file: Path, string: String): Unit = {
+        Files.writeString(file, string, StandardOpenOption.CREATE, StandardOpenOption.APPEND)
     }
 }

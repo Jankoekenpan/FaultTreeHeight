@@ -7,5 +7,8 @@ target
 ratios*.csv
 points*.csv
 timings*.csv
+dag-points*.csv
+dag-timings*.csv
+dag-ratios*.csv
 mail
 tmp

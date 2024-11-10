@@ -36,6 +36,23 @@ object Conversion {
         (minimalcutpathset.FaultTree(tree.event, eventsBuilder.result()), probabilities.result())
     }
 
+    def translateToTreeLikeFaultTree(dagFT: minimalcutpathset.FaultTree): faulttree.FaultTree = {
+        def recur(node: minimalcutpathset.TreeNode): faulttree.FaultTree = {
+            node match {
+                case minimalcutpathset.TreeNode.BasicEvent(id, probability) => faulttree.FaultTree.BasicEvent(id, probability)
+                case minimalcutpathset.TreeNode.Combination(id, minimalcutpathset.Gate.And, children) =>
+                    faulttree.FaultTree.AndEvent(id, children.toSeq.map(c => recur(dagFT.node(c))))
+                case minimalcutpathset.TreeNode.Combination(id, minimalcutpathset.Gate.Or, children) =>
+                    faulttree.FaultTree.OrEvent(id, children.toSeq.map(c => recur(dagFT.node(c))))
+            }
+        }
+
+        recur(dagFT.topNode)
+    }
+
+    def translateToDecisionTree(dagFT: minimalcutpathset.FaultTree): (decisiontree.BooleanFormula, Seq[Double]) =
+        translateToDecisionTree(translateToTreeLikeFaultTree(dagFT))
+
     def translateToDecisionTree(faultTree: faulttree.FaultTree): (decisiontree.BooleanFormula, Seq[Double]) = {
         val probabilities = Seq.newBuilder[Double]
         var curId = 0;

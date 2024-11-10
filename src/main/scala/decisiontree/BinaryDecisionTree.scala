@@ -275,7 +275,7 @@ def layers(tree: FaultTree): IArray[Seq[TreeNode]] = {
     def layerOf(t: TreeNode): Int = {
         val layer = t match {
             case TreeNode.BasicEvent(_, _) => 0
-            case TreeNode.Combination(_, _, children) => children.map(event => layerOf(tree.node(event))).max + 1
+            case TreeNode.Combination(_, _, children) => children.toSeq.map(event => layerOf(tree.node(event))).max + 1
         }
 
         layersReversed.updateWith(layer) {
@@ -293,6 +293,10 @@ def layers(tree: FaultTree): IArray[Seq[TreeNode]] = {
 
 def basicTree(basicEvent: Event): BinaryDecisionTree.NonLeaf =
     BinaryDecisionTree.NonLeaf(basicEvent, BinaryDecisionTree.Zero, BinaryDecisionTree.One)
+
+def algorithm8(faultTree: FaultTree): (BinaryDecisionTree, Height) =
+    import minimalcutpathset.getProbabilities
+    algorithm8(faultTree, getProbabilities(faultTree)())
 
 def algorithm8(faultTree: FaultTree, basicEvents: BasicEvents): (BinaryDecisionTree, Height) =
     algorithm8(faultTree, basicEvents, layers(faultTree))
