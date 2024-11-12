@@ -69,16 +69,16 @@ object Plots {
 //        val averageTimes = new ListBuffer[AverageTime]()  //TODO might not need this.
 
 //        val (chart, scatter) = Plot3D.drawScatter()
-        val (heightsChart, heightLines) = Plot2D.drawHeights()
-        val (timesChart, timesLines) = Plot2D.drawTimes()
+//        val (heightsChart, heightLines) = Plot2D.drawHeights()
+//        val (timesChart, timesLines) = Plot2D.drawTimes()
 
         val csvOutput = CSVOutput.newDataFile()
         CSVOutput.printDataHeader(csvOutput)
         val csvTimeOutput = CSVOutput.newTimingsFile()
         CSVOutput.printTimingsHeader(csvTimeOutput)
 
-        val nIterations = 50
-        for (basicEvents <- 85/*TODO 5*/ to 85/*TODO 100*/ by 5) {
+        val nIterations = 1000 //TODO is this enough??
+        for (basicEvents <- 5 to 70/*TODO 100*/ by 5) {
 
             var sumRecursive1 = 0.0
             var sumCutSet = 0.0
@@ -94,6 +94,7 @@ object Plots {
                 println(s"Iteration: ${it}")
 
                 val faultTree = RandomTrees.makeRandomTree(basicEvents)
+                val (booleanFormula, basicEventProbabilities) = Conversion.translateToDecisionTree(faultTree)
                 val (dagTree, probabilities) = Conversion.translateToDagTree(faultTree)
                 val dagBasicEvents = minimalcutpathset.getBasicEvents(dagTree)
 
@@ -118,16 +119,20 @@ object Plots {
                 val time_3 = System.nanoTime()
                 val heightPathSet = minimalcutpathset.algorithm5(minimalPathSets, probabilities)._2
                 val time3_end = System.nanoTime()
-//                val time_5 = System.nanoTime()
+                println("Calculate height using Random BDT algorithm...")
+                val time_5 = System.nanoTime()
+                val heightRandomBDT = decisiontree.RandomBDTs.algorithm13(booleanFormula, basicEventProbabilities)
+                val time5_end = System.nanoTime()
                 println("Finished height calculations!")
 
                 val recursive1_ns = time1_end - time_1
                 val cutset_ns = time2_end - time_2
                 val pathset_ns = time3_end - time_3
                 val recursive2_ns = time4_end - time_4
+                val randomBDT_ns = time5_end - time_5
 
-                val point = Coordinate(basicEvents, heightRecursive1, heightCutSet, heightPathSet, heightRecursive2)
-                val time = Time(basicEvents, recursive1_ns, cutset_ns, pathset_ns, recursive2_ns)
+                val point = Coordinate(basicEvents, heightRecursive1, heightCutSet, heightPathSet, heightRecursive2, heightRandomBDT)
+                val time = Time(basicEvents, recursive1_ns, cutset_ns, pathset_ns, recursive2_ns, randomBDT_ns)
 
 //                points.addOne(point)  // only for 3d plot
 //                Plot3D.plotHeights(chart, scatter, points)
@@ -174,8 +179,8 @@ object Plots {
             val averageTime = AverageTime(basicEvents, averageTimeRecursive1_ms, averageTimeCutSet_ms, averageTimePatSet_ms, averageTimeRecursive2_ms)
 //            averageTimes.addOne(averageTime)  //TODO might not need this.
 
-            Plot2D.addHeights(heightsChart, heightLines, averageHeights)
-            Plot2D.addTimes(timesChart, timesLines, averageTime)
+//            Plot2D.addHeights(heightsChart, heightLines, averageHeights)
+//            Plot2D.addTimes(timesChart, timesLines, averageTime)
         }
 
         //Plot3D.draw3d(points)
@@ -184,8 +189,8 @@ object Plots {
 
 }
 
-case class Coordinate(basicEvents: Int, heightRecursive1: Double, heightCutSet: Double, heightPathSet: Double, heightRecursive2: Double)
-case class Time(basicEvents: Int, timeRecursive1_ns: Long, timeCutSet_ns: Long, timePathSet_ns: Long, timeRecursive2_ns: Long)
+case class Coordinate(basicEvents: Int, heightRecursive1: Double, heightCutSet: Double, heightPathSet: Double, heightRecursive2: Double, heightRandomBDT: Double)
+case class Time(basicEvents: Int, timeRecursive1_ns: Long, timeCutSet_ns: Long, timePathSet_ns: Long, timeRecursive2_ns: Long, timeRandomBDT_ns: Long)
 case class Average(basicEvents: Int, averageRecursive1: Double, averageCutSet: Double, averagePathSet: Double, averageRecursive2: Double)
 case class AverageTime(basicEvents: Int, averageTimeRecursive1_ms: Double, averageTimeCutSet_ms: Double, averageTimePathSet_ms: Double, averageTimeRecursive2_ms: Double)
 
@@ -206,7 +211,7 @@ object Plot3D {
         val colours = new Array[Color](averages.size)
 
         var i = 0
-        for (Coordinate(basicEvents, heightRecursive1, heightCutSet, heightPathSet, heightRecursive2) <- averages) {
+        for (Coordinate(basicEvents, heightRecursive1, heightCutSet, heightPathSet, heightRecursive2, heightRandomBDT) <- averages) {
             colours(i) = colour(basicEvents)
             coordinates(i) = new Coord3d(heightRecursive1, heightCutSet, heightPathSet)
             i += 1
@@ -254,7 +259,7 @@ object Plot3D {
 
     // helpers
     def coord(coordinate: Coordinate): Coord3d = coordinate match
-        case Coordinate(basicEvents, heightRecursive1, heightCutSet, heightPathSet, heightRecursive2) => new Coord3d(heightRecursive1, heightCutSet, heightPathSet)
+        case Coordinate(basicEvents, heightRecursive1, heightCutSet, heightPathSet, heightRecursive2, heightRandomBDT) => new Coord3d(heightRecursive1, heightCutSet, heightPathSet)
 
     def colour(coordinate: Coordinate): Color = colour(coordinate.basicEvents)
 
@@ -458,22 +463,22 @@ object CSVOutput {
     }
 
     def printDataHeader(file: Path): Unit = {
-        val line = "# Basic events,Height (recursive algorithm 1),Height (cut set algorithm),Height (path set algorithm),Height (recursive algorithm 2)\r\n"
+        val line = "# Basic events,Height (recursive algorithm 1),Height (cut set algorithm),Height (path set algorithm),Height (recursive algorithm 2),Height (random BDT algorithm)\r\n"
         writeString(file, line)
     }
 
     def printTimingsHeader(file: Path): Unit = {
-        val line = "# Basic events,Execution time (recursive algorithm 1) (ns),Execution time (cut set algorithm) (ns),Execution time (path set algorithm) (ns),Execution time (recursive algorithm 2) (ns)\r\n"
+        val line = "# Basic events,Execution time (recursive algorithm 1) (ns),Execution time (cut set algorithm) (ns),Execution time (path set algorithm) (ns),Execution time (recursive algorithm 2) (ns), Execution time (random BDT algorithm) (ns)\r\n"
         writeString(file, line)
     }
 
     def printData(file: Path, point: Coordinate): Unit = point match
-        case Coordinate(events, recursive1, cutset, pathset, recursive2) =>
-            writeString(file, s""""$events","$recursive1","$cutset","$pathset","$recursive2"\r\n""")
+        case Coordinate(events, recursive1, cutset, pathset, recursive2, randomBDT) =>
+            writeString(file, s""""$events","$recursive1","$cutset","$pathset","$recursive2","$randomBDT"\r\n""")
 
     def printTimings(file: Path, timings: Time): Unit = timings match
-        case Time(events, recursive1_ns, cutset_ns, pathset_ns, recursive2_ns) =>
-            writeString(file, s""""$events","${recursive1_ns}","${cutset_ns}","${pathset_ns}","${recursive2_ns}"\r\n""")
+        case Time(events, recursive1_ns, cutset_ns, pathset_ns, recursive2_ns, randomBDT_ns) =>
+            writeString(file, s""""$events","${recursive1_ns}","${cutset_ns}","${pathset_ns}","${recursive2_ns}","${randomBDT_ns}"\r\n""")
 
     private def writeString(file: Path, string: String): Unit = {
         Files.writeString(file, string, StandardOpenOption.CREATE, StandardOpenOption.WRITE, StandardOpenOption.APPEND)

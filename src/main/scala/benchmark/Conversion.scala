@@ -36,6 +36,7 @@ object Conversion {
         (minimalcutpathset.FaultTree(tree.event, eventsBuilder.result()), probabilities.result())
     }
 
+    // TODO this seems to have a bug...
     def translateToTreeLikeFaultTree(dagFT: minimalcutpathset.FaultTree): faulttree.FaultTree = {
         def recur(node: minimalcutpathset.TreeNode): faulttree.FaultTree = {
             node match {
