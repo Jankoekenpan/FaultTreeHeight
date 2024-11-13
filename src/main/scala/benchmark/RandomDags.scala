@@ -205,6 +205,8 @@ object DagPlots {
 
                 val minimalCutSets = minimalcutpathset.minimalCutSets(dagLikeFaultTree)(dagBasicEvents)
                 val minimalPathSets = minimalcutpathset.minimalPathSets(dagLikeFaultTree)(dagBasicEvents)
+                println(s"minimalCutSets = ${minimalCutSets}")
+                println(s"minimalPathSets = ${minimalPathSets}")
 
                 println("Calculate height using CutSet algorithm...")
                 val time1 = System.nanoTime()

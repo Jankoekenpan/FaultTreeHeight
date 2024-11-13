@@ -102,6 +102,8 @@ object Plots {
                 val minimalCutSets = minimalcutpathset.minimalCutSets(dagTree)(dagBasicEvents)
 //                println("Calculating path sets...")
                 val minimalPathSets = minimalcutpathset.minimalPathSets(dagTree)(dagBasicEvents)
+                println(s"minimalCutSets = ${minimalCutSets}")
+                println(s"minimalPathSets = ${minimalPathSets}")
 
                 println("Calculate height using Recursive algorithm 1...")
                 val time_1 = System.nanoTime()
