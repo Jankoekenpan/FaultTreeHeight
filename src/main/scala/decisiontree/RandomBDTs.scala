@@ -33,7 +33,7 @@ object RandomBDTs {
             val ftb0 = subsuper(formula, b, false)
 
             val recEvents = events - b
-
+            // TODO seems to cause OOM. Can we fix this using a cache?
             val (heightFTb1, bdtB1) = height(recEvents, ftb1, probabilities)
             val (heightFTb0, bdtB0) = height(recEvents, ftb0, probabilities)
 

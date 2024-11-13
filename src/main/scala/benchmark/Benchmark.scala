@@ -188,7 +188,6 @@ object Setup {
             val nodeCount = children.size
 
             val leftHalf = nodeCount / 2
-            val rightHalf = nodeCount - leftHalf
 
             val (leftChildren, rightChildren) = children.splitAt(leftHalf)
             decisiontree.BooleanFormula.Or(createBalancedOr(leftChildren, nextId), createBalancedOr(rightChildren, nextId))
@@ -200,7 +199,6 @@ object Setup {
             val nodeCount = children.size
 
             val leftHalf = nodeCount / 2
-            val rightHalf = nodeCount - leftHalf
 
             val (leftChildren, rightChildren) = children.splitAt(leftHalf)
             decisiontree.BooleanFormula.And(createBalancedAnd(leftChildren, nextId), createBalancedAnd(rightChildren, nextId))

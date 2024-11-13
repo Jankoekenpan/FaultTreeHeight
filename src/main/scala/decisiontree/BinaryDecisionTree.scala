@@ -275,7 +275,9 @@ def layers(tree: FaultTree): IArray[Seq[TreeNode]] = {
     def layerOf(t: TreeNode): Int = {
         val layer = t match {
             case TreeNode.BasicEvent(_, _) => 0
-            case TreeNode.Combination(_, _, children) => children.toSeq.map(event => layerOf(tree.node(event))).max + 1
+            case combi @ TreeNode.Combination(_, _, children) =>
+                //println(combi) // TODO remove debug. children seems to be empty sometimes?
+                children.toSeq.map(event => layerOf(tree.node(event))).max + 1
         }
 
         layersReversed.updateWith(layer) {

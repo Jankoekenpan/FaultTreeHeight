@@ -124,14 +124,13 @@ object RandomDags {
 
                 // In rare occasions the new layer is empty, we have to account for this.
                 // e.g. originally it was size 2 but both parents got removed because they had a single child.
-                if newLayerEvents.nonEmpty then
-                    previousLayer = newLayerEvents.toSeq
-                    descendants.addAll(newLayerEvents)
+//                if newLayerEvents.nonEmpty then TODO this can no longer occur
+                assert(newLayerEvents.nonEmpty)
+                previousLayer = newLayerEvents.toSeq
+                descendants.addAll(newLayerEvents)
             end while
             -1 // Unreachable
         }
-
-        // TODO it seems that some
 
         // Create DAG-like fault tree based on links :)
         val nodes = makeTreeNodes(nBasicEvents, topEvent, downwardRelations)
@@ -199,7 +198,9 @@ object DagPlots {
                 println(s"Iteration: ${it}")
 
                 val dagLikeFaultTree = RandomDags.makeRandomDag(basicEvents)
+                println(s"DAG-like FT: ${dagLikeFaultTree}")
                 val dagBasicEvents = minimalcutpathset.getBasicEvents(dagLikeFaultTree)
+                println(s"basic events: ${dagBasicEvents}")
                 val dagProbabilities = minimalcutpathset.getProbabilities(dagLikeFaultTree)(dagBasicEvents)
 
                 val minimalCutSets = minimalcutpathset.minimalCutSets(dagLikeFaultTree)(dagBasicEvents)
