@@ -274,3 +274,135 @@ object ChlorineRelease {
     def exp(scalar: Double, exponent: Double) =
         scalar * Math.pow(10, exponent)
 }
+
+object MainTrackTrainCollisionsLeadingToFatalitiesAndInjuries {
+
+    import faulttree.FaultTree
+    import faulttree.FaultTree.*
+
+    val X1 = 1
+    val X2 = 2
+    val X3 = 3
+    val X4 = 4
+    val X5 = 5
+    val X6 = 6
+    val X7 = 7
+    val X8 = 8
+    val X9 = 9
+
+    val T = 0
+
+    final val M1 = 10
+
+    final val p1 = 3.7E-4
+    final val p2 = 1.1E-3
+    final val p3 = 7.4E-4
+    final val p4 = 3.7E-4
+    final val p5 = 1.5E-3
+    final val p6 = 7.4E-4
+    final val p7 = 3E-3
+    final val p8 = 1.1E-3
+    final val p9 = 3.7E-4
+
+    val FT: FaultTree = OrEvent(T, Seq(
+        BasicEvent(X1,p1),
+        BasicEvent(X9,p9),
+        OrEvent(M1, Seq(
+            BasicEvent(X2,p2),
+            BasicEvent(X3,p3),
+            BasicEvent(X4,p4),
+            BasicEvent(X5,p5),
+            BasicEvent(X6,p6),
+            BasicEvent(X7,p7)
+        ))
+    ))
+}
+
+object ATCFailsToResolveTheConflict {
+    import faulttree.FaultTree
+    import faulttree.FaultTree.*
+
+    val X1 = 1
+    val X2 = 2
+    val X3 = 3
+    val X4 = 4
+    val X5 = 5
+    val X6 = 6
+    val X7 = 7
+    val X8 = 8
+    val X9 = 9
+    val X10 = 10
+    val X11 = 11
+    val X12 = 12
+    val X13= 13
+    val X14 = 14
+    val X15 = 15
+    val X16 = 16
+    val X17 = 17
+    val X18 = 18
+
+    val T = 0
+
+    final val M1 = 10
+    final val M2 = 10
+    final val M3 = 10
+    final val M4 = 10
+    final val M5 = 10
+    final val M6 = 10
+    final val M7 = 10
+
+    final val p1 = 4.31E-3
+    final val p2 =  1.29e-1
+    final val p3 =  1.29e-1
+    final val p4 =  1.29e-1
+    final val p5 = 2.70e-4
+    final val p6 = 2.70e-4
+    final val p7 = 2.70e-4
+    final val p8 = 2.70e-4
+    final val p9 = 2.70e-4
+    final val p10 = 2.70e-4
+    final val p11=  2.70e-4
+    final val p12 = 2.70e-4
+    final val p13 = 3.79e-2
+    final val p14 = 3.79e-2
+    final val p15=  3.79e-2
+    final val p16 = 3.79e-2
+    final val p17 =  7.20e-4
+    final val p18 =  7.20e-4
+
+    val FT: FaultTree = OrEvent(T, Seq(
+        BasicEvent(X1,p1),
+        OrEvent(M1, Seq(
+            AndEvent(M2, Seq(
+                BasicEvent(X2,p2),
+                BasicEvent(X3,p3),
+                BasicEvent(X4,p4)
+            )),
+            OrEvent(M3, Seq(
+                BasicEvent(X5,p5),
+                BasicEvent(X6,p6),
+                BasicEvent(X7,p7),
+                BasicEvent(X8,p8),
+                BasicEvent(X9,p9),
+                BasicEvent(X10,p10),
+                BasicEvent(X11,p11),
+                BasicEvent(X12,p12)
+            ))
+        )),
+        OrEvent(M4,Seq(
+            AndEvent(M5,Seq(
+                BasicEvent(X13,p13),
+                BasicEvent(X14,p14)
+            )),
+            AndEvent(M6,Seq(
+                BasicEvent(X15,p15),
+                BasicEvent(X16,p16)
+            )),
+            OrEvent(M7,Seq(
+                BasicEvent(X17,p17),
+                BasicEvent(X18,p18)
+            ))
+        ))
+    ))
+
+}
