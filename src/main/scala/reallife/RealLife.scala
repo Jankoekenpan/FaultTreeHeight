@@ -180,6 +180,10 @@ object ChlorineRelease {
     final val InletValveNotClosedAfterFilling = 44
     final val HumanError = 45
     final val OverTemperature = 46;
+    final val FlangeLeakInValveV3 = 47
+    final val FlangeLeakInValveV31 = 48
+
+    final val LeakRuptureDueToOverPressureOr = 49 // or gate without name
 
     final val p1 = exp(2.790, -5)
     final val p2 = exp(2.864, -5)
@@ -248,11 +252,23 @@ object ChlorineRelease {
         FlangeLeakInValveV21 -> Combination(FlangeLeakInValveV21, Or, Set(B4, B5)),
         LeaksAfterBBDueToPipeRupture -> Combination(LeaksAfterBBDueToPipeRupture, Or, Set(B1, B2)),
 
-        ReleaseOfChlorineFromOutlet -> Combination(ReleaseOfChlorineFromOutlet, Or, Set(LeakBetweenTanksAndAA))
+        ReleaseOfChlorineFromOutlet -> Combination(ReleaseOfChlorineFromOutlet, Or, Set(LeakBetweenTanksAndAA, LeakBetweenAAAndBB, LeaksAfterBBDueToPipeRupture)),
+        LeakBetweenTanksAndAA -> Combination(LeakBetweenTanksAndAA, Or, Set(PipeRupture, FlangeLeakInValveV3)),
+        LeakBetweenAAAndBB -> Combination(LeakBetweenAAAndBB, Or, Set(FlangeLeakInValveV31, PipeRupture)),
 
+        ReleaseOfChlorineFromFillingPoint -> Combination(ReleaseOfChlorineFromFillingPoint, Or, Set(B21, B22, B23, B20, B24)),
 
-        // TODO other basic events
-        // TODO intermediate events.
+        ReleaseOfChlorineFromVessel -> Combination(ReleaseOfChlorineFromVessel, Or, Set(B10, LeakRuptureDueToOverPressure, B6, B25)),
+        LeakRuptureDueToOverPressure -> Combination(LeakRuptureDueToOverPressure, And, Set(SafetyReliefSystem, LeakRuptureDueToOverPressureOr)),
+        SafetyReliefSystem -> Combination(SafetyReliefSystem, And, Set(FailureOfReliefSystem, FailureOf2ndReliefSystem)),
+        FailureOfReliefSystem -> Combination(FailureOfReliefSystem, Or, Set(B7, B8, B3)),
+        FailureOf2ndReliefSystem -> Combination(FailureOf2ndReliefSystem, Or, Set(B7, B8, B3)),
+        LeakRuptureDueToOverPressureOr -> Combination(LeakRuptureDueToOverPressureOr, Or, Set(OverFilling, OverTemperature)),
+        OverTemperature -> Combination(OverTemperature, Or, Set(B11, B13, B12)),
+        OverFilling -> Combination(OverFilling, Or, Set(InletValveFailsToHold, InletValveNotClosedAfterFilling)),
+        InletValveFailsToHold -> Combination(InletValveFailsToHold, And, Set(B9, B9)),
+        InletValveNotClosedAfterFilling -> Combination(InletValveNotClosedAfterFilling, Or, Set(B26, B15, B27, B14, HumanError)),
+        HumanError -> Combination(HumanError, Or, Set(B16, B17, B18, B19)),
     ))
 
     def exp(scalar: Double, exponent: Double) =
