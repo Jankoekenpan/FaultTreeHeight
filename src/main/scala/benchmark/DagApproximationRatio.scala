@@ -3,6 +3,7 @@ package benchmark
 import minimalcutpathset.FaultTree
 
 import java.nio.file.{Files, Path, StandardOpenOption}
+import scala.collection.immutable.IntMap
 
 object DagApproximationRatio {
 
@@ -70,7 +71,7 @@ object ExampleDagApproximationRatio {
         // seems to work, so what's the deal with the converted boolean formula? It may have a problem...
     }
 
-    def exampleBooleanFormula: (decisiontree.BooleanFormula, Seq[Double]) = {
+    def exampleBooleanFormula: (decisiontree.BooleanFormula, IntMap[Double]) = {
         import decisiontree.BooleanFormula
 
         val bf = BooleanFormula.And(
@@ -84,7 +85,7 @@ object ExampleDagApproximationRatio {
             )
         )
 
-        (bf, Seq(0.25427476643247793, 0.5024058683267354, 0.3844549497288837))
+        (bf, IntMap(0 -> 0.25427476643247793, 1 -> 0.5024058683267354, 2 -> 0.3844549497288837))
     }
 
     def exampleDagFT: minimalcutpathset.FaultTree = {

@@ -94,7 +94,7 @@ object Plots {
                 println(s"Iteration: ${it}")
 
                 val faultTree = RandomTrees.makeRandomTree(basicEvents)
-                val (booleanFormula, basicEventProbabilities) = Conversion.translateToDecisionTree(faultTree)
+                val (booleanFormula, basicEventProbabilities) = Conversion.translateToBooleanFormula(faultTree)
                 val (dagTree, probabilities) = Conversion.translateToDagTree(faultTree)
                 val dagBasicEvents = minimalcutpathset.getBasicEvents(dagTree)
 

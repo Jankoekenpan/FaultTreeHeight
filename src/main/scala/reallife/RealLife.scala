@@ -1,11 +1,47 @@
-package reallife // or is this just fantasy?
+package reallife
+
+import benchmark.Conversion
+import decisiontree.RandomBDTs
+
+import java.util.random.RandomGenerator // or is this just fantasy?
 
 object RealLife {
 
+    def runTreeLikeFaultTree(faultTree: faulttree.FaultTree)(using random: RandomGenerator): Unit = {
+        val (formula, probabilities1) = Conversion.translateToBooleanFormula(faultTree)
+        val (dagTree, probabilities2) = Conversion.translateToDagTree(faultTree)
+        assert(probabilities1 == probabilities2)
+        val basicEvents = minimalcutpathset.getBasicEvents(dagTree)
+
+        val heightRecursive2 = faulttree.height(faultTree)
+        val heightCutSet = minimalcutpathset.height4(dagTree, basicEvents, probabilities2)
+        val heightPathSet = minimalcutpathset.height5(dagTree, basicEvents, probabilities2)
+        val heightRandomBDT = RandomBDTs.algorithm13(formula, probabilities1)
+        println(s"Heights: recursive2=$heightRecursive2, cutset=$heightCutSet, pathset=$heightPathSet, randomBDT=$heightRandomBDT")
+    }
+
+    def runDagLikeFaultTree(faultTree: minimalcutpathset.FaultTree)(using random: RandomGenerator): Unit = {
+        val (formula, probabilities) = Conversion.translateToDecisionTree(faultTree)
+        val basicEvents = minimalcutpathset.getBasicEvents(faultTree)
+
+        val heightRecursive3 = decisiontree.algorithm8(faultTree)._2
+        val heightCutSet = minimalcutpathset.height4(faultTree, basicEvents, probabilities)
+        val heightPathSet = minimalcutpathset.height5(faultTree, basicEvents, probabilities)
+        val heightRandomBDT = RandomBDTs.algorithm13(formula, probabilities)
+        println(s"Heights: recursive3=$heightRecursive3, cutset=$heightCutSet, pathset=$heightPathSet, randomBDT=$heightRandomBDT")
+    }
+
     def main(args: Array[String]): Unit = {
+        given random: RandomGenerator = new java.util.Random()
+        println("Tree-like Fault Trees:")
+        runTreeLikeFaultTree(AircraftRunwayExcursionAccidents.FT)
+        runTreeLikeFaultTree(MainTrackTrainCollisionsLeadingToFatalitiesAndInjuries.FT)
+        runTreeLikeFaultTree(ATCFailsToResolveTheConflict.FT)
+        runTreeLikeFaultTree(LiquidStorageTank.FT)
 
-
-
+        println("DAG-like Fault Trees:")
+        runDagLikeFaultTree(ChlorineRelease.FT)
+        runDagLikeFaultTree(T0Chopper.FT)
     }
 
 }
@@ -255,6 +291,8 @@ object ChlorineRelease {
         ReleaseOfChlorineFromOutlet -> Combination(ReleaseOfChlorineFromOutlet, Or, Set(LeakBetweenTanksAndAA, LeakBetweenAAAndBB, LeaksAfterBBDueToPipeRupture)),
         LeakBetweenTanksAndAA -> Combination(LeakBetweenTanksAndAA, Or, Set(PipeRupture, FlangeLeakInValveV3)),
         LeakBetweenAAAndBB -> Combination(LeakBetweenAAAndBB, Or, Set(FlangeLeakInValveV31, PipeRupture)),
+        FlangeLeakInValveV3 -> Combination(FlangeLeakInValveV3, Or, Set(B4, B5)),
+        FlangeLeakInValveV31 -> Combination(FlangeLeakInValveV31, Or, Set(B4, B5)),
 
         ReleaseOfChlorineFromFillingPoint -> Combination(ReleaseOfChlorineFromFillingPoint, Or, Set(B21, B22, B23, B20, B24)),
 
@@ -487,4 +525,123 @@ object T0Chopper {
 
         T -> Combination(T, Or, Set(M1, M2, M3, M4, M5, M6, M7))
     ))
+}
+
+object LiquidStorageTank {
+    import faulttree.FaultTree
+    import faulttree.FaultTree.*
+
+    val X1 = 1
+    val X2 = 2
+    val X3 = 3
+    val X4 = 4
+    val X5 = 5
+    val X6 = 6
+    val X7 = 7
+    val X8 = 8
+    val X9 = 9
+    val X10 = 10
+    val X11 = 11
+    val X12 = 12
+    val X13= 13
+    val X14 = 14
+    val X15 = 15
+    val X16 = 16
+    val X17 = 17
+    val X18 = 18
+    val X19 = 19
+    val X20 = 20
+    val X21 = 21
+    val X22 = 22
+
+    val T = 0
+
+    final val M1 = 23
+    final val M2 = 24
+    final val M3 = 25
+    final val M4 = 26
+    final val M5 = 27
+    final val M6 = 28
+    final val M7 = 29
+    final val M8 = 30
+    final val M9 = 31
+    final val M10 = 32
+    final val M11 = 33
+    final val M12 = 34
+    
+    final val p1 = 0.0800
+    final val p2 =  0.0020
+    final val p3 =  0.0762
+    final val p4 =  0.0403
+    final val p5 = 0.0403
+    final val p6 = 0.1610
+    final val p7 = 0.1
+    final val p8 = 0.0403
+    final val p9 = 0.1250
+    final val p10 = 0.1
+    final val p11=  0.0360
+    final val p12 = 0.0260
+    final val p13 = 0.0550
+    final val p14 = 0.0250
+    final val p15=  0.0403
+    final val p16 = 0.1260
+    final val p17 =  0.0014
+    final val p18 =  0.0014
+    final val p19=  0.0004
+    final val p20 = 0.0004
+    final val p21 =  0.0003
+    final val p22 =  0.0040
+
+    val FT: FaultTree = OrEvent(T, Seq(
+        OrEvent(M1, Seq(
+            BasicEvent(X1,p1),
+            BasicEvent(X2,p2),
+            BasicEvent(X3,p3)
+        )),
+        OrEvent(M2, Seq(
+            OrEvent(M3, Seq(
+                BasicEvent(X4,p4),
+                BasicEvent(X5,p5)
+            )),
+            OrEvent(M4, Seq(
+                BasicEvent(X6,p6),
+                BasicEvent(X7,p7)
+            )),
+            BasicEvent(X8,p8)
+        )),
+
+        OrEvent(M5,Seq(
+            BasicEvent(X9,p9),
+            BasicEvent(X10,p10),
+            BasicEvent(X11,p11)
+        )),
+
+        OrEvent(M6,Seq(
+            OrEvent(M7,Seq(
+                BasicEvent(X12,p12),
+                BasicEvent(X13,p13),
+                BasicEvent(X14,p14)
+            )),
+            OrEvent(M8,Seq(
+                BasicEvent(X15,p15),
+                BasicEvent(X16,p16)
+            ))
+        )),
+
+        OrEvent(M9,Seq(
+            OrEvent(M10,Seq(
+                BasicEvent(X17,p17),
+                BasicEvent(X18,p18)
+            )),
+            OrEvent(M11,Seq(
+                BasicEvent(X19,p19),
+                BasicEvent(X20,p20)
+            )),
+            OrEvent(M12,Seq(
+                BasicEvent(X21,p21),
+                BasicEvent(X22,p22)
+            ))
+        ))
+    ))
+
 }

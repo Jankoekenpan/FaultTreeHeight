@@ -11,6 +11,7 @@ enum BooleanFormula:
 
 import BooleanFormula.*
 
+import scala.collection.immutable.IntMap
 import scala.collection.mutable
 
 def computeLookupById()(lookup: BooleanFormula, variableId: Id): Boolean = {
@@ -68,7 +69,7 @@ case class Cache(
 object Cache:
     def apply(): Cache = Cache(new mutable.WeakHashMap(), new mutable.WeakHashMap())
 
-def height(formula: BooleanFormula, probabilities: Seq[RealNumber], containsVariable: (BooleanFormula, Id) => Boolean, cache: Cache): RealNumber = {
+def height(formula: BooleanFormula, probabilities: IntMap[RealNumber], containsVariable: (BooleanFormula, Id) => Boolean, cache: Cache): RealNumber = {
     val cachedHeight = cache.heights.get(formula)
     if cachedHeight.isDefined then return cachedHeight.get
 
@@ -77,7 +78,7 @@ def height(formula: BooleanFormula, probabilities: Seq[RealNumber], containsVari
         case BooleanFormula.False => 0 // used to be 1.
         case _ =>
             val heights = for
-                k <- probabilities.indices
+                k <- probabilities.keySet
                 if containsVariable(formula, k)
             yield height(k, formula, probabilities, containsVariable, cache)
             heights.min
@@ -85,7 +86,7 @@ def height(formula: BooleanFormula, probabilities: Seq[RealNumber], containsVari
     result
 }
 
-def height(k/*zero-based*/: Int, formula: BooleanFormula, probabilities: Seq[RealNumber], containsVariable: (BooleanFormula, Id) => Boolean, cache: Cache): RealNumber = {
+def height(k/*zero-based*/: Int, formula: BooleanFormula, probabilities: IntMap[RealNumber], containsVariable: (BooleanFormula, Id) => Boolean, cache: Cache): RealNumber = {
     val cacheKey = (formula, k)
     val cachedHeightK = cache.heightKs.get(cacheKey)
     if cachedHeightK.isDefined then return cachedHeightK.get
@@ -98,7 +99,7 @@ def height(k/*zero-based*/: Int, formula: BooleanFormula, probabilities: Seq[Rea
     result
 }
 
-def height(formula: BooleanFormula, probabilities: Seq[RealNumber]): RealNumber =
+def height(formula: BooleanFormula, probabilities: IntMap[RealNumber]): RealNumber =
     height(formula, probabilities, computeLookupById(), Cache())
 
 @main def main(): Unit = {
@@ -115,11 +116,11 @@ def height(formula: BooleanFormula, probabilities: Seq[RealNumber]): RealNumber 
 
     // 1.08
     var formula = problematicTree
-    var probabilities = Seq(1D/3D, 1D/4D, 1D/6D, 1D/7D, 1D/10D, 1D/11D, 1D/13D, 1D/14D)
+    var probabilities = IntMap(0 -> 1D/3D, 1 -> 1D/4D, 2 -> 1D/6D, 3 -> 1D/7D, 4 -> 1D/10D, 5 -> 1D/11D, 6 -> 1D/13D, 7 -> 1D/14D)
     println(height(formula, probabilities, computeLookupById(), Cache()))
 
     formula = anotherTree
-    probabilities = Seq(2D/3D, 1D/4D, 1D/3D, 1D/2D)
+    probabilities = IntMap(0 -> 2D/3D, 1 -> 1D/4D, 2 -> 1D/3D, 3 -> 1D/2D)
     println(height(formula, probabilities, computeLookupById(), Cache()))
 }
 

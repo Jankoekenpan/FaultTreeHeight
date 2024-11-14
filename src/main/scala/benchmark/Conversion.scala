@@ -51,8 +51,47 @@ object Conversion {
         recur(dagFT.topNode)
     }
 
-    def translateToDecisionTree(dagFT: minimalcutpathset.FaultTree): (decisiontree.BooleanFormula, Seq[Double]) =
-        translateToDecisionTree(translateToTreeLikeFaultTree(dagFT))
+    def translateToDecisionTree(dagFT: minimalcutpathset.FaultTree): (decisiontree.BooleanFormula, IntMap[Double]) =
+        translateToBooleanFormula(translateToTreeLikeFaultTree(dagFT))
+
+    def translateToBooleanFormula(faultTree: faulttree.FaultTree): (decisiontree.BooleanFormula, IntMap[Double]) = {
+        val probabilities = new scala.collection.mutable.HashMap[Int, Double]()
+
+        def matchTree(faultTree: faulttree.FaultTree): decisiontree.BooleanFormula = {
+            faultTree match
+                case faulttree.FaultTree.BasicEvent(e, p) =>
+                    probabilities.addOne((e, p))
+                    decisiontree.BooleanFormula.Variable(e)
+                case faulttree.FaultTree.AndEvent(_, children) =>
+                    createBalancedAnd(children.map(matchTree))
+                case faulttree.FaultTree.OrEvent(_, children) =>
+                    createBalancedOr(children.map(matchTree))
+        }
+
+        (matchTree(faultTree), IntMap.from(probabilities))
+    }
+
+    def createBalancedOr(children: Seq[decisiontree.BooleanFormula]): decisiontree.BooleanFormula = children match {
+        case Seq(single) => single
+        case _ =>
+            val nodeCount = children.size
+
+            val leftHalf = nodeCount / 2
+
+            val (leftChildren, rightChildren) = children.splitAt(leftHalf)
+            decisiontree.BooleanFormula.Or(createBalancedOr(leftChildren), createBalancedOr(rightChildren))
+    }
+
+    def createBalancedAnd(children: Seq[decisiontree.BooleanFormula]): decisiontree.BooleanFormula = children match {
+        case Seq(single) => single
+        case _ =>
+            val nodeCount = children.size
+
+            val leftHalf = nodeCount / 2
+
+            val (leftChildren, rightChildren) = children.splitAt(leftHalf)
+            decisiontree.BooleanFormula.And(createBalancedAnd(leftChildren), createBalancedAnd(rightChildren))
+    }
 
     def translateToDecisionTree(faultTree: faulttree.FaultTree): (decisiontree.BooleanFormula, Seq[Double]) = {
         val probabilities = Seq.newBuilder[Double]
@@ -105,7 +144,7 @@ object Conversion {
 
         val (newFormula, newProbabilities) = (
             And(Or(Variable(0), Variable(1)), And(Variable(0), Variable(2))),
-            Seq(0.1, 0.2, 0.3)
+            IntMap(0 -> 0.1, 1 -> 0.2, 2 -> 0.3)
         )
 
         val h1 = decisiontree.height(formula, probabilities)

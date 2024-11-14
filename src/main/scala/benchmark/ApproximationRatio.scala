@@ -76,7 +76,7 @@ object ApproximationRatio {
         printRatio(file, makeAlternatingFaultTree(recipe))
 
     def printRatio(file: Path, faultTree: FaultTree): Unit = {
-        val decisionTree = Conversion.translateToDecisionTree(faultTree)
+        val decisionTree = Conversion.translateToBooleanFormula(faultTree)
         val dagTree = Conversion.translateToDagTree(faultTree)
 
         println(s"DEBUG tree faulttree = $faultTree")

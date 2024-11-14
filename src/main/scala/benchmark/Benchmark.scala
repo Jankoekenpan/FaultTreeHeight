@@ -6,6 +6,7 @@ import java.nio.file.{Files, OpenOption, Path, StandardOpenOption}
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
 import scala.annotation.{switch, tailrec}
+import scala.collection.immutable.IntMap
 import scala.compiletime.uninitialized
 
 @State(Scope.Thread)
@@ -14,14 +15,14 @@ import scala.compiletime.uninitialized
 class MyBenchmark {
 
     private var decisionTree: decisiontree.BooleanFormula = uninitialized
-    private var decisionTreeProbabilities: Seq[Double] = uninitialized
+    private var decisionTreeProbabilities: IntMap[Double] = uninitialized
     private var decisionTreeIdLookup: (decisiontree.BooleanFormula, Int) => Boolean = uninitialized
 
     private var faultTree: faulttree.FaultTree = uninitialized
     private var faultTreeLayers: IArray[Seq[faulttree.FaultTree]] = uninitialized
 
     private var exampleDecisionTree: decisiontree.BooleanFormula = uninitialized
-    private var exampleDecisionTreeProbabilities: Seq[Double] = uninitialized
+    private var exampleDecisionTreeProbabilities: IntMap[Double] = uninitialized
     private var exampleDecisionTreeLookup: (decisiontree.BooleanFormula, Int) => Boolean = uninitialized
 
     private var exampleFaultTree: faulttree.FaultTree = uninitialized
@@ -43,7 +44,7 @@ class MyBenchmark {
             decisiontree.BooleanFormula.Or(decisiontree.BooleanFormula.Variable(0), decisiontree.BooleanFormula.Variable(1)),
             decisiontree.BooleanFormula.Or(decisiontree.BooleanFormula.Variable(2), decisiontree.BooleanFormula.Variable(3))
         )
-        this.exampleDecisionTreeProbabilities = Seq(1D / 2D, 1D / 3D, 1D / 4D, 1D / 5D)
+        this.exampleDecisionTreeProbabilities = IntMap(0 -> 1D / 2D, 1 -> 1D / 3D, 2 -> 1D / 4D, 3 -> 1D / 5D)
         this.exampleDecisionTreeLookup = decisiontree.computeLookupById()
 
         this.exampleFaultTree = faulttree.FaultTree.AndEvent('g', Seq(
@@ -146,13 +147,13 @@ object Setup {
         makeFaultTree(recipe)
     }
 
-    def makeDecisionTree(recipe: Recipe): (decisiontree.BooleanFormula, Seq[Probability], (decisiontree.BooleanFormula, Id) => Boolean) = {
+    def makeDecisionTree(recipe: Recipe): (decisiontree.BooleanFormula, IntMap[Probability], (decisiontree.BooleanFormula, Id) => Boolean) = {
         val idGen = new AtomicInteger()
-        val probabilitiesBuilder = Seq.newBuilder[Probability]
+        val probabilitiesBuilder = new scala.collection.mutable.HashMap[Int, Probability]()
 
         def nextId(): Id = {
             val id = idGen.getAndIncrement()
-            probabilitiesBuilder.addOne(recipe.probabilityOf(id))
+            probabilitiesBuilder.addOne((id, recipe.probabilityOf(id)))
             id
         }
 
@@ -177,7 +178,7 @@ object Setup {
         }
 
         val tree = makeDecisionTree(recipe)
-        val probabilities = probabilitiesBuilder.result()
+        val probabilities = IntMap.from(probabilitiesBuilder)
         val variableLookup: (decisiontree.BooleanFormula, Id) => Boolean = decisiontree.computeLookupById()
         (tree, probabilities, variableLookup)
     }
@@ -227,7 +228,7 @@ object Setup {
 //        println(faulttree.height(faultTree, layers))
     }
 
-    def ppDecisionTree(tree: decisiontree.BooleanFormula, probabilities: Seq[Probability]): String = tree match {
+    def ppDecisionTree(tree: decisiontree.BooleanFormula, probabilities: IntMap[Probability]): String = tree match {
         case decisiontree.BooleanFormula.Variable(id) => s"Leaf(id=${id},prob=${probabilities(id)})"
         case decisiontree.BooleanFormula.Or(left, right) => s"Or(${ppDecisionTree(left, probabilities)},${ppDecisionTree(right, probabilities)})"
         case decisiontree.BooleanFormula.And(left, right) => s"And(${ppDecisionTree(left, probabilities)},${ppDecisionTree(right, probabilities)})"
