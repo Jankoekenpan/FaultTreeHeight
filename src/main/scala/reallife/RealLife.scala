@@ -343,13 +343,13 @@ object ATCFailsToResolveTheConflict {
 
     val T = 0
 
-    final val M1 = 10
-    final val M2 = 10
-    final val M3 = 10
-    final val M4 = 10
-    final val M5 = 10
-    final val M6 = 10
-    final val M7 = 10
+    final val M1 = 19
+    final val M2 = 20
+    final val M3 = 21
+    final val M4 = 22
+    final val M5 = 23
+    final val M6 = 24
+    final val M7 = 25
 
     final val p1 = 4.31E-3
     final val p2 =  1.29e-1
@@ -405,4 +405,86 @@ object ATCFailsToResolveTheConflict {
         ))
     ))
 
+}
+
+object T0Chopper {
+    import minimalcutpathset.FaultTree
+    import minimalcutpathset.FaultTree.*
+    import minimalcutpathset.TreeNode
+    import minimalcutpathset.TreeNode.*
+    import minimalcutpathset.Gate
+    import minimalcutpathset.Gate.*
+
+    final val X1 = 1
+    final val X2 = 2
+    final val X3 = 3
+    final val X4 = 4
+    final val X5 = 5
+    final val X6 = 6
+    final val X7 = 7
+    final val X8 = 8
+    final val X9 = 9
+    final val X10 = 10
+    final val X11 = 11
+    final val X12 = 12
+    final val X13 = 13
+    final val X14 = 14
+    final val X15 = 15
+    final val X16 = 16
+
+    final val p1 = 0.000499
+    final val p2 = 0.000361
+    final val p3 = 0.001789
+    final val p4 = 0.000120
+    final val p5 = 0.001693
+    final val p6 = 0.001290
+    final val p7 = 0.000680
+    final val p8 = 0.001033
+    final val p9 = 0.000233
+    final val p10 = 0.000139
+    final val p11 = 0.001380
+    final val p12 = 0.000467
+    final val p13 = 0.000501
+    final val p14 = 0.000501
+    final val p15 = 0.000534
+    final val p16 = 0.000347
+
+    final val T = 0
+
+    final val M1 = 17
+    final val M2 = 18
+    final val M3 = 19
+    final val M4 = 20
+    final val M5 = 21
+    final val M6 = 22
+    final val M7 = 23
+
+    val FT: FaultTree = FaultTree(T, Map(
+        X1 -> BasicEvent(X1, p1),
+        X2 -> BasicEvent(X2, p2),
+        X3 -> BasicEvent(X3, p3),
+        X4 -> BasicEvent(X4, p4),
+        X5 -> BasicEvent(X5, p5),
+        X6 -> BasicEvent(X6, p6),
+        X7 -> BasicEvent(X7, p7),
+        X8 -> BasicEvent(X8, p8),
+        X9 -> BasicEvent(X9, p9),
+        X10 -> BasicEvent(X10, p10),
+        X11 -> BasicEvent(X11, p11),
+        X12 -> BasicEvent(X12, p12),
+        X13 -> BasicEvent(X13, p13),
+        X14 -> BasicEvent(X14, p14),
+        X15 -> BasicEvent(X15, p15),
+        X16 -> BasicEvent(X16, p16),
+
+        M1 -> Combination(M1, Or, Set(X1, X2, X3, X4)),
+        M2 -> Combination(M2, Or, Set(X5, X6)),
+        M3 -> Combination(M3, Or, Set(X7, X8, X6)),
+        M4 -> Combination(M4, Or, Set(X9, X10)),
+        M5 -> Combination(M5, Or, Set(X11, X12)),
+        M6 -> Combination(M6, Or, Set(X13, X14, X6)),
+        M7 -> Combination(M7, Or, Set(X15, X16)),
+
+        T -> Combination(T, Or, Set(M1, M2, M3, M4, M5, M6, M7))
+    ))
 }
