@@ -36,7 +36,6 @@ object Conversion {
         (minimalcutpathset.FaultTree(tree.event, eventsBuilder.result()), probabilities.result())
     }
 
-    // TODO this seems to have a bug...
     def translateToTreeLikeFaultTree(dagFT: minimalcutpathset.FaultTree): faulttree.FaultTree = {
         def recur(node: minimalcutpathset.TreeNode): faulttree.FaultTree = {
             node match {
@@ -93,6 +92,7 @@ object Conversion {
             decisiontree.BooleanFormula.And(createBalancedAnd(leftChildren), createBalancedAnd(rightChildren))
     }
 
+    @java.lang.Deprecated
     def translateToDecisionTree(faultTree: faulttree.FaultTree): (decisiontree.BooleanFormula, Seq[Double]) = {
         val probabilities = Seq.newBuilder[Double]
         var curId = 0;
@@ -125,8 +125,8 @@ object Conversion {
             8 -> TreeNode.Combination(8, Gate.And, Set(3, 0, 2, 6, 7)),
             7 -> TreeNode.Combination(7, Gate.And, Set(0, 2)),
             6 -> TreeNode.Combination(6, Gate.And, Set(3, 0)),
-            //5 -> TreeNode.Combination(5, Gate.Or, Set(2)),
-            //4 -> TreeNode.Combination(4, Gate.And, Set(0)),
+            5 -> TreeNode.Combination(5, Gate.Or, Set(2)),
+            4 -> TreeNode.Combination(4, Gate.And, Set(0)),
             3 -> TreeNode.Combination(3, Gate.Or, Set(1, 2)),
             2 -> TreeNode.BasicEvent(2, 0.3),
             1 -> TreeNode.BasicEvent(1, 0.2),

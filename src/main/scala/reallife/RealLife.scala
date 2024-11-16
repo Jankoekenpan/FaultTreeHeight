@@ -798,3 +798,221 @@ object LossContainerAtPort {
     ))
 
 }
+
+object HSC{
+
+    import faulttree.FaultTree
+    import faulttree.FaultTree.*
+
+    val X1 = 1
+    val X2 = 2
+    val X3 = 3
+    val X4 = 4
+    val X5 = 5
+    val X6 = 6
+    val X7 = 7
+    val X8 = 8
+    val X9 = 9
+    val X10 = 10
+    val X11 = 11
+    val X12 = 12
+    val X13 = 13
+    val X14 = 14
+    val X15 = 15
+    val X16 = 16
+    val X17 = 17
+    val X18 = 18
+    val X19 = 19
+    val X20 = 20
+    val X21 = 21
+    val X22 = 22
+    val X23 = 23
+    val X24 = 24
+    val X25 = 25
+    val X26 = 26
+    val X27 = 27
+    val X28 = 28
+    val X29 = 29
+    val X30 = 30
+    val X31 = 31
+    val X32 = 32
+    val X33 = 33
+    val X34 = 34
+    val X35 = 35
+    val X36 = 36
+    val X37 = 37
+    val X38 = 38
+    val X39 = 39
+    val X40 = 40
+    val X41 = 41
+    val X42 = 42
+    val X43 = 43
+    val X44 = 44
+    val X45 = 45
+    val X46 = 46
+    val X47 = 47
+    val X48 = 48
+    val X49 = 49
+    val X50 = 50
+    val X51 = 51
+    val X52 = 52
+    val X53 = 53
+
+    val T = 0
+
+    final val M1 = 54
+    final val M2 = 55
+    final val M3 = 56
+    final val M4 = 57
+    final val M5 = 58
+    final val M6 = 59
+    final val M7 = 60
+    final val M8 = 61
+    final val M9 = 62
+    final val M10 = 63
+    final val M11 = 64
+    final val M12 = 65
+    final val M13 = 66
+
+
+    final val p1 = 5.61e-6
+    final val p2 = 3.42e-7
+    final val p3 = 1.38e-6
+    final val p4 = 2.89e-6
+    final val p5 = 5.61e-6
+    final val p6 = 2.4e-6
+    final val p7 = 2.54e-6
+    final val p8 = 2.54e-6
+    final val p9 = 2.54e-6
+    final val p10 = 2.54e-6
+    final val p11= 2.54e-6
+    final val p12 = 2.54e-6
+    final val p13 = 2.54e-6
+    final val p14 = 2.54e-6
+    final val p15= 2.54e-6
+    final val p16 = 2.54e-6
+    final val p17 = 2.54e-6
+    final val p18 = 2.54e-6
+    final val p19= 2.54e-6
+    final val p20 = 2.54e-6
+    final val p21 = 2.54e-6
+    final val p22 = 2.54e-6
+    final val p23 = 2.54e-6
+    final val p24 = 2.54e-6
+    final val p25 = 2.54e-6
+    final val p26 = 2.54e-6
+    final val p27 = 2.54e-6
+    final val p28 = 5.3e-6
+    final val p29 = 5.3e-6
+    final val p30 = 3.42e-7
+    final val p31 = 3.42e-7
+    final val p32 = 3.42e-7
+    final val p33 = 3.42e-7
+    final val p34 = 3.42e-7
+    final val p35 = 3.42e-7
+    final val p36 = 3.42e-7
+    final val p37 = 3.42e-7
+    final val p38 = 3.42e-7
+    final val p39 = 3.42e-7
+    final val p40 = 2.1e-6
+    final val p41=  1.42e-4
+    final val p42 = 8.35e-7
+    final val p43 = 2.4e-3
+    final val p44 = 8.27e-3
+    final val p45 = 5.12e-3
+    final val p46=  5.44e-5
+    final val p47 = 1.38e-6
+    final val p48 = 4.5e-7
+    final val p49 = 4.5e-7
+    final val p50=  4.2e-6
+    final val p51 = 4.2e-6
+    final val p52 = 5e-6
+    final val p53 = 7.34e-5
+
+    val FT: FaultTree = AndEvent(T, Seq(
+        AndEvent(M1, Seq(
+            AndEvent(M6, Seq(
+                BasicEvent(X1,p1),
+                BasicEvent(X2,p2)
+            )),
+            AndEvent(M7, Seq(
+                BasicEvent(X3,p3),
+                BasicEvent(X4,p4)
+            )),
+            AndEvent(M8, Seq(
+                BasicEvent(X5,p5),
+                BasicEvent(X6,p6)
+            ))
+
+        )),
+        AndEvent(M2, Seq(
+            OrEvent(M9, Seq(
+                BasicEvent(X7,p7),
+                BasicEvent(X8,p8),
+                BasicEvent(X9,p9),
+                BasicEvent(X10,p10),
+                BasicEvent(X11,p11),
+                BasicEvent(X12,p12),
+                BasicEvent(X13,p13),
+                BasicEvent(X14,p14),
+                BasicEvent(X15,p15),
+                BasicEvent(X16,p16),
+                BasicEvent(X17,p17),
+                BasicEvent(X18,p18),
+                BasicEvent(X19,p19),
+                BasicEvent(X20,p20),
+                BasicEvent(X21,p21),
+                BasicEvent(X22,p22),
+                BasicEvent(X23,p23),
+                BasicEvent(X24,p24),
+                BasicEvent(X25,p25),
+                BasicEvent(X26,p26),
+                BasicEvent(X27,p27)
+            )),
+            OrEvent(M10, Seq(
+                BasicEvent(X30,p30),
+                BasicEvent(X31,p31),
+                BasicEvent(X32,p32),
+                BasicEvent(X33,p33),
+                BasicEvent(X34,p34),
+                BasicEvent(X35,p35),
+                BasicEvent(X36,p36),
+                BasicEvent(X37,p37),
+                BasicEvent(X38,p38),
+                BasicEvent(X39,p39)
+            )),
+            BasicEvent(X28,p28),
+            BasicEvent(X29,p29)
+        )),
+
+        AndEvent(M3, Seq(
+            BasicEvent(X40,p40),
+            BasicEvent(X41,p41),
+            BasicEvent(X42,p42),
+            BasicEvent(X43,p43)
+        )),
+
+        AndEvent(M4, Seq(
+            BasicEvent(X44,p44),
+            BasicEvent(X45,p45),
+            BasicEvent(X46,p46),
+            BasicEvent(X47,p47)
+        )),
+
+        AndEvent(M5, Seq(
+            AndEvent(M11, Seq(
+                BasicEvent(X48,p48),
+                BasicEvent(X49,p49)
+            )),
+            AndEvent(M12, Seq(
+                BasicEvent(X50,p50),
+                BasicEvent(X51,p51)
+            )),
+            AndEvent(M13, Seq(
+                BasicEvent(X52,p52),
+                BasicEvent(X53,p53)
+            )),
+        ))
+    ))
+
+}
