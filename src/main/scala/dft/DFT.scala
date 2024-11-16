@@ -76,7 +76,8 @@ object DFT {
 
         val idMapping = new mutable.HashMap[String, Int]()
         def getId(event: String): Int = {
-            idMapping.getOrElseUpdate(event, nextId())
+            val id = idMapping.getOrElseUpdate(event, nextId())
+            id
         }
 
         val result = new mutable.ListBuffer[DFTNode]()

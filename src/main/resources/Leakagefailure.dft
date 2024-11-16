@@ -36,5 +36,3 @@ toplevel "Submarine_pipeline_leakage_failure";
 "Construction_defect_of_weld-seam" prob=2.255e-04;
 "Auxiliaries_aging" prob=4.815e-04;
 "Design_defect_of_auxiliaries" prob=8.213e-06;
-
-
