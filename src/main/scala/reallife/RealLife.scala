@@ -7,6 +7,20 @@ import dft.DFT
 import java.util.random.RandomGenerator
 import scala.io.Source
 
+trait SimpleFaultTree {
+    def name: String = getClass.getSimpleName match
+        case s"${name}$$" => name
+        case name => name
+}
+
+trait TreeLikeFaultTree extends SimpleFaultTree {
+    def FT: faulttree.FaultTree
+}
+
+trait DagLikeFaultTree extends SimpleFaultTree {
+    def FT: minimalcutpathset.FaultTree
+}
+
 object RealLife {
 
     def runTreeLikeFaultTree(faultTree: faulttree.FaultTree)(using random: RandomGenerator): Unit = {
@@ -33,8 +47,9 @@ object RealLife {
         println(s"Heights: recursive3=$heightRecursive3, cutset=$heightCutSet, pathset=$heightPathSet, randomBDT=$heightRandomBDT")
     }
 
-    def main(args: Array[String]): Unit = {
+    def runTrees(): Unit = {
         given random: RandomGenerator = new java.util.Random()
+
         println("Tree-like Fault Trees:")
         runTreeLikeFaultTree(AircraftRunwayExcursionAccidents.FT)
         runTreeLikeFaultTree(MainTrackTrainCollisionsLeadingToFatalitiesAndInjuries.FT)
@@ -55,9 +70,108 @@ object RealLife {
         runDagLikeFaultTree(OGPF.FT)
     }
 
+    def main(args: Array[String]): Unit = {
+        //runTrees()
+        given random: java.util.random.RandomGenerator = new java.util.Random()
+
+        val treelikeFaultTrees: Seq[TreeLikeFaultTree] = Seq(
+            AircraftRunwayExcursionAccidents,
+            MainTrackTrainCollisionsLeadingToFatalitiesAndInjuries,
+            ATCFailsToResolveTheConflict,
+            LiquidStorageTank,
+            LossContainerAtPort,
+            HSC,
+            SubmarinePipelineStopperFailure,
+            BHNGPipeline,
+            BayesianNetwork,
+            LeakageFailure,
+            AssessingTheRisks1,
+            PCBA,
+        )
+
+        val daglikeFaultTrees: Seq[DagLikeFaultTree] = Seq(
+            ChlorineRelease,
+            T0Chopper,
+            OGPF
+        )
+
+        val csvOutput = CSVOutput.createTreeLikeFile()
+        CSVOutput.printTreeLikeHeader(csvOutput)
+
+        for (treeLikeFT <- treelikeFaultTrees) {
+            val treeFT = treeLikeFT.FT
+            val (dagFT, probabilities) = Conversion.translateToDagTree(treeFT)
+            val basicEvents = minimalcutpathset.getBasicEvents(dagFT)
+            val (booleanFormula, _) = Conversion.translateToBooleanFormula(treeFT)
+
+            val minimalCutSets = minimalcutpathset.minimalCutSets(dagFT)(basicEvents)
+            val minimalPathSets = minimalcutpathset.minimalPathSets(dagFT)(basicEvents)
+
+            println(s"Calculate height of ${treeLikeFT.name} using Recursive algorithm 2...")
+            val time_begin_recursive = System.nanoTime()
+            val heightRecursive2 = faulttree.height7(treeFT)
+            val time_end_recursive = System.nanoTime()
+            println(s"Calculate height of ${treeLikeFT.name} using CutSet algorithm...")
+            val time_begin_cutset = System.nanoTime()
+            val heightCutSet = minimalcutpathset.algorithm4(minimalCutSets, probabilities)._2
+            val time_end_cutset = System.nanoTime()
+            println(s"Calculate height of ${treeLikeFT.name} using PathSet algorithm...")
+            val time_begin_pathset = System.nanoTime()
+            val heightPathSet = minimalcutpathset.algorithm5(minimalPathSets, probabilities)._2
+            val time_end_pathset = System.nanoTime()
+            println(s"Calculate height of ${treeLikeFT.name} using Random BDT algorithm...")
+            val time_begin_randombdt = System.nanoTime()
+            val heightRandomBDT = decisiontree.RandomBDTs.algorithm13(booleanFormula, probabilities)
+            val time_end_randombdt = System.nanoTime()
+
+            val time_recursive2_ns = time_end_recursive - time_begin_recursive
+            val time_cutset_ns = time_end_cutset - time_begin_cutset
+            val time_pathset_ns = time_end_pathset - time_begin_pathset
+            val time_randombdt_ns = time_end_randombdt - time_begin_randombdt
+
+            CSVOutput.printTreeLikeData(
+                file = csvOutput,
+                treeName = treeLikeFT.name,
+                heightRecursive = heightRecursive2,
+                timeRecursive = time_recursive2_ns,
+                heightCutSet = heightCutSet,
+                timeCutSet = time_cutset_ns,
+                heightPathSet = heightPathSet,
+                timePathSet = time_pathset_ns,
+                heightRandomBDT = heightRandomBDT,
+                timeRandomBDT = time_randombdt_ns
+            )
+        }
+    }
+
 }
 
-object AircraftRunwayExcursionAccidents {
+object CSVOutput {
+    import java.nio.file.{Files, Path, StandardOpenOption}
+
+    private val outfileTree = "real-life-trees.csv"
+    private val outfileDag = "real-life-dags.csv"
+
+    def createTreeLikeFile(): Path = {
+        Files.createFile(Path.of(outfileTree))
+    }
+
+    def printTreeLikeHeader(file: Path): Unit = {
+        val line = "Fault Tree,Recursive algorithm 2 height,time (ns),Cut set algorithm height,time (ns),Path set algorithm height (ns),time,Random binary decision tree algorithm height,time (ns)\r\n"
+        writeString(file, line)
+    }
+
+    def printTreeLikeData(file: Path, treeName: String, heightRecursive: Double, timeRecursive: Long, heightCutSet: Double, timeCutSet: Long, heightPathSet: Double, timePathSet: Long, heightRandomBDT: Double, timeRandomBDT: Long): Unit = {
+        val line = s""""${treeName}","${heightRecursive}","${timeRecursive}","${heightCutSet}","${timeCutSet}","${heightPathSet}","${timePathSet}","${heightRandomBDT}","${timeRandomBDT}""""
+        writeString(file, line)
+    }
+
+    private def writeString(file: Path, string: String): Unit = {
+        Files.writeString(file, string, StandardOpenOption.CREATE, StandardOpenOption.WRITE, StandardOpenOption.APPEND)
+    }
+}
+
+object AircraftRunwayExcursionAccidents extends TreeLikeFaultTree {
     import faulttree.FaultTree
     import faulttree.FaultTree.*
 
@@ -170,7 +284,7 @@ object AircraftRunwayExcursionAccidents {
 
 }
 
-object ChlorineRelease {
+object ChlorineRelease extends DagLikeFaultTree {
     import minimalcutpathset.FaultTree
     import minimalcutpathset.FaultTree.*
     import minimalcutpathset.TreeNode
@@ -324,7 +438,7 @@ object ChlorineRelease {
         scalar * Math.pow(10, exponent)
 }
 
-object MainTrackTrainCollisionsLeadingToFatalitiesAndInjuries {
+object MainTrackTrainCollisionsLeadingToFatalitiesAndInjuries extends TreeLikeFaultTree {
 
     import faulttree.FaultTree
     import faulttree.FaultTree.*
@@ -367,7 +481,7 @@ object MainTrackTrainCollisionsLeadingToFatalitiesAndInjuries {
     ))
 }
 
-object ATCFailsToResolveTheConflict {
+object ATCFailsToResolveTheConflict extends TreeLikeFaultTree {
     import faulttree.FaultTree
     import faulttree.FaultTree.*
 
@@ -456,7 +570,7 @@ object ATCFailsToResolveTheConflict {
 
 }
 
-object T0Chopper {
+object T0Chopper extends DagLikeFaultTree {
     import minimalcutpathset.FaultTree
     import minimalcutpathset.FaultTree.*
     import minimalcutpathset.TreeNode
@@ -538,8 +652,10 @@ object T0Chopper {
     ))
 }
 
-@java.lang.Deprecated // probabilities listed here might not actually be failure probabilities
-object LiquidStorageTank {
+@java.lang.Deprecated
+// Probabilities listed here might not actually be failure probabilities.
+// The values in the DFT benchmark set and the corresponding paper don't seem to be the same.
+object LiquidStorageTank extends TreeLikeFaultTree {
     import faulttree.FaultTree
     import faulttree.FaultTree.*
 
@@ -658,7 +774,7 @@ object LiquidStorageTank {
 
 }
 
-object LossContainerAtPort {
+object LossContainerAtPort extends TreeLikeFaultTree {
 
     import faulttree.FaultTree
     import faulttree.FaultTree.*
@@ -810,7 +926,7 @@ object LossContainerAtPort {
 
 }
 
-object HSC {
+object HSC extends TreeLikeFaultTree {
 
     import faulttree.FaultTree
     import faulttree.FaultTree.*
@@ -1028,7 +1144,7 @@ object HSC {
 
 }
 
-object SubmarinePipelineStopperFailure {
+object SubmarinePipelineStopperFailure extends TreeLikeFaultTree {
 
     import faulttree.FaultTree
     import faulttree.FaultTree.*
@@ -1201,7 +1317,7 @@ object SubmarinePipelineStopperFailure {
 
 }
 
-object BHNGPipeline {
+object BHNGPipeline extends TreeLikeFaultTree {
 
     import faulttree.FaultTree
     import faulttree.FaultTree.*
@@ -1915,31 +2031,31 @@ object Chemicalcargoshortage{
     ))
 }
 
-object BayesianNetwork {
+object BayesianNetwork extends TreeLikeFaultTree {
     import faulttree.FaultTree
 
     val FT: FaultTree = DFT.readTreeLikeFaultTree(Source.fromResource("Bayesian_network.dft"))
 }
 
-object LeakageFailure {
+object LeakageFailure extends TreeLikeFaultTree {
     import faulttree.FaultTree
 
     val FT: FaultTree = DFT.readTreeLikeFaultTree(Source.fromResource("Leakagefailure.dft"))
 }
 
-object AssessingTheRisks1 {
+object AssessingTheRisks1 extends TreeLikeFaultTree {
     import faulttree.FaultTree
 
     val FT: FaultTree = DFT.readTreeLikeFaultTree(Source.fromResource("AssessingtheRisks1.dft"))
 }
 
-object OGPF {
+object OGPF extends DagLikeFaultTree {
     import minimalcutpathset.FaultTree
 
     val FT: FaultTree = DFT.readDagLikeFaultTree(Source.fromResource("ogpf.dft"))
 }
 
-object PCBA {
+object PCBA extends TreeLikeFaultTree {
     import faulttree.FaultTree
 
     val FT: FaultTree = DFT.readTreeLikeFaultTree(Source.fromResource("PCBA.dft"))

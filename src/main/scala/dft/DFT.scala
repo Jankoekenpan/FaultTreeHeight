@@ -4,13 +4,65 @@ import benchmark.Conversion
 
 import scala.collection.mutable
 import scala.io.Source
-import stringmatching.regex.Interpolators.r // https://bishabosha.github.io/articles/simple-parsing-with-strings.html
 
 enum DFTNode:
     case BasicEvent(id: Int, probability: Double)
     case OrEvent(id: Int, children: Seq[Int])
     case AndEvent(id: Int, children: Seq[Int])
     case TopLevel(id: Int)
+
+object Parsing {
+    enum DFTLine:
+        case BasicEvent(id: String, probability: String)
+        case AndEvent(id: String, children: Seq[String])
+        case OrEvent(id: String, children: Seq[String])
+        case TopLevel(id: String)
+
+    import fastparse.*
+    import fastparse.NoWhitespace.*
+
+    def dftToplevel[$: P]: P[DFTLine.TopLevel] =
+        P("toplevel \"" ~ CharsWhile(_ != '\"').! ~ "\";")
+            .map { x => DFTLine.TopLevel(x) }
+    def dftOr[$: P]: P[DFTLine.OrEvent] =
+        P("\"" ~ CharsWhile(_ != '\"').! ~ "\" or " ~ ("\"" ~ CharsWhile(_ != '\"').! ~ "\"").rep(sep=" ") ~ ";")
+            .map { case (x, y) => DFTLine.OrEvent(x, y) }
+    def dftAnd[$: P]: P[DFTLine.AndEvent] =
+        P("\"" ~ CharsWhile(_ != '\"').! ~ "\" and " ~ ("\"" ~ CharsWhile(_ != '\"').! ~ "\"").rep(sep=" ") ~ ";")
+            .map { case (x, y) => DFTLine.AndEvent(x, y) }
+    def dftBasic[$: P]: P[DFTLine.BasicEvent] =
+        P("\"" ~ CharsWhile(_ != '\"').! ~ "\" prob=" ~ CharsWhile(_ != ';').! ~ ";")
+            .map { case (x, y) => DFTLine.BasicEvent(x, y) }
+    def dftLine[$: P]: P[DFTLine] = dftToplevel | dftOr | dftAnd | dftBasic
+
+    def parseDFTLine(line: String): DFTLine = {
+        val Parsed.Success(parsed, _) = parse(line, dftLine)
+        parsed
+    }
+
+    def main(args: Array[String]): Unit = {
+        val topExample = "toplevel \"swag\";"
+        val orExample = "\"asdf\" or \"gh  jkl;\" \"yolo\";"
+        val andExample = "\"asdf\" and \"ghjkl;\" \"yolo\";"
+        val basicExample = "\"swag\" prob=0.12345;"
+
+        val Parsed.Success(foo, _) = parse(topExample, dftToplevel)
+        val Parsed.Success(bar, _) = parse(orExample, dftOr)
+        val Parsed.Success(qux, _) = parse(andExample, dftAnd)
+        val Parsed.Success(baz, _) = parse(basicExample, dftBasic)
+
+        val Parsed.Success(_, _) = parse(topExample, dftLine)
+        val Parsed.Success(_, _) = parse(orExample, dftLine)
+        val Parsed.Success(_, _) = parse(andExample, dftLine)
+        val Parsed.Success(_, _) = parse(basicExample, dftLine)
+
+        println(foo)
+        println(bar)
+        println(qux)
+        println(baz)
+    }
+
+}
 
 object DFT {
 
@@ -30,15 +82,15 @@ object DFT {
         val result = new mutable.ListBuffer[DFTNode]()
 
         for (line <- source.getLines()) {
-            line match {
-                case r"toplevel \"${topLevelEvent}\";" =>
+            Parsing.parseDFTLine(line) match {
+                case Parsing.DFTLine.TopLevel(topLevelEvent) =>
                     result.addOne(DFTNode.TopLevel(getId(topLevelEvent)))
-                case r"\"${parentEvent}\" or ${r"${childEvents}...( );"}" =>
-                    result.addOne(DFTNode.OrEvent(getId(parentEvent), childEvents.map { case r"\"${childEvent}\"" => getId(childEvent) }))
-                case r"\"${parentEvent}\" and ${r"${childEvents}...( );"}" =>
-                    result.addOne(DFTNode.AndEvent(getId(parentEvent), childEvents.map { case r"\"${childEvent}\"" => getId(childEvent) }))
-                case r"\"${basicEvent}\" prob=${r"$prob%g"};" =>
-                    result.addOne(DFTNode.BasicEvent(getId(basicEvent), prob))
+                case Parsing.DFTLine.OrEvent(parentEvent, childEvents) =>
+                    result.addOne(DFTNode.OrEvent(getId(parentEvent), childEvents.map(getId)))
+                case Parsing.DFTLine.AndEvent(parentEvent, childEvents) =>
+                    result.addOne(DFTNode.AndEvent(getId(parentEvent), childEvents.map(getId)))
+                case Parsing.DFTLine.BasicEvent(basicEvent, prob) =>
+                    result.addOne(DFTNode.BasicEvent(getId(basicEvent), prob.toDouble))
             }
         }
 
