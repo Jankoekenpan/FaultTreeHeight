@@ -80,19 +80,20 @@ object RealLife {
             ATCFailsToResolveTheConflict,
             LiquidStorageTank,
             LossContainerAtPort,
-            HSC,    // TODO seems to take a very long time for Algorithm 4 (cut sets)
+            //HSC, //TODO re-add this.   // TODO seems to take a very long time for Algorithm 4 (cut sets) (TODO possibly also the random BDT one..)
             SubmarinePipelineStopperFailure,
             BHNGPipeline,
-            BayesianNetwork,
+            //BayesianNetwork, TODO re-add this.    // TODO don't use cut set algorithm for this one (because there are 2 billion cut sets) path set algorithm might be possible, but will still be slow
             LeakageFailure,
             AssessingTheRisks1,
             PCBA,
+            ChemicalCargoShortage,
         )
 
         val daglikeFaultTrees: Seq[DagLikeFaultTree] = Seq(
             ChlorineRelease,
             T0Chopper,
-            OGPF
+            OGPF,
         )
 
         val csvOuputTree = CSVOutput.createTreeLikeFile()
@@ -105,7 +106,9 @@ object RealLife {
             val (booleanFormula, _) = Conversion.translateToBooleanFormula(treeFT)
 
             // TODO flatten tree before running recursive algorithm.
+            println("Calculating minimal cut sets...")
             val minimalCutSets = minimalcutpathset.minimalCutSets(dagFT)(basicEvents)
+            println("Calculating minimal path sets...")
             val minimalPathSets = minimalcutpathset.minimalPathSets(dagFT)(basicEvents)
 
             // TODO probably want to remove this.
@@ -127,6 +130,8 @@ object RealLife {
             val time_begin_randombdt = System.nanoTime()
             val heightRandomBDT = decisiontree.RandomBDTs.algorithm13(booleanFormula, probabilities)
             val time_end_randombdt = System.nanoTime()
+            println("Finished calculating heights!")
+            println()
 
             val time_recursive2_ns = time_end_recursive - time_begin_recursive
             val time_cutset_ns = time_end_cutset - time_begin_cutset
@@ -157,7 +162,9 @@ object RealLife {
             val (booleanFormula, probabilities) = Conversion.translateToBooleanFormula(dagFT)
 
             // TODO flatten tree before running recursive algorithm.
+            println("Calculating minimal cut sets...")
             val minimalCutSets = minimalcutpathset.minimalCutSets(dagFT)(basicEvents)
+            println("Calculating minimal path sets...")
             val minimalPathSets = minimalcutpathset.minimalPathSets(dagFT)(basicEvents)
 
             println(s"Calculate height of ${dagLikeFT.name} using Recursive algorithm 3...")
@@ -176,6 +183,8 @@ object RealLife {
             val time_begin_randombdt = System.nanoTime()
             val heightRandomBDT = decisiontree.RandomBDTs.algorithm13(booleanFormula, probabilities)
             val time_end_randombdt = System.nanoTime()
+            println("Finished calculating heights!")
+            println()
 
             val time_recursive3_ns = time_end_recursive - time_begin_recursive
             val time_cutset_ns = time_end_cutset - time_begin_cutset
@@ -1584,7 +1593,7 @@ object BHNGPipeline extends TreeLikeFaultTree {
     ))
 }
 
-object Chemicalcargoshortage{
+object ChemicalCargoShortage extends TreeLikeFaultTree {
 
     import faulttree.FaultTree
     import faulttree.FaultTree.*
