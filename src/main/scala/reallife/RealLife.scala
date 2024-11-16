@@ -39,6 +39,9 @@ object RealLife {
         runTreeLikeFaultTree(ATCFailsToResolveTheConflict.FT)
         runTreeLikeFaultTree(LiquidStorageTank.FT)
         runTreeLikeFaultTree(LossContainerAtPort.FT)
+        runTreeLikeFaultTree(HSC.FT)
+        runTreeLikeFaultTree(SubmarinePipelineStopperFailure.FT)
+        runTreeLikeFaultTree(BHNGPipeline.FT)
 
         println("DAG-like Fault Trees:")
         runDagLikeFaultTree(ChlorineRelease.FT)
