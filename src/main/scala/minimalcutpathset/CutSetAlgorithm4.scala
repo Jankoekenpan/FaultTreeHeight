@@ -129,20 +129,31 @@ def algorithm4(cutSets: CutSets, basicEvents: IntMap[Probability]): (Etas, Doubl
     (etas, asDouble(heights(List())))
 }
 
+def algorithm4(faultTree: FaultTree): (Etas, Double) = {
+    val basicEvents = getBasicEvents(faultTree)
+    val probabilities = getProbabilities(faultTree)(basicEvents)
+    val cutSets = minimalCutSets(faultTree)(basicEvents)
+//    println(cutSets)
+    algorithm4(cutSets, probabilities)
+}
+
 @main
 def testAlgo4(): Unit = {
-    println(height4(
-        FaultTree(1, Map(
-            1 -> TreeNode.Combination(1, Gate.Or, Set(2, 3)),
-            2 -> TreeNode.Combination(2, Gate.And, Set(4, 5, 6)),
-            3 -> TreeNode.Combination(3, Gate.And, Set(7, 8)),
-            4 -> TreeNode.BasicEvent(4, 0.5),
-            5 -> TreeNode.BasicEvent(5, 0.7),
-            6 -> TreeNode.BasicEvent(6, 0.4),
-            7 -> TreeNode.BasicEvent(7, 0.6),
-            8 -> TreeNode.BasicEvent(8, 0.2)
-        ))
-    ))  // expected: 2.632
+//    println(height4(
+//        FaultTree(1, Map(
+//            1 -> TreeNode.Combination(1, Gate.Or, Set(2, 3)),
+//            2 -> TreeNode.Combination(2, Gate.And, Set(4, 5, 6)),
+//            3 -> TreeNode.Combination(3, Gate.And, Set(7, 8)),
+//            4 -> TreeNode.BasicEvent(4, 0.5),
+//            5 -> TreeNode.BasicEvent(5, 0.7),
+//            6 -> TreeNode.BasicEvent(6, 0.4),
+//            7 -> TreeNode.BasicEvent(7, 0.6),
+//            8 -> TreeNode.BasicEvent(8, 0.2)
+//        ))
+//    ))  // expected: 2.632
+//    println()
 
-    println(height4(reallife.T0Chopper.FT)) // expected: 15.877624503409331
+    val (etas, height) = algorithm4(reallife.T0Chopper.FT)
+    println(height) // expected: 15.877624503409331
+    etas.foreach(println)
 }

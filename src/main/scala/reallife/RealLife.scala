@@ -35,23 +35,23 @@ object RealLife {
 
     def main(args: Array[String]): Unit = {
         given random: RandomGenerator = new java.util.Random()
-        println("Tree-like Fault Trees:")
-        runTreeLikeFaultTree(AircraftRunwayExcursionAccidents.FT)
-        runTreeLikeFaultTree(MainTrackTrainCollisionsLeadingToFatalitiesAndInjuries.FT)
-        runTreeLikeFaultTree(ATCFailsToResolveTheConflict.FT)
-        runTreeLikeFaultTree(LiquidStorageTank.FT)
-        runTreeLikeFaultTree(LossContainerAtPort.FT)
-        runTreeLikeFaultTree(HSC.FT)    // TODO this one seems to take a long time!
-        runTreeLikeFaultTree(SubmarinePipelineStopperFailure.FT)
-        runTreeLikeFaultTree(BHNGPipeline.FT)
-        runTreeLikeFaultTree(BayesianNetwork.FT)
-        runTreeLikeFaultTree(LeakageFailure.FT)
-        runTreeLikeFaultTree(AssessingTheRisks1.FT)
-        runTreeLikeFaultTree(OGPF.FT)
-        runTreeLikeFaultTree(PCBA.FT)
+//        println("Tree-like Fault Trees:")
+//        runTreeLikeFaultTree(AircraftRunwayExcursionAccidents.FT)
+//        runTreeLikeFaultTree(MainTrackTrainCollisionsLeadingToFatalitiesAndInjuries.FT)
+//        runTreeLikeFaultTree(ATCFailsToResolveTheConflict.FT)
+//        runTreeLikeFaultTree(LiquidStorageTank.FT)
+//        runTreeLikeFaultTree(LossContainerAtPort.FT)
+//        runTreeLikeFaultTree(HSC.FT)    // TODO this one seems to take a long time!
+//        runTreeLikeFaultTree(SubmarinePipelineStopperFailure.FT)
+//        runTreeLikeFaultTree(BHNGPipeline.FT)
+//        runTreeLikeFaultTree(BayesianNetwork.FT)
+//        runTreeLikeFaultTree(LeakageFailure.FT)
+//        runTreeLikeFaultTree(AssessingTheRisks1.FT)
+//        runTreeLikeFaultTree(OGPF.FT)
+//        runTreeLikeFaultTree(PCBA.FT)
 
-        println("DAG-like Fault Trees:")
-        runDagLikeFaultTree(ChlorineRelease.FT)
+//        println("DAG-like Fault Trees:")
+//        runDagLikeFaultTree(ChlorineRelease.FT)
         runDagLikeFaultTree(T0Chopper.FT)
     }
 
