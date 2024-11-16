@@ -35,24 +35,24 @@ object RealLife {
 
     def main(args: Array[String]): Unit = {
         given random: RandomGenerator = new java.util.Random()
-//        println("Tree-like Fault Trees:")
-//        runTreeLikeFaultTree(AircraftRunwayExcursionAccidents.FT)
-//        runTreeLikeFaultTree(MainTrackTrainCollisionsLeadingToFatalitiesAndInjuries.FT)
-//        runTreeLikeFaultTree(ATCFailsToResolveTheConflict.FT)
-//        runTreeLikeFaultTree(LiquidStorageTank.FT)
-//        runTreeLikeFaultTree(LossContainerAtPort.FT)
-//        runTreeLikeFaultTree(HSC.FT)    // TODO this one seems to take a long time!
-//        runTreeLikeFaultTree(SubmarinePipelineStopperFailure.FT)
-//        runTreeLikeFaultTree(BHNGPipeline.FT)
-//        runTreeLikeFaultTree(BayesianNetwork.FT)
-//        runTreeLikeFaultTree(LeakageFailure.FT)
-//        runTreeLikeFaultTree(AssessingTheRisks1.FT)
-//        runTreeLikeFaultTree(OGPF.FT)
-//        runTreeLikeFaultTree(PCBA.FT)
+        println("Tree-like Fault Trees:")
+        runTreeLikeFaultTree(AircraftRunwayExcursionAccidents.FT)
+        runTreeLikeFaultTree(MainTrackTrainCollisionsLeadingToFatalitiesAndInjuries.FT)
+        runTreeLikeFaultTree(ATCFailsToResolveTheConflict.FT)
+        runTreeLikeFaultTree(LiquidStorageTank.FT)
+        runTreeLikeFaultTree(LossContainerAtPort.FT)
+        runTreeLikeFaultTree(HSC.FT)    // TODO this one seems to take a long time!
+        runTreeLikeFaultTree(SubmarinePipelineStopperFailure.FT)
+        runTreeLikeFaultTree(BHNGPipeline.FT)
+        runTreeLikeFaultTree(BayesianNetwork.FT)
+        runTreeLikeFaultTree(LeakageFailure.FT)
+        runTreeLikeFaultTree(AssessingTheRisks1.FT)
+        runTreeLikeFaultTree(PCBA.FT)
 
-//        println("DAG-like Fault Trees:")
-//        runDagLikeFaultTree(ChlorineRelease.FT)
+        println("DAG-like Fault Trees:")
+        runDagLikeFaultTree(ChlorineRelease.FT)
         runDagLikeFaultTree(T0Chopper.FT)
+        runDagLikeFaultTree(OGPF.FT)
     }
 
 }
@@ -1918,29 +1918,29 @@ object Chemicalcargoshortage{
 object BayesianNetwork {
     import faulttree.FaultTree
 
-    val FT: FaultTree = DFT.readTreelikeFaultTree(Source.fromResource("Bayesian_network.dft"))
+    val FT: FaultTree = DFT.readTreeLikeFaultTree(Source.fromResource("Bayesian_network.dft"))
 }
 
 object LeakageFailure {
     import faulttree.FaultTree
 
-    val FT: FaultTree = DFT.readTreelikeFaultTree(Source.fromResource("Leakagefailure.dft"))
+    val FT: FaultTree = DFT.readTreeLikeFaultTree(Source.fromResource("Leakagefailure.dft"))
 }
 
 object AssessingTheRisks1 {
     import faulttree.FaultTree
 
-    val FT: FaultTree = DFT.readTreelikeFaultTree(Source.fromResource("AssessingtheRisks1.dft"))
+    val FT: FaultTree = DFT.readTreeLikeFaultTree(Source.fromResource("AssessingtheRisks1.dft"))
 }
 
 object OGPF {
-    import faulttree.FaultTree
+    import minimalcutpathset.FaultTree
 
-    val FT: FaultTree = DFT.readTreelikeFaultTree(Source.fromResource("ogpf.dft"))
+    val FT: FaultTree = DFT.readDagLikeFaultTree(Source.fromResource("ogpf.dft"))
 }
 
 object PCBA {
     import faulttree.FaultTree
 
-    val FT: FaultTree = DFT.readTreelikeFaultTree(Source.fromResource("PCBA.dft"))
+    val FT: FaultTree = DFT.readTreeLikeFaultTree(Source.fromResource("PCBA.dft"))
 }

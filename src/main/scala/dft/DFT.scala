@@ -45,9 +45,12 @@ object DFT {
         result.toList
     }
 
-    def readTreelikeFaultTree(source: Source): faulttree.FaultTree =
+    def readTreeLikeFaultTree(source: Source): faulttree.FaultTree =
         Conversion.translateToTreeLikeFaultTree(readDFTFile(source))
 
+    def readDagLikeFaultTree(source: Source): minimalcutpathset.FaultTree =
+        Conversion.translateToDagTree(readDFTFile(source))
+    
     def main(args: Array[String]): Unit = {
         val source = Source.fromResource("AssessingtheRisks1.dft")
 
