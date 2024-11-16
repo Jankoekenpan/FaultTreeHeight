@@ -314,7 +314,7 @@ def MOCUS(faultTree: FaultTree)(basicEvents: Set[Event] = getBasicEvents(faultTr
     while ListOfCutSets.nonEmpty do
 //        println(s"DEBUG: cut sets yet to be processed: ${ListOfCutSets}")
 //        println(s"DEBUG: cut sets in result: ${resultBuilder}")
-        println()
+//        println()
 
         val C: Set[Event] = ListOfCutSets.head
         ListOfCutSets = ListOfCutSets.tail
