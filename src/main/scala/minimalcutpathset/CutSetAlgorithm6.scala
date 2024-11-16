@@ -7,7 +7,7 @@ def doubleEqual(one: Double, two: Double): Boolean =
     Math.abs(one - two) < 0.00_000_1
 
 def cutSetProbability(cutSet: CutSet, probabilities: IntMap[Probability]): Probability =
-    cutSet.map(basicEvent => probabilities(basicEvent)).product
+    cutSet.toSeq.map(basicEvent => probabilities(basicEvent)).product
 
 def height6(faultTree: FaultTree, probabilities: IntMap[Probability]): Double = {
     val cutSets = minimalCutSets(faultTree)()

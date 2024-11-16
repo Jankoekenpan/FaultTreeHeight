@@ -143,4 +143,6 @@ def testAlgo4(): Unit = {
             8 -> TreeNode.BasicEvent(8, 0.2)
         ))
     ))  // expected: 2.632
+
+    println(height4(reallife.T0Chopper.FT)) // expected: 15.877624503409331
 }

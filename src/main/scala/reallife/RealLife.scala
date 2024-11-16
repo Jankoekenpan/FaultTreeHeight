@@ -538,6 +538,7 @@ object T0Chopper {
     ))
 }
 
+@java.lang.Deprecated // probabilities listed here might not actually be failure probabilities
 object LiquidStorageTank {
     import faulttree.FaultTree
     import faulttree.FaultTree.*
@@ -594,14 +595,14 @@ object LiquidStorageTank {
     final val p12 = 0.0260
     final val p13 = 0.0550
     final val p14 = 0.0250
-    final val p15=  0.0403
+    final val p15 = 0.0403
     final val p16 = 0.1260
-    final val p17 =  0.0014
-    final val p18 =  0.0014
-    final val p19=  0.0004
+    final val p17 = 0.0374
+    final val p18 = 0.0374
+    final val p19 = 0.0004
     final val p20 = 0.0004
-    final val p21 =  0.0003
-    final val p22 =  0.0040
+    final val p21 = 0.0003
+    final val p22 = 0.0040
 
     val FT: FaultTree = OrEvent(T, Seq(
         OrEvent(M1, Seq(
