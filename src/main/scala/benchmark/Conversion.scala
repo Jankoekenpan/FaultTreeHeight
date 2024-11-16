@@ -4,6 +4,30 @@ import scala.collection.immutable.IntMap
 
 object Conversion {
 
+    def translateToTreeLikeFaultTree(dftNodes: Seq[dft.DFTNode]): faulttree.FaultTree =
+        translateToTreeLikeFaultTree(translateToDagTree(dftNodes))
+
+    def translateToDagTree(dftNodes: Seq[dft.DFTNode]): minimalcutpathset.FaultTree = {
+        val mapBuilder = Map.newBuilder[Int, minimalcutpathset.TreeNode]
+
+        var top: Int | Null = null
+
+        for node <- dftNodes do
+            node match
+                case dft.DFTNode.BasicEvent(event, prob) =>
+                    mapBuilder.addOne((event, minimalcutpathset.TreeNode.BasicEvent(event, prob)))
+                case dft.DFTNode.AndEvent(id, children) =>
+                    mapBuilder.addOne((id, minimalcutpathset.TreeNode.Combination(id, minimalcutpathset.Gate.And, children.toSet)))
+                case dft.DFTNode.OrEvent(id, children) =>
+                    mapBuilder.addOne((id, minimalcutpathset.TreeNode.Combination(id, minimalcutpathset.Gate.Or, children.toSet)))
+                case dft.DFTNode.TopLevel(id) =>
+                    top = id
+            end match
+        end for
+
+        minimalcutpathset.FaultTree(top.asInstanceOf[Int], mapBuilder.result())
+    }
+
     def translateToDagTree(tree: faulttree.FaultTree): (minimalcutpathset.FaultTree, IntMap[Double]) = {
         val eventsBuilder = scala.collection.immutable.Map.newBuilder[Int, minimalcutpathset.TreeNode]
         val probabilities = IntMap.newBuilder[Double]
@@ -155,8 +179,8 @@ object Conversion {
 
         println(h1)
         println(h2)
-        println(h3) // SHOULDN'T BE LOWER THAN h1!
-        println(h4) // SHOULDN'T BE LOWER THAN h1!
+        println(h3) // SHOULDN'T BE LOWER THAN h1! (this is solved now :D)
+        println(h4) // SHOULDN'T BE LOWER THAN h1! (this is solved now :D)
         println(h5)
     }
 }

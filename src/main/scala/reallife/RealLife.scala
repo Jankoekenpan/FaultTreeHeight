@@ -1396,3 +1396,513 @@ object BHNGPipeline {
         ))
     ))
 }
+
+object Chemicalcargoshortage{
+
+    import faulttree.FaultTree
+    import faulttree.FaultTree.*
+
+    val X1 = 1
+    val X2 = 2
+    val X3 = 3
+    val X4 = 4
+    val X5 = 5
+    val X6 = 6
+    val X7 = 7
+    val X8 = 8
+    val X9 = 9
+    val X10 = 10
+    val X11 = 11
+    val X12 = 12
+    val X13 = 13
+    val X14 = 14
+    val X15 = 15
+    val X16 = 16
+    val X17 = 17
+    val X18 = 18
+    val X19 = 19
+    val X20 = 20
+    val X21 = 21
+    val X22 = 22
+    val X23 = 23
+    val X24 = 24
+    val X25 = 25
+    val X26 = 26
+    val X27 = 27
+    val X28 = 28
+    val X29 = 29
+    val X30 = 30
+    val X31 = 31
+    val X32 = 32
+    val X33 = 33
+    val X34 = 34
+    val X35 = 35
+    val X36 = 36
+    val X37 = 37
+    val X38 = 38
+    val X39 = 39
+    val X40 = 40
+    val X41 = 41
+    val X42 = 42
+    val X43 = 43
+    val X44 = 44
+    val X45 = 45
+    val X46 = 46
+    val X47 = 47
+    val X48 = 48
+    val X49 = 49
+    val X50 = 50
+    val X51 = 51
+    val X52 = 52
+    val X53 = 53
+    val X54 = 54
+    val X55 = 55
+    val X56 = 56
+    val X57 = 57
+    val X58 = 58
+    val X59 = 59
+    val X60 = 60
+    val X61 = 61
+    val X62 = 62
+    val X63 = 63
+    val X64 = 64
+    val X65 = 65
+    val X66 = 66
+    val X67 = 67
+    val X68 = 68
+    val X69 = 69
+    val X70 = 70
+    val X71 = 71
+    val X72 = 72
+    val X73 = 73
+    val X74 = 74
+    val X75 = 75
+    val X76 = 76
+    val X77 = 77
+    val X78 = 78
+    val X79 = 79
+    val X80 = 80
+    val X81 = 81
+    val X82 = 82
+    val X83 = 83
+    val X84 = 84
+    val X85 = 85
+    val X86 = 86
+    val X87 = 87
+    val X88 = 88
+    val X89 = 89
+    val X90 = 90
+    val X91 = 91
+    val X92 = 92
+    val X93 = 93
+    val X94 = 94
+    val X95 = 95
+    val X96 = 96
+    val X97 = 97
+    val X98 = 98
+    val X99 = 99
+    val X100 = 100
+    val X101 = 101
+    val X102 = 102
+    val X103 = 103
+
+    val T = 0
+
+    final val M1 = 104
+    final val M2 = 105
+    final val M3 = 106
+    final val M4 = 107
+    final val M6 = 109
+    final val M7 = 110
+    final val M8 = 111
+    final val M9 = 112
+    final val M10 = 113
+    final val M11 = 114
+    final val M12 = 115
+    final val M13 = 116
+    final val M14 = 117
+    final val M15 = 118
+    final val M16 = 119
+    final val M17 = 120
+    final val M18 = 121
+    final val M19 = 122
+    final val M20 = 123
+    final val M21 = 124
+    final val M22 = 125
+    final val M23 = 126
+    final val M24 = 127
+    final val M25 = 128
+    final val M26 = 129
+    final val M27 = 130
+    final val M28 = 131
+    final val M29 = 132
+    final val M30 = 133
+    final val M31 = 134
+    final val M32 = 135
+    final val M33 = 136
+    final val M34 = 137
+    final val M35 = 138
+    final val M36 = 139
+    final val M37 = 140
+    final val M38 = 141
+    final val M39 = 142
+    final val M40 = 143
+    final val M41 = 144
+    final val M42 = 145
+    final val M43 = 146
+    final val M44 = 147
+    final val M45 = 148
+    final val M46 = 149
+    final val M47 = 150
+    final val M48 = 151
+    final val M49 = 152
+    final val M50 = 153
+    final val M51 = 154
+    final val M52 = 155
+    final val M53 = 156
+    final val M54 = 108
+    final val M55 = 157
+    final val M56 = 158
+    final val M57 = 159
+    final val M58 = 160
+    final val M59 = 161
+    final val M60 = 162
+    final val M61 = 163
+    final val M62 = 164
+    final val M63 = 165
+
+    final val p1 = 0.00069
+    final val p2 = 0.00005
+    final val p3 = 0.01599
+    final val p4 = 0.00595
+    final val p5 = 0.00252
+    final val p6 = 0.00145
+    final val p7 = 0.00011
+    final val p8 = 0.00006
+    final val p9 = 0.00005
+    final val p10 = 0.00091
+    final val p11 = 0.00310
+    final val p12 = 0.00603
+    final val p13 = 0.00147
+    final val p14 = 0.00324
+    final val p15 = 0.00001
+    final val p16 = 0.00340
+    final val p17 = 0.00300
+    final val p18 = 0.00045
+    final val p19 = 0.00338
+    final val p20 = 0.00002
+    final val p21 = 0.00777
+    final val p22 = 0.00433
+    final val p23 = 0.00992
+    final val p24 = 0.00007
+    final val p25 = 0.00776
+    final val p26 = 0.00030
+    final val p27 = 0.00010
+    final val p28 = 0.00173
+    final val p29 = 0.00072
+    final val p30 = 0.00045
+    final val p31 = 0.00462
+    final val p32 = 0.00773
+    final val p33 = 0.00286
+    final val p34 = 0.00760
+    final val p35 = 0.00002
+    final val p36 = 0.02206
+    final val p37 = 0.00064
+    final val p38 = 0.01750
+    final val p39 = 0.01854
+    final val p40 = 0.00001
+    final val p41 = 0.00152
+    final val p42 = 0.00273
+    final val p43 = 0.01250
+    final val p44 = 0.01153
+    final val p45 = 0.00891
+    final val p46 = 0.00054
+    final val p47 = 0.01959
+    final val p48 = 0.00022
+    final val p49 = 0.01756
+    final val p50 = 0.02284
+    final val p51 = 0.01736
+    final val p52 = 0.02824
+    final val p53 = 0.00636
+    final val p54 = 0.00336
+    final val p55 = 0.00040
+    final val p56 = 0.00152
+    final val p57 = 0.00676
+    final val p58 = 0.01264
+    final val p59 = 0.03504
+    final val p60 = 0.01452
+    final val p61 = 0.00259
+    final val p62 = 0.00463
+    final val p63 = 0.00139
+    final val p64 = 0.00972
+    final val p65 = 0.00420
+    final val p66 = 0.02238
+    final val p67 = 0.02250
+    final val p68 = 0.01929
+    final val p69 = 0.02321
+    final val p70 = 0.00748
+    final val p71 = 0.00276
+    final val p72 = 0.00040
+    final val p73 = 0.00143
+    final val p74 = 0.00582
+    final val p75 = 0.01455
+    final val p76 = 0.03156
+    final val p77 = 0.00048
+    final val p78 = 0.00346
+    final val p79 = 0.00139
+    final val p80 = 0.00972
+    final val p81 = 0.00493
+    final val p82 = 0.01442
+    final val p83 = 0.03670
+    final val p84 = 0.00364
+    final val p85 = 0.01402
+    final val p86 = 0.00727
+    final val p87 = 0.03504
+    final val p88 = 0.03136
+    final val p89 = 0.00723
+    final val p90 = 0.02883
+    final val p91 = 0.00550
+    final val p92 = 0.01018
+    final val p93 = 0.00231
+    final val p94 = 0.01365
+    final val p95 = 0.01444
+    final val p96 = 0.00228
+    final val p97 = 0.00742
+    final val p98 = 0.00799
+    final val p99 = 0.00382
+    final val p100 = 0.02230
+    final val p101 = 0.01467
+    final val p102 = 0.00324
+    final val p103 = 0.02939
+    
+    val FT: FaultTree = OrEvent(T, Seq(
+        OrEvent(M1, Seq(
+            BasicEvent(X39,p39),
+            AndEvent(M35, Seq(
+                OrEvent(M40, Seq(
+                    BasicEvent(X1,p1),
+                    BasicEvent(X2,p2)
+                )),
+                BasicEvent(X3,p3)
+            )),
+            AndEvent(M36, Seq(
+                BasicEvent(X4,p4),
+                BasicEvent(X5,p5)
+            )),
+            AndEvent(M37, Seq(
+                OrEvent(M41, Seq(
+                    OrEvent(M44, Seq(
+                        AndEvent(M47, Seq(
+                            AndEvent(M50, Seq(
+                                OrEvent(M54, Seq(
+                                    BasicEvent(X6,p6),
+                                    BasicEvent(X7,p7),
+                                    BasicEvent(X8,p8),
+                                    BasicEvent(X9,p9),
+                                    BasicEvent(X10,p10)
+                                )),
+                                OrEvent(M55, Seq(
+                                    BasicEvent(X12,p12),
+                                    BasicEvent(X13,p13),
+                                    BasicEvent(X14,p14)
+                                ))
+                            )),
+                            BasicEvent(X11,p11)
+                        )),
+                        BasicEvent(X15,p15)
+                    )),
+                    OrEvent(M45, Seq(
+                        AndEvent(M48, Seq(
+                            OrEvent(M51, Seq(
+                                OrEvent(M56, Seq(
+                                    BasicEvent(X17,p17),
+                                    BasicEvent(X18,p18),
+                                    BasicEvent(X19,p19)
+                                )),
+                                OrEvent(M57, Seq(
+                                    BasicEvent(X21,p21),
+                                    BasicEvent(X22,p22),
+                                    BasicEvent(X23,p23),
+                                    BasicEvent(X24,p24),
+                                    BasicEvent(X25,p25)
+                                ))
+                            )),
+                            BasicEvent(X20,p20)
+                        )),
+                        BasicEvent(X16,p16),
+                        BasicEvent(X26,p26)
+                    )),
+                )),
+                OrEvent(M42, Seq(
+                    BasicEvent(X27,p27),
+                    BasicEvent(X28,p28),
+                    BasicEvent(X29,p29),
+                    AndEvent(M46, Seq(
+                        BasicEvent(X30,p30),
+                        OrEvent(M49, Seq(
+                            OrEvent(M52, Seq(
+                                BasicEvent(X31,p31),
+                                BasicEvent(X32,p32),
+                                BasicEvent(X33,p33),
+                                BasicEvent(X34,p34),
+                                BasicEvent(X35,p35)
+                            )),
+                            OrEvent(M53, Seq(
+                                BasicEvent(X36,p36),
+                                BasicEvent(X37,p37),
+                                BasicEvent(X38,p38)
+                            ))
+                        )),
+                        BasicEvent(M30,p30)
+                    ))
+                ))
+            )),
+            OrEvent(M38, Seq(
+                BasicEvent(X40,p40),
+                BasicEvent(X41,p41)
+            )),
+            AndEvent(M39, Seq(
+                OrEvent(M43, Seq(
+                    BasicEvent(X43,p43),
+                    BasicEvent(X44,p44)
+                )),
+                BasicEvent(X42,p42)
+            ))
+        )),
+        OrEvent(M2, Seq(
+            OrEvent(M4, Seq(
+                AndEvent(M13, Seq(
+                    OrEvent(M14, Seq(
+                        BasicEvent(X45,p45),
+                        BasicEvent(X46,p46),
+                        BasicEvent(X47,p47),
+                        BasicEvent(X48,p48),
+                        BasicEvent(X49,p49)
+                    )),
+                    BasicEvent(X50,p50)
+                )),
+                OrEvent(M12, Seq(
+                    OrEvent(M15, Seq(
+                        AndEvent(M26, Seq(
+                            OrEvent(M29, Seq(
+                                BasicEvent(X55,p55),
+                                BasicEvent(X56,p56),
+                                BasicEvent(X57,p57)
+                            )),
+                            BasicEvent(X54,p54)
+                        )),
+                        AndEvent(M27, Seq(
+                            OrEvent(M28, Seq(
+                                BasicEvent(X51,p51),
+                                BasicEvent(X52,p52)
+                            )),
+                            BasicEvent(X53,p53)
+                        ))
+                    )),
+                    AndEvent(M16, Seq(
+                        OrEvent(M25, Seq(
+                            BasicEvent(X58,p58),
+                            BasicEvent(X59,p59)
+                        )),
+                        BasicEvent(X60,p60),
+                        BasicEvent(X61,p61)
+                    )),
+                )),
+                AndEvent(M11, Seq(
+                    OrEvent(M17, Seq(
+                        BasicEvent(X62,p62),
+                        BasicEvent(X63,p63),
+                        BasicEvent(X64,p64)
+                    )),
+                    BasicEvent(X65,p65)
+                ))
+            )),
+            AndEvent(M6, Seq(
+                BasicEvent(X66,p66),
+                BasicEvent(X67,p67)
+            )),
+            OrEvent(M7, Seq(
+                AndEvent(M10, Seq(
+                    OrEvent(M18, Seq(
+                        BasicEvent(X84,p84),
+                        BasicEvent(X85,p85),
+                        BasicEvent(X86,p86)
+                    )),
+                    BasicEvent(X87,p87)
+                )),
+                OrEvent(M9, Seq(
+                    OrEvent(M19, Seq(
+                        OrEvent(M24, Seq(
+                            AndEvent(M30, Seq(
+                                OrEvent(M33, Seq(
+                                    BasicEvent(X68,p68),
+                                    BasicEvent(X69,p69)
+                                )),
+                                BasicEvent(X70,p70)
+                            )),
+                            AndEvent(M31, Seq(
+                                OrEvent(M34, Seq(
+                                    BasicEvent(X72,p72),
+                                    BasicEvent(X73,p73),
+                                    BasicEvent(X74,p74)
+                                )),
+                                BasicEvent(X71,p71)
+                            ))
+                        )),
+                        AndEvent(M23, Seq(
+                            OrEvent(M32, Seq(
+                                BasicEvent(X75,p75),
+                                BasicEvent(X76,p76)
+                            )),
+                            BasicEvent(X77,p77)
+                        ))
+                    )),
+                    AndEvent(M20, Seq(
+                        OrEvent(M22, Seq(
+                            BasicEvent(X78,p78),
+                            BasicEvent(X79,p79),
+                            BasicEvent(X80,p80)
+                        )),
+                        BasicEvent(X81,p81)
+                    )),
+                    OrEvent(M21, Seq(
+                        BasicEvent(X82,p82),
+                        BasicEvent(X83,p83)
+                    ))
+                )),
+                AndEvent(M8, Seq(
+                    BasicEvent(X88,p88),
+                    BasicEvent(X89,p89)
+                ))
+            ))
+        )),
+        OrEvent(M3, Seq(
+            AndEvent(M58, Seq(
+                OrEvent(M61, Seq(
+                    BasicEvent(X92,p92),
+                    BasicEvent(X93,p93)
+                )),
+                BasicEvent(X90,p90),
+                BasicEvent(X91,p91)
+            )),
+            AndEvent(M59, Seq(
+                OrEvent(M62, Seq(
+                    BasicEvent(X94,p94),
+                    BasicEvent(X95,p95),
+                    BasicEvent(X96,p96),
+                    BasicEvent(X97,p97),
+                    BasicEvent(X98,p98)
+                )),
+                BasicEvent(X99,p99)
+            )),
+            AndEvent(M60, Seq(
+                OrEvent(M63, Seq(
+                    BasicEvent(X100,p100),
+                    BasicEvent(X101,p101)
+                )),
+                BasicEvent(X102,p102),
+                BasicEvent(X103,p103)
+            ))
+        ))
+    ))
+}
