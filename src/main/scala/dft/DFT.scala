@@ -1,5 +1,7 @@
 package dft
 
+import benchmark.Conversion
+
 import scala.collection.mutable
 import scala.io.Source
 import stringmatching.regex.Interpolators.r // https://bishabosha.github.io/articles/simple-parsing-with-strings.html
@@ -43,10 +45,10 @@ object DFT {
         result.toList
     }
 
+    def readTreelikeFaultTree(source: Source): faulttree.FaultTree =
+        Conversion.translateToTreeLikeFaultTree(readDFTFile(source))
+
     def main(args: Array[String]): Unit = {
-        // TODO skip the following ones:
-        //  assigning the risk 2.
-        //  TODO which other ones?
         val source = Source.fromResource("AssessingtheRisks1.dft")
 
         val dftNodes = DFT.readDFTFile(source)

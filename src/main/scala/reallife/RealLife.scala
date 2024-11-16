@@ -2,8 +2,10 @@ package reallife
 
 import benchmark.Conversion
 import decisiontree.RandomBDTs
+import dft.DFT
 
-import java.util.random.RandomGenerator // or is this just fantasy?
+import java.util.random.RandomGenerator
+import scala.io.Source // or is this just fantasy?
 
 object RealLife {
 
@@ -42,6 +44,11 @@ object RealLife {
         runTreeLikeFaultTree(HSC.FT)
         runTreeLikeFaultTree(SubmarinePipelineStopperFailure.FT)
         runTreeLikeFaultTree(BHNGPipeline.FT)
+        runTreeLikeFaultTree(BayesianNetwork.FT)
+        runTreeLikeFaultTree(LeakageFailure.FT)
+        runTreeLikeFaultTree(AssessingTheRisks1.FT)
+        runTreeLikeFaultTree(OGPF.FT)
+        runTreeLikeFaultTree(PCBA.FT)
 
         println("DAG-like Fault Trees:")
         runDagLikeFaultTree(ChlorineRelease.FT)
@@ -1674,7 +1681,7 @@ object Chemicalcargoshortage{
     final val p101 = 0.01467
     final val p102 = 0.00324
     final val p103 = 0.02939
-    
+
     val FT: FaultTree = OrEvent(T, Seq(
         OrEvent(M1, Seq(
             BasicEvent(X39,p39),
@@ -1905,4 +1912,34 @@ object Chemicalcargoshortage{
             ))
         ))
     ))
+}
+
+object BayesianNetwork {
+    import faulttree.FaultTree
+
+    val FT: FaultTree = DFT.readTreelikeFaultTree(Source.fromResource("Bayesian_network.dft"))
+}
+
+object LeakageFailure {
+    import faulttree.FaultTree
+
+    val FT: FaultTree = DFT.readTreelikeFaultTree(Source.fromResource("Leakagefailure.dft"))
+}
+
+object AssessingTheRisks1 {
+    import faulttree.FaultTree
+
+    val FT: FaultTree = DFT.readTreelikeFaultTree(Source.fromResource("AssessingtheRisks1.dft"))
+}
+
+object OGPF {
+    import faulttree.FaultTree
+
+    val FT: FaultTree = DFT.readTreelikeFaultTree(Source.fromResource("ogpf.dft"))
+}
+
+object PCBA {
+    import faulttree.FaultTree
+
+    val FT: FaultTree = DFT.readTreelikeFaultTree(Source.fromResource("PCBA.dft"))
 }
