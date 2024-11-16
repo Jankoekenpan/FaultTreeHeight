@@ -36,7 +36,7 @@ object DagApproximationRatio {
 
     def printData(file: Path, dagLikeFaultTree: FaultTree): Unit = {
         println(s"dagTree = ${dagLikeFaultTree}")
-        val (booleanFormula, probabilities) = Conversion.translateToDecisionTree(dagLikeFaultTree)
+        val (booleanFormula, probabilities) = Conversion.translateToBooleanFormula(dagLikeFaultTree)
         println(s"boolean formula = ${booleanFormula}, probabilities = ${probabilities}")
 
         val basicEvents = minimalcutpathset.getBasicEvents(dagLikeFaultTree)

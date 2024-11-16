@@ -201,16 +201,6 @@ def isPath0(path: Path7): Boolean = path.last == Last.Zero
 
 // h just counts basic events (so no leaf nodes).
 def h(path: Path7): Int = path.length - 1
-//
-//enum Direction:
-//    case L, R
-//case class Edge(start: Event, direction: Direction, dest: Event | Last)
-//type Edges = Seq[Edge]
-
-//def edges(path: Path7): List[Edge] = path match
-//    case Path.Leaf(_) => Nil
-//    case Path.ConsLeft(x, xs) => Edge(x, Direction.L, xs.head) :: edges(xs)
-//    case Path.ConsRight(x, xs) => Edge(x, Direction.R, xs.head) :: edges(xs)
 
 type Probability = Double
 type BasicEvents = IntMap[Probability]

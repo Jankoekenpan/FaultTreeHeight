@@ -74,7 +74,7 @@ object Conversion {
         recur(dagFT.topNode)
     }
 
-    def translateToDecisionTree(dagFT: minimalcutpathset.FaultTree): (decisiontree.BooleanFormula, IntMap[Double]) =
+    def translateToBooleanFormula(dagFT: minimalcutpathset.FaultTree): (decisiontree.BooleanFormula, IntMap[Double]) =
         translateToBooleanFormula(translateToTreeLikeFaultTree(dagFT))
 
     def translateToBooleanFormula(faultTree: faulttree.FaultTree): (decisiontree.BooleanFormula, IntMap[Double]) = {
@@ -116,7 +116,7 @@ object Conversion {
             decisiontree.BooleanFormula.And(createBalancedAnd(leftChildren), createBalancedAnd(rightChildren))
     }
 
-    @java.lang.Deprecated
+    @java.lang.Deprecated(forRemoval = true)
     def translateToDecisionTree(faultTree: faulttree.FaultTree): (decisiontree.BooleanFormula, Seq[Double]) = {
         val probabilities = Seq.newBuilder[Double]
         var curId = 0;
@@ -161,7 +161,7 @@ object Conversion {
         println(treeLikeFaultTree)
         println()
 
-        val (formula, probabilities) = translateToDecisionTree(dagTree)
+        val (formula, probabilities) = translateToBooleanFormula(dagTree)
         println(formula)
         println(probabilities)
         println()
