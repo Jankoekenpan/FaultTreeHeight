@@ -885,15 +885,15 @@ object HSC {
     final val p8 = 2.54e-6
     final val p9 = 2.54e-6
     final val p10 = 2.54e-6
-    final val p11= 2.54e-6
+    final val p11 = 2.54e-6
     final val p12 = 2.54e-6
     final val p13 = 2.54e-6
     final val p14 = 2.54e-6
-    final val p15= 2.54e-6
+    final val p15 = 2.54e-6
     final val p16 = 2.54e-6
     final val p17 = 2.54e-6
     final val p18 = 2.54e-6
-    final val p19= 2.54e-6
+    final val p19 = 2.54e-6
     final val p20 = 2.54e-6
     final val p21 = 2.54e-6
     final val p22 = 2.54e-6
@@ -915,16 +915,16 @@ object HSC {
     final val p38 = 3.42e-7
     final val p39 = 3.42e-7
     final val p40 = 2.1e-6
-    final val p41=  1.42e-4
+    final val p41 =  1.42e-4
     final val p42 = 8.35e-7
     final val p43 = 2.4e-3
     final val p44 = 8.27e-3
     final val p45 = 5.12e-3
-    final val p46=  5.44e-5
+    final val p46 =  5.44e-5
     final val p47 = 1.38e-6
     final val p48 = 4.5e-7
     final val p49 = 4.5e-7
-    final val p50=  4.2e-6
+    final val p50 =  4.2e-6
     final val p51 = 4.2e-6
     final val p52 = 5e-6
     final val p53 = 7.34e-5
@@ -1116,7 +1116,7 @@ object SubmarinePipelineStopperFailure {
             OrEvent(M5, Seq(
                 OrEvent(M15, Seq(
                     BasicEvent(X1,p1),
-                    BasicEvent(X2,p3),
+                    BasicEvent(X2,p2),
                     BasicEvent(X3,p3)
                 )),
                 OrEvent(M16, Seq(
@@ -1178,9 +1178,9 @@ object SubmarinePipelineStopperFailure {
             )),
             OrEvent(M14, Seq(
                 OrEvent(M21, Seq(
-                    BasicEvent(X28,p13),
-                    BasicEvent(X29,p14),
-                    BasicEvent(X30,p15)
+                    BasicEvent(X28,p28),
+                    BasicEvent(X29,p29),
+                    BasicEvent(X30,p30)
                 )),
                 BasicEvent(X31,p31)
             ))
