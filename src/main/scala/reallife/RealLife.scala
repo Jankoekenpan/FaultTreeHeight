@@ -1,11 +1,11 @@
-package reallife
+package reallife // or is this just fantasy?
 
 import benchmark.Conversion
 import decisiontree.RandomBDTs
 import dft.DFT
 
 import java.util.random.RandomGenerator
-import scala.io.Source // or is this just fantasy?
+import scala.io.Source
 
 object RealLife {
 
@@ -41,7 +41,7 @@ object RealLife {
         runTreeLikeFaultTree(ATCFailsToResolveTheConflict.FT)
         runTreeLikeFaultTree(LiquidStorageTank.FT)
         runTreeLikeFaultTree(LossContainerAtPort.FT)
-        runTreeLikeFaultTree(HSC.FT)
+        runTreeLikeFaultTree(HSC.FT)    // TODO this one seems to take a long time!
         runTreeLikeFaultTree(SubmarinePipelineStopperFailure.FT)
         runTreeLikeFaultTree(BHNGPipeline.FT)
         runTreeLikeFaultTree(BayesianNetwork.FT)
