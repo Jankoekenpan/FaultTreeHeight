@@ -4,6 +4,7 @@ import minimalcutpathset.TreeNode.Combination
 import reallife.T0Chopper
 
 import scala.collection.immutable.IntMap
+import scala.collection.mutable
 import scala.jdk.CollectionConverters.given
 import scala.util.boundary
 import scala.util.boundary.break
@@ -266,8 +267,8 @@ def minimalCutSets(faultTree: FaultTree)(basicEvents: Set[Event] = getBasicEvent
 def minimalPathSets(faultTree: FaultTree)(basicEvents: Set[Event] = getBasicEvents(faultTree)): PathSets =
     MOPAS(faultTree)(basicEvents).toSet
 
-// TODO can we also use this function in the 'MOCUS or' case? and 'MOPAS and' case?
-def removeSupersets(cutSets: Seq[Set[Event]]): Seq[Set[Event]] = {
+// TODO can we use this function in the MOCUS/MOPAS 'and' and 'or' branches instead of only at the end?
+def removeSupersets(cutSets: Iterable[Set[Event]]): Seq[Set[Event]] = {
     val result = new java.util.HashSet[CutSet]()
 
     boundary {
@@ -306,16 +307,12 @@ def getBasicEvents(faultTree: FaultTree): Set[Event] =
 def MOCUS(faultTree: FaultTree)(basicEvents: Set[Event] = getBasicEvents(faultTree)): Seq[Set[Event]] = {
 
     // contains only sets which completely consist of basic evens
-    val resultBuilder = Seq.newBuilder[Set[Event]]
+    val resultBuilder = new mutable.ListBuffer[Set[Event]]()
 
     // contains sets which contain non-basic events
     var ListOfCutSets: Seq[Set[Event]] = List(Set(faultTree.topEvent))
 
     while ListOfCutSets.nonEmpty do
-//        println(s"DEBUG: cut sets yet to be processed: ${ListOfCutSets}")
-//        println(s"DEBUG: cut sets in result: ${resultBuilder}")
-//        println()
-
         val C: Set[Event] = ListOfCutSets.head
         ListOfCutSets = ListOfCutSets.tail
 
@@ -329,7 +326,7 @@ def MOCUS(faultTree: FaultTree)(basicEvents: Set[Event] = getBasicEvents(faultTr
                     faultTree.node(E) match
                         case TreeNode.Combination(_, Gate.And, children) =>
                             val Cnew: Set[Event] = C.excl(E).union(children)
-                            ListOfCutSets = removeSupersets(Cnew +: ListOfCutSets)
+                            ListOfCutSets = Cnew +: ListOfCutSets
                             break()
                         case TreeNode.Combination(_, Gate.Or, children) =>
                             val CwithoutE = C.excl(E)
@@ -337,23 +334,19 @@ def MOCUS(faultTree: FaultTree)(basicEvents: Set[Event] = getBasicEvents(faultTr
                             ListOfCutSets = ListOfCutSets.prependedAll(expandedSets)
                             break()
                         case _: TreeNode.BasicEvent =>
-                            // nothing to do
+                            // nothing to do, continue with next element in this set.
                     end match
                 end while
         end if
     end while
 
-//    println("DEBUG: finish...")
-//    println(s"DEBUG: cut sets yet to be processed: ${ListOfCutSets}")
-    val result = resultBuilder.result()
-//    println(s"DEBUG: processed cut sets: ${result}")
-    result
+    removeSupersets(resultBuilder)
 }
 
 def MOPAS(faultTree: FaultTree)(basicEvents: Set[Event] = getBasicEvents(faultTree)): Seq[Set[Event]] = {
 
     // contains only sets which completely consist of basic evens
-    val resultBuilder = Seq.newBuilder[Set[Event]]
+    val resultBuilder = new mutable.ListBuffer[Set[Event]]()
 
     // contains sets which contain non-basic events
     var ListOfPathSets: Seq[Set[Event]] = List(Set(faultTree.topEvent))
@@ -372,7 +365,7 @@ def MOPAS(faultTree: FaultTree)(basicEvents: Set[Event] = getBasicEvents(faultTr
                     faultTree.node(E) match
                         case TreeNode.Combination(_, Gate.Or, children) =>
                             val Pnew: Set[Event] = P.excl(E).union(children)
-                            ListOfPathSets = removeSupersets(Pnew +: ListOfPathSets)
+                            ListOfPathSets = Pnew +: ListOfPathSets
                             break()
                         case TreeNode.Combination(_, Gate.And, children) =>
                             val PwithoutE = P.excl(E)
@@ -380,12 +373,13 @@ def MOPAS(faultTree: FaultTree)(basicEvents: Set[Event] = getBasicEvents(faultTr
                             ListOfPathSets = ListOfPathSets.prependedAll(expandedSets)
                             break()
                         case _: TreeNode.BasicEvent =>
-                            // nothing to do
+                            // nothing to do, continue with next element in this set.
                     end match
                 end while
         end if
     end while
-    resultBuilder.result()
+
+    removeSupersets(resultBuilder)
 }
 
 val reproTree = FaultTree(0, Map(

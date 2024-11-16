@@ -107,6 +107,8 @@ object RealLife {
             val minimalCutSets = minimalcutpathset.minimalCutSets(dagFT)(basicEvents)
             val minimalPathSets = minimalcutpathset.minimalPathSets(dagFT)(basicEvents)
 
+            println(s"DEBUG cut sets (${minimalCutSets.size}): $minimalCutSets")
+
             println(s"Calculate height of ${treeLikeFT.name} using Recursive algorithm 2...")
             val time_begin_recursive = System.nanoTime()
             val heightRecursive2 = faulttree.height7(treeFT)
@@ -131,6 +133,7 @@ object RealLife {
 
             CSVOutput.printTreeLikeData(
                 file = csvOutput,
+                basicEvents = basicEvents.size,
                 treeName = treeLikeFT.name,
                 heightRecursive = heightRecursive2,
                 timeRecursive = time_recursive2_ns,
@@ -157,12 +160,12 @@ object CSVOutput {
     }
 
     def printTreeLikeHeader(file: Path): Unit = {
-        val line = "Fault Tree,Recursive algorithm 2 height,time (ns),Cut set algorithm height,time (ns),Path set algorithm height (ns),time,Random binary decision tree algorithm height,time (ns)\r\n"
+        val line = "Fault Tree,# Basic events,Recursive algorithm 2 height,time (ns),Cut set algorithm height,time (ns),Path set algorithm height,time (ns),Random binary decision tree algorithm height,time (ns)\r\n"
         writeString(file, line)
     }
 
-    def printTreeLikeData(file: Path, treeName: String, heightRecursive: Double, timeRecursive: Long, heightCutSet: Double, timeCutSet: Long, heightPathSet: Double, timePathSet: Long, heightRandomBDT: Double, timeRandomBDT: Long): Unit = {
-        val line = s""""${treeName}","${heightRecursive}","${timeRecursive}","${heightCutSet}","${timeCutSet}","${heightPathSet}","${timePathSet}","${heightRandomBDT}","${timeRandomBDT}""""
+    def printTreeLikeData(file: Path, basicEvents: Int, treeName: String, heightRecursive: Double, timeRecursive: Long, heightCutSet: Double, timeCutSet: Long, heightPathSet: Double, timePathSet: Long, heightRandomBDT: Double, timeRandomBDT: Long): Unit = {
+        val line = s""""${treeName}","${basicEvents}","${heightRecursive}","${timeRecursive}","${heightCutSet}","${timeCutSet}","${heightPathSet}","${timePathSet}","${heightRandomBDT}","${timeRandomBDT}"\r\n"""
         writeString(file, line)
     }
 
