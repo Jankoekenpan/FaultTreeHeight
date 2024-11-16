@@ -8,10 +8,8 @@ import minimalcutpathset.TreeNode
 import guru.nidi.graphviz.model.{MutableGraph, MutableNode}
 import guru.nidi.graphviz.model.Factory.*
 
-import java.awt.FlowLayout
 import java.io.File
 import java.util.random.RandomGenerator
-import javax.imageio.ImageIO
 import javax.swing.{ImageIcon, JFrame, JLabel}
 import scala.collection.mutable
 
@@ -28,7 +26,7 @@ object FaultDAGViz {
 
         for (event, treeNode) <- faultDag.events do
             val label = treeNode match
-                case TreeNode.BasicEvent(id, probability) => id + ": " + f"$probability%.3f"
+                case TreeNode.BasicEvent(id, probability) => id + ": " + f"$probability%.6f"
                 case TreeNode.Combination(id, gate, children) => id + ": " + gate
             val vertex = mutNode(label)
             vertices.put(event, vertex)
@@ -66,12 +64,21 @@ object FaultDAGViz {
 //        frame.setVisible(true)
     }
 
-    def main(args: Array[String]): Unit = {
-        given random: RandomGenerator = new java.util.Random()
+    def display(fileName: String, faultTree: FaultTree): Unit = {
+        val image = Graphviz.fromGraph(toGraphViz(faultTree))
+            .width(1920)
+            .render(Format.PNG)
+            .toFile(new File(s"tmp/${fileName}.png"))
+    }
 
-        for (i <- 1 to 10) {
-            display(i, toGraphViz(RandomDags.makeRandomDag(10)))
-        }
+    def main(args: Array[String]): Unit = {
+//        given random: RandomGenerator = new java.util.Random()
+//
+//        for (i <- 1 to 10) {
+//            display(i, toGraphViz(RandomDags.makeRandomDag(10)))
+//        }
+
+        display("T0 Chopper", reallife.T0Chopper.FT)
     }
 
 }
