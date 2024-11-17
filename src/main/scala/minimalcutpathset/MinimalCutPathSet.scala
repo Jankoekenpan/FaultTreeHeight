@@ -353,24 +353,28 @@ def minimalCutSets(faultTree: FaultTree)(basicEvents: Set[Event] = getBasicEvent
 def minimalPathSets(faultTree: FaultTree)(basicEvents: Set[Event] = getBasicEvents(faultTree)): PathSets =
     MOPAS(faultTree)(basicEvents).toSet
 
-// TODO can we use this function in the MOCUS/MOPAS 'and' and 'or' branches instead of only at the end?
+// can we use this function in the MOCUS/MOPAS 'and' and 'or' branches instead of only at the end?
+// perhaps we can, but I doubt that's more efficient then just doing it once at the end.
 def removeSupersets(cutSets: Iterable[Set[Event]]): Seq[Set[Event]] = {
     val result = new java.util.HashSet[CutSet]()
 
-    boundary {
-        val cutSetIterator = cutSets.iterator
-        while (cutSetIterator.hasNext) {
-            val cutSet = cutSetIterator.next()
-            val resIterator = result.iterator
+    val cutSetIterator = cutSets.iterator
+    while (cutSetIterator.hasNext) {
+        val inputCutSet = cutSetIterator.next()
+
+        val resIterator = result.iterator
+        boundary {
             while (resIterator.hasNext) {
                 val resSet = resIterator.next()
-                if (resSet.subsetOf(cutSet)) {
-                    break() // don't add cutSet to result
-                } else if (cutSet.subsetOf(resSet)) {
+                if (resSet.subsetOf(inputCutSet)) {
+                    // don't add inputCutSet to result
+                    break()
+                } else if (inputCutSet.subsetOf(resSet)) {
+                    // resSet is a superset of inputCutSet - it can be removed.
                     resIterator.remove()
                 }
             }
-            result.add(cutSet)
+            result.add(inputCutSet)
         }
     }
 
