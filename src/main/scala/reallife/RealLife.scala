@@ -310,7 +310,7 @@ object AircraftRunwayExcursionAccidents extends TreeLikeFaultTree {
     final val p1 = 6E-4
     final val p2 = 2E-5
     final val p3 = 1E-4
-    final val p4 = 1E-4
+    final val p4 = 4E-4
     final val p5 = 3E-4
     final val p6 = 2E-4
     final val p7 = 2E-4
