@@ -12,6 +12,26 @@ enum FaultTree(val event: Event):
     case AndEvent(id: Event, children: Seq[FaultTree]) extends FaultTree(id)
     case OrEvent(id: Event, children: Seq[FaultTree]) extends FaultTree(id)
 
+def flatten(faultTree: FaultTree): FaultTree = {
+    def flattenOrChild(faultTree: FaultTree): Seq[FaultTree] = faultTree match {
+        case b: FaultTree.BasicEvent => Seq(b)
+        case FaultTree.AndEvent(andId, andChildren) => Seq(FaultTree.AndEvent(andId, andChildren.flatMap(flattenAndChild)))
+        case FaultTree.OrEvent(orId, orChildren) => orChildren.flatMap(flattenOrChild)
+    }
+
+    def flattenAndChild(faultTree: FaultTree): Seq[FaultTree] = faultTree match {
+        case b: FaultTree.BasicEvent => Seq(b)
+        case FaultTree.OrEvent(orId, orChildren) => Seq(FaultTree.OrEvent(orId, orChildren.flatMap(flattenOrChild)))
+        case FaultTree.AndEvent(andId, andChildren) => andChildren.flatMap(flattenAndChild)
+    }
+
+    faultTree match {
+        case b: FaultTree.BasicEvent => b
+        case FaultTree.AndEvent(id, children) => FaultTree.AndEvent(id, children.flatMap(flattenAndChild))
+        case FaultTree.OrEvent(id, children) => FaultTree.OrEvent(id, children.flatMap(flattenOrChild))
+    }
+}
+
 def bigoplus[A](vectorLhs: Seq[A], vectorRhs: Seq[A])(using n: Numeric[A]): Seq[A] =
     for
         yk <- vectorRhs

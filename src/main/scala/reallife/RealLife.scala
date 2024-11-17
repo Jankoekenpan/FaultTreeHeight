@@ -87,7 +87,7 @@ object RealLife {
             LeakageFailure,
             AssessingTheRisks1,
             PCBA,
-            ChemicalCargoShortage,
+            //ChemicalCargoShortage,      // TODO recursive algorithm goes oom. should try and memory-optimise it and use a Trie-like structure instead of Map[Path, X]
         )
 
         val daglikeFaultTrees: Seq[DagLikeFaultTree] = Seq(
