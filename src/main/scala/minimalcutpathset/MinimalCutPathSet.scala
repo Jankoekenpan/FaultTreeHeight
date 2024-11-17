@@ -90,6 +90,7 @@ def flatten(faultTree: FaultTree): FaultTree = {
                             case None => Some(Set(parent))
                         }
                     end for
+            end match
         end for
 
         res
