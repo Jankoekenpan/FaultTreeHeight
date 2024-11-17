@@ -32,8 +32,6 @@ object ApproximationRatio {
 //        println(ppFaultTree(faulttree.reproTree))
 //        println(ppDecisionTree.tupled(translateToDecisionTree(faulttree.reproTree)))
 //        val (dagTree, probabilities) = translateToDagTree(faulttree.reproTree)
-//        println(s"DEBUG dagtree = $dagTree")
-//        println(s"DEBUG height = ${minimalcutpathset.height(dagTree, probabilities)}")
 
         val file = Files.createFile(Path.of(outFile))
         printHeader(file)

@@ -150,9 +150,6 @@ def height(tree: FaultTree, probabilities: IntMap[Probability]): Double = {
     val cutSets = minimalCutSets(tree)(basicEvents)
     val pathSets = minimalPathSets(tree)(basicEvents)
 
-    println(s"DEBUG cutSets = ${cutSets}")
-    println(s"DEBUG pathSets = ${pathSets}")
-
     val (etas, height) = approximate(cutSets, pathSets, probabilities)
 
     height

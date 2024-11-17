@@ -112,9 +112,6 @@ object RealLife {
             println("Calculating minimal path sets...")
             val minimalPathSets = minimalcutpathset.minimalPathSets(dagFT)(basicEvents)
 
-            // TODO probably want to remove this.
-            println(s"DEBUG cut sets (${minimalCutSets.size}): $minimalCutSets")
-
             println(s"Calculate height of ${treeLikeFT.name} using Recursive algorithm 2...")
             val time_begin_recursive = System.nanoTime()
             val heightRecursive2 = faulttree.height7(flattenedTree) // Note: recursive algorithm uses flattened FT.
