@@ -76,6 +76,7 @@ object RealLife {
 
         val treelikeFaultTrees: Seq[TreeLikeFaultTree] = Seq(
             AircraftRunwayExcursionAccidents,
+            AircraftRunwayExcursionAccidentsFromDFT, //TODO remove this one, or the line above.
             MainTrackTrainCollisionsLeadingToFatalitiesAndInjuries,
             ATCFailsToResolveTheConflict,
             LiquidStorageTank,
@@ -96,6 +97,17 @@ object RealLife {
             OGPF,
         )
 
+        // TODO put this back:
+        runAlgorithms(treelikeFaultTrees, daglikeFaultTrees)
+
+        // TODO temporary:
+        // HSC: only works will with recursive algorithm and path set algorithm.
+        // ChemicalCargoShortage: it takes a long time to calculate path sets! so we omit that one.
+        // ChemicalCargoShartage: recursive algorithm runs out of memory.
+        //runAlgorithms(Seq(HSC), Seq())
+    }
+
+    def runAlgorithms(treelikeFaultTrees: Seq[TreeLikeFaultTree], daglikeFaultTrees: Seq[DagLikeFaultTree])(using random: java.util.random.RandomGenerator): Unit = {
         val csvOuputTree = CSVOutput.createTreeLikeFile()
         CSVOutput.printTreeLikeHeader(csvOuputTree)
 
@@ -105,36 +117,48 @@ object RealLife {
             val basicEvents = minimalcutpathset.getBasicEvents(dagFT)
             val (booleanFormula, _) = Conversion.translateToBooleanFormula(treeFT)
 
-            println("Flattening tree for recursive algorithm")
+            println("Flattening tree for recursive algorithm...")
             val flattenedTree = faulttree.flatten(treeFT)
             println("Calculating minimal cut sets...")
             val minimalCutSets = minimalcutpathset.minimalCutSets(dagFT)(basicEvents)
+            //TODO add this back
             println("Calculating minimal path sets...")
             val minimalPathSets = minimalcutpathset.minimalPathSets(dagFT)(basicEvents)
+
+            println(s"DEBUG: cut sets (${minimalCutSets.size}) = ${minimalCutSets}")
+            println(s"DEBUG: path sets (${minimalPathSets.size}) = ${minimalPathSets}")
 
             println(s"Calculate height of ${treeLikeFT.name} using Recursive algorithm 2...")
             val time_begin_recursive = System.nanoTime()
             val heightRecursive2 = faulttree.height7(flattenedTree) // Note: recursive algorithm uses flattened FT.
             val time_end_recursive = System.nanoTime()
-            println(s"Calculate height of ${treeLikeFT.name} using CutSet algorithm...")
-            val time_begin_cutset = System.nanoTime()
-            val heightCutSet = minimalcutpathset.algorithm4(minimalCutSets, probabilities)._2
-            val time_end_cutset = System.nanoTime()
+            val time_recursive2_ns = time_end_recursive - time_begin_recursive
+            println(s"Recursive2 results: height=${heightRecursive2}, time=${time_recursive2_ns} (ns)")
+
             println(s"Calculate height of ${treeLikeFT.name} using PathSet algorithm...")
             val time_begin_pathset = System.nanoTime()
             val heightPathSet = minimalcutpathset.algorithm5(minimalPathSets, probabilities)._2
             val time_end_pathset = System.nanoTime()
+            val time_pathset_ns = time_end_pathset - time_begin_pathset
+            println(s"PathSet results: height=${heightPathSet}, time=${time_pathset_ns} (ns)")
+
+            println(s"Calculate height of ${treeLikeFT.name} using CutSet algorithm...")
+            val time_begin_cutset = System.nanoTime()
+            val heightCutSet = minimalcutpathset.algorithm4(minimalCutSets, probabilities)._2
+            val time_end_cutset = System.nanoTime()
+            val time_cutset_ns = time_end_cutset - time_begin_cutset
+            println(s"CutSet results: height=${heightCutSet}, time=${time_cutset_ns} (ns)")
+
             println(s"Calculate height of ${treeLikeFT.name} using Random BDT algorithm...")
             val time_begin_randombdt = System.nanoTime()
             val heightRandomBDT = decisiontree.RandomBDTs.algorithm13(booleanFormula, probabilities)
             val time_end_randombdt = System.nanoTime()
+            val time_randombdt_ns = time_end_randombdt - time_begin_randombdt
+            println(s"RandomBDT results: height=${heightRandomBDT}, time=${time_randombdt_ns} (ns)")
+
             println("Finished calculating heights!")
             println()
 
-            val time_recursive2_ns = time_end_recursive - time_begin_recursive
-            val time_cutset_ns = time_end_cutset - time_begin_cutset
-            val time_pathset_ns = time_end_pathset - time_begin_pathset
-            val time_randombdt_ns = time_end_randombdt - time_begin_randombdt
 
             CSVOutput.printData(
                 file = csvOuputTree,
@@ -355,6 +379,11 @@ object AircraftRunwayExcursionAccidents extends TreeLikeFaultTree {
 
 }
 
+object AircraftRunwayExcursionAccidentsFromDFT extends TreeLikeFaultTree {
+
+    val FT: faulttree.FaultTree = DFT.readTreeLikeFaultTree(Source.fromResource("Faulttreemodels.dft"))
+}
+
 object ChlorineRelease extends DagLikeFaultTree {
     import minimalcutpathset.FaultTree
     import minimalcutpathset.FaultTree.*
@@ -547,7 +576,8 @@ object MainTrackTrainCollisionsLeadingToFatalitiesAndInjuries extends TreeLikeFa
             BasicEvent(X4,p4),
             BasicEvent(X5,p5),
             BasicEvent(X6,p6),
-            BasicEvent(X7,p7)
+            BasicEvent(X7,p7),
+            BasicEvent(X8,p8)
         ))
     ))
 }

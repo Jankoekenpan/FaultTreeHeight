@@ -108,10 +108,13 @@ object DFT {
         val source = Source.fromResource("AssessingtheRisks1.dft")
 
         val dftNodes = DFT.readDFTFile(source)
+        println(s"DEBUG: how many lines?: ${dftNodes.size}")
 
         for (node <- dftNodes) {
             println(node)
         }
+
+        println(Conversion.translateToTreeLikeFaultTree(dftNodes))
     }
 
 }
