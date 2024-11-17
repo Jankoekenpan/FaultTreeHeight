@@ -105,7 +105,8 @@ object RealLife {
             val basicEvents = minimalcutpathset.getBasicEvents(dagFT)
             val (booleanFormula, _) = Conversion.translateToBooleanFormula(treeFT)
 
-            // TODO flatten tree before running recursive algorithm.
+            println("Flattening tree for recursive algorithm")
+            val flattenedTree = faulttree.flatten(treeFT)
             println("Calculating minimal cut sets...")
             val minimalCutSets = minimalcutpathset.minimalCutSets(dagFT)(basicEvents)
             println("Calculating minimal path sets...")
@@ -116,7 +117,7 @@ object RealLife {
 
             println(s"Calculate height of ${treeLikeFT.name} using Recursive algorithm 2...")
             val time_begin_recursive = System.nanoTime()
-            val heightRecursive2 = faulttree.height7(treeFT)
+            val heightRecursive2 = faulttree.height7(flattenedTree) // Note: recursive algorithm uses flattened FT.
             val time_end_recursive = System.nanoTime()
             println(s"Calculate height of ${treeLikeFT.name} using CutSet algorithm...")
             val time_begin_cutset = System.nanoTime()
@@ -161,7 +162,8 @@ object RealLife {
             val basicEvents = minimalcutpathset.getBasicEvents(dagFT)
             val (booleanFormula, probabilities) = Conversion.translateToBooleanFormula(dagFT)
 
-            // TODO flatten tree before running recursive algorithm.
+            println("Flattening tree for recursive algorithm")
+            val flattenedDag = minimalcutpathset.flatten(dagFT)
             println("Calculating minimal cut sets...")
             val minimalCutSets = minimalcutpathset.minimalCutSets(dagFT)(basicEvents)
             println("Calculating minimal path sets...")
@@ -169,7 +171,7 @@ object RealLife {
 
             println(s"Calculate height of ${dagLikeFT.name} using Recursive algorithm 3...")
             val time_begin_recursive = System.nanoTime()
-            val heightRecursive3 = decisiontree.algorithm8(dagFT, probabilities)._2
+            val heightRecursive3 = decisiontree.algorithm8(flattenedDag, probabilities)._2 // Note: recursive algorithm uses flattened FT.
             val time_end_recursive = System.nanoTime()
             println(s"Calculate height of ${dagLikeFT.name} using CutSet algorithm...")
             val time_begin_cutset = System.nanoTime()
