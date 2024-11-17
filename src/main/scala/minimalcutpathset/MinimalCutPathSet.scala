@@ -24,6 +24,91 @@ case class FaultTree(topEvent: Event, events: Map[Event, TreeNode]):
 type Event = Int
 type Probability = Double
 
+def flatten(faultTree: FaultTree): FaultTree = {
+    val top = faultTree.topEvent
+
+    val intermediateEventsWhichMightBeRemoved = mutable.Set.empty[Event]
+
+    def flatten(event: Event, events: Map[Event, TreeNode]): Map[Event, TreeNode] = {
+        val node = events(event)
+
+        node match {
+            case b: TreeNode.BasicEvent => events
+            case TreeNode.Combination(orId, Gate.Or, orChildren) =>
+                // look up the nodes of the orChildren,
+                // if they themselves are also Or nodes, then:
+                //     those grandchildren become the children of this Or node
+                // and we also call flatten again on *all* children (need to thread events Map properly!!)
+
+                var map = events
+                var newOrChildren = orChildren
+
+                for orChild <- orChildren do
+                    map = flatten(orChild, map)
+                    map(orChild) match
+                        case TreeNode.Combination(_, Gate.Or, grandChildren) =>
+                            newOrChildren = newOrChildren - orChild ++ grandChildren
+                            intermediateEventsWhichMightBeRemoved.addOne(orChild)
+                        case _ => // basic event or and node, no substitutions
+                    end match
+                end for
+                val replacementNode = TreeNode.Combination(orId, Gate.Or, newOrChildren)
+                map.updated(orId, replacementNode)
+            case TreeNode.Combination(andId, Gate.And, andChildren) =>
+                // idem
+
+                var map = events
+                var newAndChildren = andChildren
+
+                for andChild <- andChildren do
+                    map = flatten(andChild, map)
+                    map(andChild) match
+                        case TreeNode.Combination(_, Gate.And, grandChildren) =>
+                            newAndChildren = newAndChildren - andChild ++ grandChildren
+                            intermediateEventsWhichMightBeRemoved.addOne(andChild)
+                        case _ => // basic event or or node, no substitutions
+                    end match
+                end for
+                val replacementNode = TreeNode.Combination(andId, Gate.And, newAndChildren)
+                map.updated(andId, replacementNode)
+        }
+    }
+
+    var newEvents = flatten(top, faultTree.events)
+
+    // Clean up orphan events
+    def inverse(events: Map[Event, TreeNode]): Map[Event, Set[Event]] = {
+        var res = Map.empty[Event, Set[Event]]
+
+        for (_, node) <- events do
+            node match
+                case _: TreeNode.BasicEvent => // basic events are not parents, nothing to do
+                case TreeNode.Combination(parent, _, children) =>
+                    for child <- children do
+                        res = res.updatedWith(child) {
+                            case Some(parents) => Some(parents + parent)
+                            case None => Some(Set(parent))
+                        }
+                    end for
+        end for
+
+        res
+    }
+    val parentRelation = inverse(newEvents)
+    for toBeRemovedEvent <- intermediateEventsWhichMightBeRemoved do
+        parentRelation.get(toBeRemovedEvent) match
+            case Some(parents) if parents.nonEmpty =>
+                // There is still a parent, we retain the toBeRemovedEvent in newEvents.
+            case _ =>
+                // No parents, remove orphan event from newEvents.
+                newEvents = newEvents.removed(toBeRemovedEvent)
+        end match
+    end for
+
+    FaultTree(top, newEvents)
+}
+
+
 enum Decision:
     case Zero   // 0
     case One    // 1
