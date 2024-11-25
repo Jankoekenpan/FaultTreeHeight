@@ -347,13 +347,13 @@ class RealWorldFaultTreesBenchmark {
 
     @Benchmark
     def timeATCFailsToResolveTheConflict_ranger() =
-        decisiontree.RandomBDTs.algorithm13(atcFailsToResolveTheConflict_formula, atcFailsToResolveTheConflict_probabilities)
+        decisiontree.RandomBDTs.height(atcFailsToResolveTheConflict_basicevents, atcFailsToResolveTheConflict_formula, atcFailsToResolveTheConflict_probabilities)
 
     // AircraftRunwayExcursionAccidents
 
     @Benchmark
     def timeAircraftRunwayExcursionAccidents_remind() =
-        faulttree.height(aircraftRunwayExcursionAccidents_flattened)
+        faulttree.height7(aircraftRunwayExcursionAccidents_flattened)
 
     @Benchmark
     def timeAircraftRunwayExcursionAccidents_mince() =
@@ -365,13 +365,13 @@ class RealWorldFaultTreesBenchmark {
 
     @Benchmark
     def timeAircraftRunwayExcursionAccidents_ranger() =
-        decisiontree.RandomBDTs.algorithm13(aircraftRunwayExcursionAccidents_formula, aircraftRunwayExcursionAccidents_probabilities)
+        decisiontree.RandomBDTs.height(aircraftRunwayExcursionAccidents_basicevents, aircraftRunwayExcursionAccidents_formula, aircraftRunwayExcursionAccidents_probabilities)
 
     // LiquidStorageTank
 
     @Benchmark
     def timeLiquidStorageTank_remind() =
-        faulttree.height(liquidStorageTank_flattened)
+        faulttree.height7(liquidStorageTank_flattened)
 
     @Benchmark
     def timeLiquidStorageTank_mince() =
@@ -383,13 +383,13 @@ class RealWorldFaultTreesBenchmark {
 
     @Benchmark
     def timeLiquidStorageTank_ranger() =
-        decisiontree.RandomBDTs.algorithm13(liquidStorageTank_formula, liquidStorageTank_probabilities)
+        decisiontree.RandomBDTs.height(liquidStorageTank_basicevents, liquidStorageTank_formula, liquidStorageTank_probabilities)
 
     // LeakageFailure
 
     @Benchmark
     def timeLeakageFailure_remind() =
-        faulttree.height(leakageFailure_flattened)
+        faulttree.height7(leakageFailure_flattened)
 
     @Benchmark
     def timeLeakageFailure_mince() =
@@ -401,7 +401,7 @@ class RealWorldFaultTreesBenchmark {
 
     @Benchmark
     def timeLeakageFailure_ranger() =
-        decisiontree.RandomBDTs.algorithm13(leakageFailure_formula, leakageFailure_probabilities)
+        decisiontree.RandomBDTs.height(leakageFailure_basicevents, leakageFailure_formula, leakageFailure_probabilities)
 
     // AssessingTheRisks1
 
@@ -419,7 +419,7 @@ class RealWorldFaultTreesBenchmark {
 
     @Benchmark
     def timeAssessingTheRisks1_ranger() =
-        decisiontree.RandomBDTs.algorithm13(assessingTheRisks1_formula, assessingTheRisks1_probabilities)
+        decisiontree.RandomBDTs.height(assessingTheRisks1_basicevents, assessingTheRisks1_formula, assessingTheRisks1_probabilities)
 
     // ChlorineRelease
 
@@ -437,7 +437,7 @@ class RealWorldFaultTreesBenchmark {
 
     @Benchmark
     def timeChlorineRelease_ranger() =
-        decisiontree.RandomBDTs.algorithm13(chlorineRelease_formula, t0Chopper_probabilities)
+        decisiontree.RandomBDTs.height(chlorineRelease_basicevents, chlorineRelease_formula, t0Chopper_probabilities)
 
     // LossContainerAtPort
 
@@ -455,13 +455,13 @@ class RealWorldFaultTreesBenchmark {
 
     @Benchmark
     def timeLossContainerAtPort_ranger() =
-        decisiontree.RandomBDTs.algorithm13(lossContainerAtPort_formula, lossContainerAtPort_probabilities)
+        decisiontree.RandomBDTs.height(lossContainerAtPort_basicevents, lossContainerAtPort_formula, lossContainerAtPort_probabilities)
 
     // SubmarinePipelineStopperFailure
 
     @Benchmark
     def timeSubmarinePipelineStopperFailure_remind() =
-        faulttree.height(submarinePipelineStopperFailure_flattened)
+        faulttree.height7(submarinePipelineStopperFailure_flattened)
 
     @Benchmark
     def timeSubmarinePipelineStopperFailure_mince() =
@@ -473,13 +473,13 @@ class RealWorldFaultTreesBenchmark {
 
     @Benchmark
     def timeSubmarinePipelineStopperFailure_ranger() =
-        decisiontree.RandomBDTs.algorithm13(submarinePipelineStopperFailure_formula, submarinePipelineStopperFailure_probabilities)
+        decisiontree.RandomBDTs.height(submarinePipelineStopperFailure_basicevents, submarinePipelineStopperFailure_formula, submarinePipelineStopperFailure_probabilities)
 
     // PCBA
 
     @Benchmark
     def timePCBA_remind() =
-        faulttree.height(pcba_flattened)
+        faulttree.height7(pcba_flattened)
 
     @Benchmark
     def timePCBA_mince() =
@@ -491,7 +491,7 @@ class RealWorldFaultTreesBenchmark {
 
     @Benchmark
     def timePCBA_ranger() =
-        decisiontree.RandomBDTs.algorithm13(pcba_formula, pcba_probabilities)
+        decisiontree.RandomBDTs.height(pcba_basicevents, pcba_formula, pcba_probabilities)
 
     // OGPF
 
@@ -509,13 +509,13 @@ class RealWorldFaultTreesBenchmark {
 
     @Benchmark
     def timeOGPF_ranger() =
-        decisiontree.RandomBDTs.algorithm13(ogpf_formula, ogpf_probabilities)
+        decisiontree.RandomBDTs.height(ogpf_basicevents, ogpf_formula, ogpf_probabilities)
 
     // BHNGPipeline
 
     @Benchmark
     def timeBHNGPipeline_remind() =
-        faulttree.height(bhngPipeline_flattened)
+        faulttree.height7(bhngPipeline_flattened)
 
     @Benchmark
     def timeBHNGPipeline_mince() =
@@ -527,13 +527,13 @@ class RealWorldFaultTreesBenchmark {
 
     @Benchmark
     def timeBHNGPipeline_ranger() =
-        decisiontree.RandomBDTs.algorithm13(bhngPipeline_formula, bhngPipeline_probabilities)
+        decisiontree.RandomBDTs.height(bhngPipeline_basicevents, bhngPipeline_formula, bhngPipeline_probabilities)
 
     // HSC
 
     @Benchmark
     def timeHSC_remind() =
-        faulttree.height(hsc_flattened)
+        faulttree.height7(hsc_flattened)
 
     @Benchmark
     def timeHSC_pase() =

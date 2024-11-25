@@ -23,8 +23,11 @@ Depending on your IDE/Editor setup, you should also install SBT itself.
 
 ## Running the benchmarks
 
-Execute `sbt jmh:run` from a terminal.
+Set your JAVA_HOME environment variable to a JDK 23 installation.
+Windows example: `set JAVA_HOME=C:\Program Files\Eclipse Adoptium\jdk-23.0.1+11-hotspot`
+Linux example: `export JAVA_HOME=/opt/jdk23`
 
+Execute `sbt jmh:run` from a terminal.
 
 <!--- TODO do we want to keep RandomTrees and RandomDags? -->
 
