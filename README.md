@@ -7,21 +7,26 @@ For IntelliJ, ensure the [Scala plugin](https://plugins.jetbrains.com/plugin/134
 For VSCode, ensure the [Scala/Metals](https://scalameta.org/metals/docs/editors/vscode/) extension is installed.
 
 Your IDE should now recognise this project as an [SBT](https://www.scala-sbt.org/) project.
+Depending on your IDE/Editor setup, you should also install SBT itself.
 
 ## Project setup
 
-- DecisionTree.scala: contains the legacy height calculation for boolean formulae.
-- FaultTree.scala: contains the new height calculation for tree-like fault trees.
-- Benchmark.scala: contains a [JMH](https://openjdk.org/projects/code-tools/jmh/) benchmark for comparing the running times of both algorithms.
-  There is also some auxiliary code for generating decision trees and fault trees.
+- DecisionTree.scala: contains the exact height calculation for boolean formulae (Eminent).
+- RecursiveAlgorithm2.scala: contains the 'recursive' height approximation algorithm for tree-like fault trees (Remind).
+- BinaryDecisionTree.scala: contains the 'recursive' height approximation algorithm for dag-like fault trees (Remind).
+- CutSetAlgorithm4.scala: contains the 'MCS-based' height approximation algorithm for dag-like fault trees (Mince).
+- PathSetAlgorithm5.scala: contains the 'MPS-based' height approximation algorithm for dag-like fault trees (Pase).
+- RandomBDTS.scala: contains the 'random binatry decision tree' height approximation algorithm for dag-like fault trees (Ranger).
+- Benchmark.scala: contains a [JMH](https://openjdk.org/projects/code-tools/jmh/) benchmark for comparing the running times of all algorithms mentioned in the Paper.
+- Conversion.scala: code which converts between Tree-Like FaultTree, Dag-Like FaultTree and BooleanFormula representations of fault trees.
+- RealLife.scala: calculates height approximations for some real-world fault trees.
 
 ## Running the benchmarks
 
 Execute `sbt jmh:run` from a terminal.
 
-## Approximation ratios
 
-Execute ApproximationRatios#main in order to generate the approximation ratios csv file.
+<!--- TODO do we want to keep RandomTrees and RandomDags? -->
 
 ## Random trees
 

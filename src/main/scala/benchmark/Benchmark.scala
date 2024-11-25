@@ -3,8 +3,6 @@ package benchmark
 import org.openjdk.jmh.annotations.{Benchmark, BenchmarkMode, Mode, OutputTimeUnit, Scope, Setup, State}
 
 import java.util.concurrent.TimeUnit
-import java.util.concurrent.atomic.AtomicInteger
-import scala.annotation.switch
 import scala.collection.immutable.IntMap
 import scala.compiletime.uninitialized
 
@@ -12,7 +10,7 @@ import scala.compiletime.uninitialized
 @BenchmarkMode(Array(Mode.AverageTime))
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 class RealWorldFaultTreesBenchmark {
-    
+
     private given randomGenerator: java.util.random.RandomGenerator = new java.util.Random()
 
     // Tree-like FaultTrees:
@@ -22,6 +20,7 @@ class RealWorldFaultTreesBenchmark {
     private var aircraftRunwayExcursionAccidents_cutsets: minimalcutpathset.CutSets = uninitialized
     private var aircraftRunwayExcursionAccidents_pathsets: minimalcutpathset.PathSets = uninitialized
     private var aircraftRunwayExcursionAccidents_probabilities: IntMap[Double] = uninitialized
+    private var aircraftRunwayExcursionAccidents_basicevents: Set[Int] = uninitialized
 
     private var mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_faulttree: faulttree.FaultTree = uninitialized
     private var mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_formula: decisiontree.BooleanFormula = uninitialized
@@ -29,54 +28,63 @@ class RealWorldFaultTreesBenchmark {
     private var mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_cutsets: minimalcutpathset.CutSets = uninitialized
     private var mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_pathsets: minimalcutpathset.PathSets = uninitialized
     private var mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_probabilities: IntMap[Double] = uninitialized
+    private var mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_basicevents: Set[Int] = uninitialized
 
     private var atcFailsToResolveTheConflict_formula: decisiontree.BooleanFormula = uninitialized
     private var atcFailsToResolveTheConflict_flattened: faulttree.FaultTree = uninitialized
     private var atcFailsToResolveTheConflict_cutsets: minimalcutpathset.CutSets = uninitialized
     private var atcFailsToResolveTheConflict_pathsets: minimalcutpathset.PathSets = uninitialized
     private var atcFailsToResolveTheConflict_probabilities: IntMap[Double] = uninitialized
+    private var atcFailsToResolveTheConflict_basicevents: Set[Int] = uninitialized
 
     private var liquidStorageTank_formula: decisiontree.BooleanFormula = uninitialized
     private var liquidStorageTank_flattened: faulttree.FaultTree = uninitialized
     private var liquidStorageTank_cutsets: minimalcutpathset.CutSets = uninitialized
     private var liquidStorageTank_pathsets: minimalcutpathset.PathSets = uninitialized
     private var liquidStorageTank_probabilities: IntMap[Double] = uninitialized
+    private var liquidStorageTank_basicevents: Set[Int] = uninitialized
 
     private var lossContainerAtPort_formula: decisiontree.BooleanFormula = uninitialized
     private var lossContainerAtPort_flattened: faulttree.FaultTree = uninitialized
     private var lossContainerAtPort_cutsets: minimalcutpathset.CutSets = uninitialized
     private var lossContainerAtPort_pathsets: minimalcutpathset.PathSets = uninitialized
     private var lossContainerAtPort_probabilities: IntMap[Double] = uninitialized
+    private var lossContainerAtPort_basicevents: Set[Int] = uninitialized
 
     private var submarinePipelineStopperFailure_formula: decisiontree.BooleanFormula = uninitialized
     private var submarinePipelineStopperFailure_flattened: faulttree.FaultTree = uninitialized
     private var submarinePipelineStopperFailure_cutsets: minimalcutpathset.CutSets = uninitialized
     private var submarinePipelineStopperFailure_pathsets: minimalcutpathset.PathSets = uninitialized
     private var submarinePipelineStopperFailure_probabilities: IntMap[Double] = uninitialized
+    private var submarinePipelineStopperFailure_basicevents: Set[Int] = uninitialized
 
     private var bhngPipeline_formula: decisiontree.BooleanFormula = uninitialized
     private var bhngPipeline_flattened: faulttree.FaultTree = uninitialized
     private var bhngPipeline_cutsets: minimalcutpathset.CutSets = uninitialized
     private var bhngPipeline_pathsets: minimalcutpathset.PathSets = uninitialized
     private var bhngPipeline_probabilities: IntMap[Double] = uninitialized
+    private var bhngPipeline_basicevents: Set[Int] = uninitialized
 
     private var leakageFailure_formula: decisiontree.BooleanFormula = uninitialized
     private var leakageFailure_flattened: faulttree.FaultTree = uninitialized
     private var leakageFailure_cutsets: minimalcutpathset.CutSets = uninitialized
     private var leakageFailure_pathsets: minimalcutpathset.PathSets = uninitialized
     private var leakageFailure_probabilities: IntMap[Double] = uninitialized
+    private var leakageFailure_basicevents: Set[Int] = uninitialized
 
     private var assessingTheRisks1_formula: decisiontree.BooleanFormula = uninitialized
     private var assessingTheRisks1_flattened: faulttree.FaultTree = uninitialized
     private var assessingTheRisks1_cutsets: minimalcutpathset.CutSets = uninitialized
     private var assessingTheRisks1_pathsets: minimalcutpathset.PathSets = uninitialized
     private var assessingTheRisks1_probabilities: IntMap[Double] = uninitialized
+    private var assessingTheRisks1_basicevents: Set[Int] = uninitialized
 
     private var pcba_formula: decisiontree.BooleanFormula = uninitialized
     private var pcba_flattened: faulttree.FaultTree = uninitialized
     private var pcba_cutsets: minimalcutpathset.CutSets = uninitialized
     private var pcba_pathsets: minimalcutpathset.PathSets = uninitialized
     private var pcba_probabilities: IntMap[Double] = uninitialized
+    private var pcba_basicevents: Set[Int] = uninitialized
 
     private var hsc_flattened: faulttree.FaultTree = uninitialized
     private var hsc_pathsets: minimalcutpathset.PathSets = uninitialized
