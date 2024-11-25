@@ -97,19 +97,21 @@ class RealWorldFaultTreesBenchmark {
     private var chlorineRelease_cutsets: minimalcutpathset.CutSets = uninitialized
     private var chlorineRelease_pathsets: minimalcutpathset.PathSets = uninitialized
     private var chlorineRelease_probabilities: IntMap[Double] = uninitialized
+    private var chlorineRelease_basicevents: Set[Int] = uninitialized
 
     private var t0Chopper_formula: decisiontree.BooleanFormula = uninitialized
     private var t0Chopper_flattened: minimalcutpathset.FaultTree = uninitialized
     private var t0Chopper_cutsets: minimalcutpathset.CutSets = uninitialized
     private var t0Chopper_pathsets: minimalcutpathset.PathSets = uninitialized
     private var t0Chopper_probabilities: IntMap[Double] = uninitialized
+    private var t0Chopper_basicevents: Set[Int] = uninitialized
 
     private var ogpf_formula: decisiontree.BooleanFormula = uninitialized
     private var ogpf_flattened: minimalcutpathset.FaultTree = uninitialized
     private var ogpf_cutsets: minimalcutpathset.CutSets = uninitialized
     private var ogpf_pathsets: minimalcutpathset.PathSets = uninitialized
     private var ogpf_probabilities: IntMap[Double] = uninitialized
-
+    private var ogpf_basicevents: Set[Int] = uninitialized
 
     @Setup
     def setup(): Unit = {
@@ -123,6 +125,7 @@ class RealWorldFaultTreesBenchmark {
             aircraftRunwayExcursionAccidents_cutsets = minimalcutpathset.minimalCutSets(dagTree)(basicEvents)
             aircraftRunwayExcursionAccidents_pathsets = minimalcutpathset.minimalPathSets(dagTree)(basicEvents)
             aircraftRunwayExcursionAccidents_flattened = faulttree.flatten(aircraftRunwayExcursionAccidents_FT)
+            aircraftRunwayExcursionAccidents_basicevents = decisiontree.RandomBDTs.getBasicEvents(aircraftRunwayExcursionAccidents_formula)
         }
 
         {
@@ -135,6 +138,7 @@ class RealWorldFaultTreesBenchmark {
             mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_cutsets = minimalcutpathset.minimalCutSets(dagTree)(basicEvents)
             mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_pathsets = minimalcutpathset.minimalPathSets(dagTree)(basicEvents)
             mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_flattened = faulttree.flatten(mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_faulttree)
+            mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_basicevents = decisiontree.RandomBDTs.getBasicEvents(mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_formula)
         }
 
         {
@@ -147,6 +151,7 @@ class RealWorldFaultTreesBenchmark {
             atcFailsToResolveTheConflict_cutsets = minimalcutpathset.minimalCutSets(dagTree)(basicEvents)
             atcFailsToResolveTheConflict_pathsets = minimalcutpathset.minimalPathSets(dagTree)(basicEvents)
             atcFailsToResolveTheConflict_flattened = faulttree.flatten(atcFailsToResolveTheConflict_FT)
+            atcFailsToResolveTheConflict_basicevents = decisiontree.RandomBDTs.getBasicEvents(atcFailsToResolveTheConflict_formula)
         }
 
         {
@@ -159,6 +164,7 @@ class RealWorldFaultTreesBenchmark {
             liquidStorageTank_cutsets = minimalcutpathset.minimalCutSets(dagTree)(basicEvents)
             liquidStorageTank_pathsets = minimalcutpathset.minimalPathSets(dagTree)(basicEvents)
             liquidStorageTank_flattened = faulttree.flatten(liquidStorageTank_FT)
+            liquidStorageTank_basicevents = decisiontree.RandomBDTs.getBasicEvents(liquidStorageTank_formula)
         }
 
         {
@@ -171,6 +177,7 @@ class RealWorldFaultTreesBenchmark {
             lossContainerAtPort_cutsets = minimalcutpathset.minimalCutSets(dagTree)(basicEvents)
             lossContainerAtPort_pathsets = minimalcutpathset.minimalPathSets(dagTree)(basicEvents)
             lossContainerAtPort_flattened = faulttree.flatten(lossContainerAtPort_FT)
+            lossContainerAtPort_basicevents = decisiontree.RandomBDTs.getBasicEvents(lossContainerAtPort_formula)
         }
 
         {
@@ -183,6 +190,7 @@ class RealWorldFaultTreesBenchmark {
             submarinePipelineStopperFailure_cutsets = minimalcutpathset.minimalCutSets(dagTree)(basicEvents)
             submarinePipelineStopperFailure_pathsets = minimalcutpathset.minimalPathSets(dagTree)(basicEvents)
             submarinePipelineStopperFailure_flattened = faulttree.flatten(submarinePipelineStopperFailure_FT)
+            submarinePipelineStopperFailure_basicevents = decisiontree.RandomBDTs.getBasicEvents(submarinePipelineStopperFailure_formula)
         }
 
         {
@@ -195,6 +203,7 @@ class RealWorldFaultTreesBenchmark {
             bhngPipeline_cutsets = minimalcutpathset.minimalCutSets(dagTree)(basicEvents)
             bhngPipeline_pathsets = minimalcutpathset.minimalPathSets(dagTree)(basicEvents)
             bhngPipeline_flattened = faulttree.flatten(bhngPipeline_FT)
+            bhngPipeline_basicevents = decisiontree.RandomBDTs.getBasicEvents(bhngPipeline_formula)
         }
 
         {
@@ -207,6 +216,7 @@ class RealWorldFaultTreesBenchmark {
             leakageFailure_cutsets = minimalcutpathset.minimalCutSets(dagTree)(basicEvents)
             leakageFailure_pathsets = minimalcutpathset.minimalPathSets(dagTree)(basicEvents)
             leakageFailure_flattened = faulttree.flatten(leakageFailure_FT)
+            leakageFailure_basicevents = decisiontree.RandomBDTs.getBasicEvents(leakageFailure_formula)
         }
 
         {
@@ -219,6 +229,7 @@ class RealWorldFaultTreesBenchmark {
             assessingTheRisks1_cutsets = minimalcutpathset.minimalCutSets(dagTree)(basicEvents)
             assessingTheRisks1_pathsets = minimalcutpathset.minimalPathSets(dagTree)(basicEvents)
             assessingTheRisks1_flattened = faulttree.flatten(assessingTheRisks1_FT)
+            assessingTheRisks1_basicevents = decisiontree.RandomBDTs.getBasicEvents(assessingTheRisks1_formula)
         }
 
         {
@@ -231,6 +242,7 @@ class RealWorldFaultTreesBenchmark {
             pcba_cutsets = minimalcutpathset.minimalCutSets(dagTree)(basicEvents)
             pcba_pathsets = minimalcutpathset.minimalPathSets(dagTree)(basicEvents)
             pcba_flattened = faulttree.flatten(pcba_FT)
+            pcba_basicevents = decisiontree.RandomBDTs.getBasicEvents(pcba_formula)
         }
 
         {
@@ -251,6 +263,7 @@ class RealWorldFaultTreesBenchmark {
             chlorineRelease_cutsets = minimalcutpathset.minimalCutSets(chlorineRelease_FT)(basicEvents)
             chlorineRelease_pathsets = minimalcutpathset.minimalPathSets(chlorineRelease_FT)(basicEvents)
             chlorineRelease_flattened = minimalcutpathset.flatten(chlorineRelease_FT)
+            chlorineRelease_basicevents = decisiontree.RandomBDTs.getBasicEvents(chlorineRelease_formula)
         }
 
         {
@@ -262,6 +275,7 @@ class RealWorldFaultTreesBenchmark {
             t0Chopper_cutsets = minimalcutpathset.minimalCutSets(t0Chopper_FT)(basicEvents)
             t0Chopper_pathsets = minimalcutpathset.minimalPathSets(t0Chopper_FT)(basicEvents)
             t0Chopper_flattened = minimalcutpathset.flatten(t0Chopper_FT)
+            t0Chopper_basicevents = decisiontree.RandomBDTs.getBasicEvents(t0Chopper_formula)
         }
 
         {
@@ -273,6 +287,7 @@ class RealWorldFaultTreesBenchmark {
             ogpf_cutsets = minimalcutpathset.minimalCutSets(ogpf_FT)(basicEvents)
             ogpf_pathsets = minimalcutpathset.minimalPathSets(ogpf_FT)(basicEvents)
             ogpf_flattened = minimalcutpathset.flatten(ogpf_FT)
+            ogpf_basicevents = decisiontree.RandomBDTs.getBasicEvents(ogpf_formula)
         }
     }
 
@@ -296,7 +311,7 @@ class RealWorldFaultTreesBenchmark {
 
     @Benchmark
     def timeMainTrackTrainCollisionsLeadingToFatalitiesAndInjuries_ranger() =
-        decisiontree.RandomBDTs.algorithm13(mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_formula, mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_probabilities)
+        decisiontree.RandomBDTs.height(mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_basicevents, mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_formula, mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_probabilities)
 
     // T0Chopper
 
@@ -314,7 +329,7 @@ class RealWorldFaultTreesBenchmark {
 
     @Benchmark
     def timeT0Chopper_ranger() =
-        decisiontree.RandomBDTs.algorithm13(t0Chopper_formula, t0Chopper_probabilities)
+        decisiontree.RandomBDTs.height(t0Chopper_basicevents, t0Chopper_formula, t0Chopper_probabilities)
 
     // ATCFailsToResolveTheConflict
 
