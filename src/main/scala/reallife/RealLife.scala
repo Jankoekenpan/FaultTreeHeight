@@ -1,10 +1,11 @@
 package reallife // or is this just fantasy?
 
 import benchmark.Conversion
-import decisiontree.RandomBDTs
+import decisiontree.{BooleanFormula, RandomBDTs}
 import dft.DFT
 
 import java.util.random.RandomGenerator
+import scala.collection.immutable.IntMap
 import scala.io.Source
 
 trait SimpleFaultTree {
@@ -121,7 +122,6 @@ object RealLife {
             val flattenedTree = faulttree.flatten(treeFT)
             println("Calculating minimal cut sets...")
             val minimalCutSets = minimalcutpathset.minimalCutSets(dagFT)(basicEvents)
-            //TODO add this back
             println("Calculating minimal path sets...")
             val minimalPathSets = minimalcutpathset.minimalPathSets(dagFT)(basicEvents)
 
@@ -163,6 +163,8 @@ object RealLife {
             CSVOutput.printData(
                 file = csvOuputTree,
                 basicEvents = basicEvents.size,
+                minimalCutSets = minimalCutSets.size,
+                minimalPathSets = minimalPathSets.size,
                 treeName = treeLikeFT.name,
                 heightRecursive = heightRecursive2,
                 timeRecursive = time_recursive2_ns,
@@ -217,6 +219,8 @@ object RealLife {
             CSVOutput.printData(
                 file = csvOutputDag,
                 basicEvents = basicEvents.size,
+                minimalCutSets = minimalCutSets.size,
+                minimalPathSets = minimalPathSets.size,
                 treeName = dagLikeFT.name,
                 heightRecursive = heightRecursive3,
                 timeRecursive = time_recursive3_ns,
@@ -230,6 +234,42 @@ object RealLife {
         }
     }
 
+}
+
+object EnumerationAlgorithm {
+
+    def main(args: Array[String]): Unit = {
+        val faultTrees: Seq[SimpleFaultTree] = Seq(
+            MainTrackTrainCollisionsLeadingToFatalitiesAndInjuries,
+            ATCFailsToResolveTheConflict,
+            T0Chopper
+        )
+
+        for (faultTree <- faultTrees) {
+            runEnumerationAlgorithm(faultTree)
+        }
+    }
+
+    def runEnumerationAlgorithm(faultTree: SimpleFaultTree): Unit = faultTree match {
+        case treeLike: TreeLikeFaultTree =>
+            val (booleanFormula, basicEventProbabilities) = Conversion.translateToBooleanFormula(treeLike.FT)
+            runEnumerationAlgorithm(faultTree.name, booleanFormula, basicEventProbabilities)
+        case dagLike: DagLikeFaultTree =>
+            val (booleanFormula, basicEventProbabilities) = Conversion.translateToBooleanFormula(dagLike.FT)
+            runEnumerationAlgorithm(faultTree.name, booleanFormula, basicEventProbabilities)
+        case _ => throw new RuntimeException("Impossible!")
+    }
+
+    def runEnumerationAlgorithm(name: String, booleanFormula: BooleanFormula, basicEventProbabilities: IntMap[Double]): Unit = {
+        val time_before = System.nanoTime()
+        val height = decisiontree.height(booleanFormula, basicEventProbabilities)
+        val time_after = System.nanoTime()
+
+        val duration_ns = time_after - time_before
+        val duration_ms = duration_ns / 1_000_000D
+
+        println(s"FaultTree $name took $duration_ms milliseconds to calculate: height $height")
+    }
 }
 
 object CSVOutput {
@@ -247,17 +287,17 @@ object CSVOutput {
     }
 
     def printTreeLikeHeader(file: Path): Unit = {
-        val line = "Fault Tree,# Basic events,Recursive algorithm 2 height,time (ns),Cut set algorithm height,time (ns),Path set algorithm height,time (ns),Random binary decision tree algorithm height,time (ns)\r\n"
+        val line = "Fault Tree,# Basic events,# Minimal cut sets,# Minimal path sets,Recursive algorithm 2 height,time (ns),Cut set algorithm height,time (ns),Path set algorithm height,time (ns),Random binary decision tree algorithm height,time (ns)\r\n"
         writeString(file, line)
     }
 
     def printDagLikeHeader(file: Path): Unit = {
-        val line = "Fault Tree,# Basic events,Recursive algorithm 3 height,time (ns),Cut set algorithm height,time (ns),Path set algorithm height,time (ns),Random binary decision tree algorithm height,time (ns)\r\n"
+        val line = "Fault Tree,# Basic events,# Minimal cut sets,# Minimal path sets,Recursive algorithm 3 height,time (ns),Cut set algorithm height,time (ns),Path set algorithm height,time (ns),Random binary decision tree algorithm height,time (ns)\r\n"
         writeString(file, line)
     }
 
-    def printData(file: Path, basicEvents: Int, treeName: String, heightRecursive: Double, timeRecursive: Long, heightCutSet: Double, timeCutSet: Long, heightPathSet: Double, timePathSet: Long, heightRandomBDT: Double, timeRandomBDT: Long): Unit = {
-        val line = s""""${treeName}","${basicEvents}","${heightRecursive}","${timeRecursive}","${heightCutSet}","${timeCutSet}","${heightPathSet}","${timePathSet}","${heightRandomBDT}","${timeRandomBDT}"\r\n"""
+    def printData(file: Path, basicEvents: Int, minimalCutSets: Int, minimalPathSets: Int, treeName: String, heightRecursive: Double, timeRecursive: Long, heightCutSet: Double, timeCutSet: Long, heightPathSet: Double, timePathSet: Long, heightRandomBDT: Double, timeRandomBDT: Long): Unit = {
+        val line = s""""${treeName}","${basicEvents}","${minimalCutSets}","${minimalPathSets}","${heightRecursive}","${timeRecursive}","${heightCutSet}","${timeCutSet}","${heightPathSet}","${timePathSet}","${heightRandomBDT}","${timeRandomBDT}"\r\n"""
         writeString(file, line)
     }
 
@@ -598,7 +638,7 @@ object ATCFailsToResolveTheConflict extends TreeLikeFaultTree {
     val X10 = 10
     val X11 = 11
     val X12 = 12
-    val X13= 13
+    val X13 = 13
     val X14 = 14
     val X15 = 15
     val X16 = 16
@@ -616,23 +656,23 @@ object ATCFailsToResolveTheConflict extends TreeLikeFaultTree {
     final val M7 = 25
 
     final val p1 = 4.31E-3
-    final val p2 =  1.29e-1
-    final val p3 =  1.29e-1
-    final val p4 =  1.29e-1
+    final val p2 = 1.29e-1
+    final val p3 = 1.29e-1
+    final val p4 = 1.29e-1
     final val p5 = 2.70e-4
     final val p6 = 2.70e-4
     final val p7 = 2.70e-4
     final val p8 = 2.70e-4
     final val p9 = 2.70e-4
     final val p10 = 2.70e-4
-    final val p11=  2.70e-4
+    final val p11 = 2.70e-4
     final val p12 = 2.70e-4
     final val p13 = 3.79e-2
     final val p14 = 3.79e-2
     final val p15=  3.79e-2
     final val p16 = 3.79e-2
-    final val p17 =  7.20e-4
-    final val p18 =  7.20e-4
+    final val p17 = 7.20e-4
+    final val p18 = 7.20e-4
 
     val FT: FaultTree = OrEvent(T, Seq(
         BasicEvent(X1,p1),
@@ -772,7 +812,7 @@ object LiquidStorageTank extends TreeLikeFaultTree {
     val X10 = 10
     val X11 = 11
     val X12 = 12
-    val X13= 13
+    val X13 = 13
     val X14 = 14
     val X15 = 15
     val X16 = 16
