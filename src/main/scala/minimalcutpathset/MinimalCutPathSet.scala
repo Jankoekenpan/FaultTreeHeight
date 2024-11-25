@@ -24,6 +24,9 @@ case class FaultTree(topEvent: Event, events: Map[Event, TreeNode]):
 type Event = Int
 type Probability = Double
 
+def doubleEqual(one: Double, two: Double): Boolean =
+    Math.abs(one - two) < 0.00_000_1
+
 def flatten(faultTree: FaultTree): FaultTree = {
     val top = faultTree.topEvent
 

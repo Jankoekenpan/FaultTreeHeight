@@ -2,6 +2,9 @@ package minimalcutpathset
 
 import scala.collection.immutable.IntMap
 
+def cutSetProbability(cutSet: CutSet, probabilities: IntMap[Probability]): Probability =
+    cutSet.toSeq.map(basicEvent => probabilities(basicEvent)).product
+
 def height4(faultTree: FaultTree): Double = {
     val basicEvents = getBasicEvents(faultTree)
     val probabilities = getProbabilities(faultTree)(basicEvents)
