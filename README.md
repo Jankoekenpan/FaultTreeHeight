@@ -31,6 +31,8 @@ Windows example: `set JAVA_HOME=C:\Program Files\Eclipse Adoptium\jdk-23.0.1+11-
 Linux example: `export JAVA_HOME=/opt/jdk23`
 
 Execute `sbt jmh:run` from a terminal.
+<br>
+Note that this operation can take up to 6 hours.
 
 <!--- TODO do we want to keep RandomTrees and RandomDags? -->
 

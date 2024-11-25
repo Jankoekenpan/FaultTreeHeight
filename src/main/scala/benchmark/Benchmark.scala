@@ -294,249 +294,249 @@ class RealWorldFaultTreesBenchmark {
     // MainTrackTrainCollisionsLeadingToFatalitiesAndInjuries
 
     @Benchmark
-    def timeMainTrackTrainCollisionsLeadingToFatalitiesAndInjuries_eminent() =
+    def timeMainTrackTrainCollisionsLeadingToFatalitiesAndInjuries_eminent(): Double =
         decisiontree.height(mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_formula, mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_probabilities)
 
     @Benchmark
-    def timeMainTrackTrainCollisionsLeadingToFatalitiesAndInjuries_remind() =
+    def timeMainTrackTrainCollisionsLeadingToFatalitiesAndInjuries_remind(): Double =
         faulttree.height7(mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_flattened)
 
     @Benchmark
     def timeMainTrackTrainCollisionsLeadingToFatalitiesAndInjuries_mince() =
-        minimalcutpathset.algorithm4(mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_cutsets, mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_probabilities)
+        minimalcutpathset.algorithm4(mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_cutsets, mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_probabilities)._2
 
     @Benchmark
     def timeMainTrackTrainCollisionsLeadingToFatalitiesAndInjuries_pase() =
-        minimalcutpathset.algorithm5(mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_pathsets, mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_probabilities)
+        minimalcutpathset.algorithm5(mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_pathsets, mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_probabilities)._2
 
     @Benchmark
     def timeMainTrackTrainCollisionsLeadingToFatalitiesAndInjuries_ranger() =
-        decisiontree.RandomBDTs.height(mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_basicevents, mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_formula, mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_probabilities)
+        decisiontree.RandomBDTs.height(mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_basicevents, mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_formula, mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_probabilities)._1
 
     // T0Chopper
 
     @Benchmark
     def timeT0Chopper_remind() =
-        decisiontree.algorithm8(t0Chopper_flattened, t0Chopper_probabilities)
+        decisiontree.algorithm8(t0Chopper_flattened, t0Chopper_probabilities)._2
 
     @Benchmark
     def timeT0Chopper_mince() =
-        minimalcutpathset.algorithm4(t0Chopper_cutsets, t0Chopper_probabilities)
+        minimalcutpathset.algorithm4(t0Chopper_cutsets, t0Chopper_probabilities)._2
 
     @Benchmark
     def timeT0Chopper_pase() =
-        minimalcutpathset.algorithm5(t0Chopper_pathsets, t0Chopper_probabilities)
+        minimalcutpathset.algorithm5(t0Chopper_pathsets, t0Chopper_probabilities)._2
 
     @Benchmark
     def timeT0Chopper_ranger() =
-        decisiontree.RandomBDTs.height(t0Chopper_basicevents, t0Chopper_formula, t0Chopper_probabilities)
+        decisiontree.RandomBDTs.height(t0Chopper_basicevents, t0Chopper_formula, t0Chopper_probabilities)._1
 
     // ATCFailsToResolveTheConflict
 
     @Benchmark
-    def timeATCFailsToResolveTheConflict_remind() =
+    def timeATCFailsToResolveTheConflict_remind(): Double =
         faulttree.height7(atcFailsToResolveTheConflict_flattened)
 
     @Benchmark
-    def timeATCFailsToResolveTheConflict_mince() =
-        minimalcutpathset.algorithm4(atcFailsToResolveTheConflict_cutsets, atcFailsToResolveTheConflict_probabilities)
+    def timeATCFailsToResolveTheConflict_mince(): Double =
+        minimalcutpathset.algorithm4(atcFailsToResolveTheConflict_cutsets, atcFailsToResolveTheConflict_probabilities)._2
 
     @Benchmark
-    def timeATCFailsToResolveTheConflict_pase() =
-        minimalcutpathset.algorithm5(atcFailsToResolveTheConflict_pathsets, atcFailsToResolveTheConflict_probabilities)
+    def timeATCFailsToResolveTheConflict_pase(): Double =
+        minimalcutpathset.algorithm5(atcFailsToResolveTheConflict_pathsets, atcFailsToResolveTheConflict_probabilities)._2
 
     @Benchmark
-    def timeATCFailsToResolveTheConflict_ranger() =
-        decisiontree.RandomBDTs.height(atcFailsToResolveTheConflict_basicevents, atcFailsToResolveTheConflict_formula, atcFailsToResolveTheConflict_probabilities)
+    def timeATCFailsToResolveTheConflict_ranger(): Double =
+        decisiontree.RandomBDTs.height(atcFailsToResolveTheConflict_basicevents, atcFailsToResolveTheConflict_formula, atcFailsToResolveTheConflict_probabilities)._1
 
     // AircraftRunwayExcursionAccidents
 
     @Benchmark
-    def timeAircraftRunwayExcursionAccidents_remind() =
+    def timeAircraftRunwayExcursionAccidents_remind(): Double =
         faulttree.height7(aircraftRunwayExcursionAccidents_flattened)
 
     @Benchmark
-    def timeAircraftRunwayExcursionAccidents_mince() =
-        minimalcutpathset.algorithm4(aircraftRunwayExcursionAccidents_cutsets, aircraftRunwayExcursionAccidents_probabilities)
+    def timeAircraftRunwayExcursionAccidents_mince(): Double =
+        minimalcutpathset.algorithm4(aircraftRunwayExcursionAccidents_cutsets, aircraftRunwayExcursionAccidents_probabilities)._2
 
     @Benchmark
-    def timeAircraftRunwayExcursionAccidents_pase() =
-        minimalcutpathset.algorithm5(aircraftRunwayExcursionAccidents_pathsets, aircraftRunwayExcursionAccidents_probabilities)
+    def timeAircraftRunwayExcursionAccidents_pase(): Double =
+        minimalcutpathset.algorithm5(aircraftRunwayExcursionAccidents_pathsets, aircraftRunwayExcursionAccidents_probabilities)._2
 
     @Benchmark
-    def timeAircraftRunwayExcursionAccidents_ranger() =
-        decisiontree.RandomBDTs.height(aircraftRunwayExcursionAccidents_basicevents, aircraftRunwayExcursionAccidents_formula, aircraftRunwayExcursionAccidents_probabilities)
+    def timeAircraftRunwayExcursionAccidents_ranger(): Double =
+        decisiontree.RandomBDTs.height(aircraftRunwayExcursionAccidents_basicevents, aircraftRunwayExcursionAccidents_formula, aircraftRunwayExcursionAccidents_probabilities)._1
 
     // LiquidStorageTank
 
     @Benchmark
-    def timeLiquidStorageTank_remind() =
+    def timeLiquidStorageTank_remind(): Double =
         faulttree.height7(liquidStorageTank_flattened)
 
     @Benchmark
-    def timeLiquidStorageTank_mince() =
-        minimalcutpathset.algorithm4(liquidStorageTank_cutsets, liquidStorageTank_probabilities)
+    def timeLiquidStorageTank_mince(): Double =
+        minimalcutpathset.algorithm4(liquidStorageTank_cutsets, liquidStorageTank_probabilities)._2
 
     @Benchmark
-    def timeLiquidStorageTank_pase() =
-        minimalcutpathset.algorithm5(liquidStorageTank_pathsets, liquidStorageTank_probabilities)
+    def timeLiquidStorageTank_pase(): Double =
+        minimalcutpathset.algorithm5(liquidStorageTank_pathsets, liquidStorageTank_probabilities)._2
 
     @Benchmark
-    def timeLiquidStorageTank_ranger() =
-        decisiontree.RandomBDTs.height(liquidStorageTank_basicevents, liquidStorageTank_formula, liquidStorageTank_probabilities)
+    def timeLiquidStorageTank_ranger(): Double =
+        decisiontree.RandomBDTs.height(liquidStorageTank_basicevents, liquidStorageTank_formula, liquidStorageTank_probabilities)._1
 
     // LeakageFailure
 
     @Benchmark
-    def timeLeakageFailure_remind() =
+    def timeLeakageFailure_remind(): Double =
         faulttree.height7(leakageFailure_flattened)
 
     @Benchmark
-    def timeLeakageFailure_mince() =
-        minimalcutpathset.algorithm4(leakageFailure_cutsets, leakageFailure_probabilities)
+    def timeLeakageFailure_mince(): Double =
+        minimalcutpathset.algorithm4(leakageFailure_cutsets, leakageFailure_probabilities)._2
 
     @Benchmark
-    def timeLeakageFailure_pase() =
-        minimalcutpathset.algorithm5(leakageFailure_pathsets, leakageFailure_probabilities)
+    def timeLeakageFailure_pase(): Double =
+        minimalcutpathset.algorithm5(leakageFailure_pathsets, leakageFailure_probabilities)._2
 
     @Benchmark
-    def timeLeakageFailure_ranger() =
-        decisiontree.RandomBDTs.height(leakageFailure_basicevents, leakageFailure_formula, leakageFailure_probabilities)
+    def timeLeakageFailure_ranger(): Double =
+        decisiontree.RandomBDTs.height(leakageFailure_basicevents, leakageFailure_formula, leakageFailure_probabilities)._1
 
     // AssessingTheRisks1
 
     @Benchmark
-    def timeAssessingTheRisks1_remind() =
+    def timeAssessingTheRisks1_remind(): Double =
         faulttree.height7(assessingTheRisks1_flattened)
 
     @Benchmark
-    def timeAssessingTheRisks1_mince() =
-        minimalcutpathset.algorithm4(assessingTheRisks1_cutsets, assessingTheRisks1_probabilities)
+    def timeAssessingTheRisks1_mince(): Double =
+        minimalcutpathset.algorithm4(assessingTheRisks1_cutsets, assessingTheRisks1_probabilities)._2
 
     @Benchmark
-    def timeAssessingTheRisks1_pase() =
-        minimalcutpathset.algorithm5(assessingTheRisks1_pathsets, assessingTheRisks1_probabilities)
+    def timeAssessingTheRisks1_pase(): Double =
+        minimalcutpathset.algorithm5(assessingTheRisks1_pathsets, assessingTheRisks1_probabilities)._2
 
     @Benchmark
-    def timeAssessingTheRisks1_ranger() =
-        decisiontree.RandomBDTs.height(assessingTheRisks1_basicevents, assessingTheRisks1_formula, assessingTheRisks1_probabilities)
+    def timeAssessingTheRisks1_ranger(): Double =
+        decisiontree.RandomBDTs.height(assessingTheRisks1_basicevents, assessingTheRisks1_formula, assessingTheRisks1_probabilities)._1
 
     // ChlorineRelease
 
     @Benchmark
-    def timeChlorineRelease_remind() =
-        decisiontree.algorithm8(chlorineRelease_flattened, chlorineRelease_probabilities)
+    def timeChlorineRelease_remind(): Double =
+        decisiontree.algorithm8(chlorineRelease_flattened, chlorineRelease_probabilities)._2
 
     @Benchmark
-    def timeChlorineRelease_mince() =
-        minimalcutpathset.algorithm4(chlorineRelease_cutsets, chlorineRelease_probabilities)
+    def timeChlorineRelease_mince(): Double =
+        minimalcutpathset.algorithm4(chlorineRelease_cutsets, chlorineRelease_probabilities)._2
 
     @Benchmark
-    def timeChlorineRelease_pase() =
-        minimalcutpathset.algorithm5(chlorineRelease_pathsets, chlorineRelease_probabilities)
+    def timeChlorineRelease_pase(): Double =
+        minimalcutpathset.algorithm5(chlorineRelease_pathsets, chlorineRelease_probabilities)._2
 
     @Benchmark
-    def timeChlorineRelease_ranger() =
-        decisiontree.RandomBDTs.height(chlorineRelease_basicevents, chlorineRelease_formula, t0Chopper_probabilities)
+    def timeChlorineRelease_ranger(): Double =
+        decisiontree.RandomBDTs.height(chlorineRelease_basicevents, chlorineRelease_formula, t0Chopper_probabilities)._1
 
     // LossContainerAtPort
 
     @Benchmark
-    def timeLossContainerAtPort_remind() =
+    def timeLossContainerAtPort_remind(): Double =
         faulttree.height7(lossContainerAtPort_flattened)
 
     @Benchmark
-    def timeLossContainerAtPort_mince() =
-        minimalcutpathset.algorithm4(lossContainerAtPort_cutsets, lossContainerAtPort_probabilities)
+    def timeLossContainerAtPort_mince(): Double =
+        minimalcutpathset.algorithm4(lossContainerAtPort_cutsets, lossContainerAtPort_probabilities)._2
 
     @Benchmark
-    def timeLossContainerAtPort_pase() =
-        minimalcutpathset.algorithm5(lossContainerAtPort_pathsets, lossContainerAtPort_probabilities)
+    def timeLossContainerAtPort_pase(): Double =
+        minimalcutpathset.algorithm5(lossContainerAtPort_pathsets, lossContainerAtPort_probabilities)._2
 
     @Benchmark
-    def timeLossContainerAtPort_ranger() =
-        decisiontree.RandomBDTs.height(lossContainerAtPort_basicevents, lossContainerAtPort_formula, lossContainerAtPort_probabilities)
+    def timeLossContainerAtPort_ranger(): Double =
+        decisiontree.RandomBDTs.height(lossContainerAtPort_basicevents, lossContainerAtPort_formula, lossContainerAtPort_probabilities)._1
 
     // SubmarinePipelineStopperFailure
 
     @Benchmark
-    def timeSubmarinePipelineStopperFailure_remind() =
+    def timeSubmarinePipelineStopperFailure_remind(): Double =
         faulttree.height7(submarinePipelineStopperFailure_flattened)
 
     @Benchmark
-    def timeSubmarinePipelineStopperFailure_mince() =
-        minimalcutpathset.algorithm4(submarinePipelineStopperFailure_cutsets, submarinePipelineStopperFailure_probabilities)
+    def timeSubmarinePipelineStopperFailure_mince(): Double =
+        minimalcutpathset.algorithm4(submarinePipelineStopperFailure_cutsets, submarinePipelineStopperFailure_probabilities)._2
 
     @Benchmark
-    def timeSubmarinePipelineStopperFailure_pase() =
-        minimalcutpathset.algorithm5(submarinePipelineStopperFailure_pathsets, submarinePipelineStopperFailure_probabilities)
+    def timeSubmarinePipelineStopperFailure_pase(): Double =
+        minimalcutpathset.algorithm5(submarinePipelineStopperFailure_pathsets, submarinePipelineStopperFailure_probabilities)._2
 
     @Benchmark
-    def timeSubmarinePipelineStopperFailure_ranger() =
-        decisiontree.RandomBDTs.height(submarinePipelineStopperFailure_basicevents, submarinePipelineStopperFailure_formula, submarinePipelineStopperFailure_probabilities)
+    def timeSubmarinePipelineStopperFailure_ranger(): Double =
+        decisiontree.RandomBDTs.height(submarinePipelineStopperFailure_basicevents, submarinePipelineStopperFailure_formula, submarinePipelineStopperFailure_probabilities)._1
 
     // PCBA
 
     @Benchmark
-    def timePCBA_remind() =
+    def timePCBA_remind(): Double =
         faulttree.height7(pcba_flattened)
 
     @Benchmark
-    def timePCBA_mince() =
-        minimalcutpathset.algorithm4(pcba_cutsets, pcba_probabilities)
+    def timePCBA_mince(): Double =
+        minimalcutpathset.algorithm4(pcba_cutsets, pcba_probabilities)._2
 
     @Benchmark
-    def timePCBA_pase() =
-        minimalcutpathset.algorithm5(pcba_pathsets, pcba_probabilities)
+    def timePCBA_pase(): Double =
+        minimalcutpathset.algorithm5(pcba_pathsets, pcba_probabilities)._2
 
     @Benchmark
-    def timePCBA_ranger() =
-        decisiontree.RandomBDTs.height(pcba_basicevents, pcba_formula, pcba_probabilities)
+    def timePCBA_ranger(): Double =
+        decisiontree.RandomBDTs.height(pcba_basicevents, pcba_formula, pcba_probabilities)._1
 
     // OGPF
 
     @Benchmark
-    def timeOGPF_remind() =
-        decisiontree.algorithm8(ogpf_flattened, ogpf_probabilities)
+    def timeOGPF_remind(): Double =
+        decisiontree.algorithm8(ogpf_flattened, ogpf_probabilities)._2
 
     @Benchmark
-    def timeOGPF_mince() =
-        minimalcutpathset.algorithm4(ogpf_cutsets, ogpf_probabilities)
+    def timeOGPF_mince(): Double =
+        minimalcutpathset.algorithm4(ogpf_cutsets, ogpf_probabilities)._2
 
     @Benchmark
-    def timeOGPF_pase() =
-        minimalcutpathset.algorithm5(ogpf_pathsets, ogpf_probabilities)
+    def timeOGPF_pase(): Double =
+        minimalcutpathset.algorithm5(ogpf_pathsets, ogpf_probabilities)._2
 
     @Benchmark
-    def timeOGPF_ranger() =
-        decisiontree.RandomBDTs.height(ogpf_basicevents, ogpf_formula, ogpf_probabilities)
+    def timeOGPF_ranger(): Double =
+        decisiontree.RandomBDTs.height(ogpf_basicevents, ogpf_formula, ogpf_probabilities)._1
 
     // BHNGPipeline
 
     @Benchmark
-    def timeBHNGPipeline_remind() =
+    def timeBHNGPipeline_remind(): Double =
         faulttree.height7(bhngPipeline_flattened)
 
     @Benchmark
-    def timeBHNGPipeline_mince() =
-        minimalcutpathset.algorithm4(bhngPipeline_cutsets, bhngPipeline_probabilities)
+    def timeBHNGPipeline_mince(): Double =
+        minimalcutpathset.algorithm4(bhngPipeline_cutsets, bhngPipeline_probabilities)._2
 
     @Benchmark
-    def timeBHNGPipeline_pase() =
-        minimalcutpathset.algorithm5(bhngPipeline_pathsets, bhngPipeline_probabilities)
+    def timeBHNGPipeline_pase(): Double =
+        minimalcutpathset.algorithm5(bhngPipeline_pathsets, bhngPipeline_probabilities)._2
 
     @Benchmark
-    def timeBHNGPipeline_ranger() =
-        decisiontree.RandomBDTs.height(bhngPipeline_basicevents, bhngPipeline_formula, bhngPipeline_probabilities)
+    def timeBHNGPipeline_ranger(): Double =
+        decisiontree.RandomBDTs.height(bhngPipeline_basicevents, bhngPipeline_formula, bhngPipeline_probabilities)._1
 
     // HSC
 
     @Benchmark
-    def timeHSC_remind() =
+    def timeHSC_remind(): Double =
         faulttree.height7(hsc_flattened)
 
     @Benchmark
-    def timeHSC_pase() =
-        minimalcutpathset.algorithm5(hsc_pathsets, hsc_probabilities)
+    def timeHSC_pase(): Double =
+        minimalcutpathset.algorithm5(hsc_pathsets, hsc_probabilities)._2
 
 }
