@@ -116,31 +116,6 @@ object Conversion {
             decisiontree.BooleanFormula.And(createBalancedAnd(leftChildren), createBalancedAnd(rightChildren))
     }
 
-    @java.lang.Deprecated(forRemoval = true)
-    def translateToDecisionTree(faultTree: faulttree.FaultTree): (decisiontree.BooleanFormula, Seq[Double]) = {
-        val probabilities = Seq.newBuilder[Double]
-        var curId = 0;
-
-        def nextId(): Int = {
-            val id = curId
-            curId += 1
-            id
-        }
-
-        def matchTree(faultTree: faulttree.FaultTree): decisiontree.BooleanFormula = {
-            faultTree match
-                case faulttree.FaultTree.BasicEvent(_, p) =>
-                    probabilities.addOne(p)
-                    decisiontree.BooleanFormula.Variable(nextId())
-                case faulttree.FaultTree.AndEvent(_, children) =>
-                    Setup.createBalancedAnd(children.map(matchTree), nextId)
-                case faulttree.FaultTree.OrEvent(_, children) =>
-                    Setup.createBalancedOr(children.map(matchTree), nextId)
-        }
-
-        (matchTree(faultTree), probabilities.result())
-    }
-
     def main(args: Array[String]): Unit = {
         import minimalcutpathset.{FaultTree, TreeNode, Gate}
         import decisiontree.BooleanFormula.*

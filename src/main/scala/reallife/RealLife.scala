@@ -30,7 +30,7 @@ object RealLife {
         assert(probabilities1 == probabilities2)
         val basicEvents = minimalcutpathset.getBasicEvents(dagTree)
 
-        val heightRecursive2 = faulttree.height(faultTree)
+        val heightRecursive2 = faulttree.height7(faultTree)
         val heightCutSet = minimalcutpathset.height4(dagTree, basicEvents, probabilities2)
         val heightPathSet = minimalcutpathset.height5(dagTree, basicEvents, probabilities2)
         val heightRandomBDT = RandomBDTs.algorithm13(formula, probabilities1)

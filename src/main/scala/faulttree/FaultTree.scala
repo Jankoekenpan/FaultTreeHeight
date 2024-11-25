@@ -76,10 +76,13 @@ def layers(tree: FaultTree): IArray[Seq[FaultTree]] = {
     IArray.from(layersReversed.values.map(_.toSeq))
 }
 
+/** @deprecated use #height7 instead */
+@java.lang.Deprecated
 def height(tree: FaultTree): Real = {
     height(tree, layers(tree))
 }
 
+/** @deprecated use #height7 instead */
 def height(tree: FaultTree, layers: IArray[Seq[FaultTree]]): Real = {
     inline def eventsAtLayer(layer: Int): Seq[FaultTree] = layers(layer)
     inline def basicEvents: Seq[FaultTree.BasicEvent] = eventsAtLayer(0).asInstanceOf[Seq[FaultTree.BasicEvent]]
