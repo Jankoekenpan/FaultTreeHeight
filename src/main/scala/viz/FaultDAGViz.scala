@@ -1,6 +1,5 @@
 package viz
 
-import benchmark.RandomDags
 import guru.nidi.graphviz.attribute.Rank
 import guru.nidi.graphviz.engine.{Format, Graphviz}
 import minimalcutpathset.FaultTree
@@ -9,7 +8,6 @@ import guru.nidi.graphviz.model.{MutableGraph, MutableNode}
 import guru.nidi.graphviz.model.Factory.*
 
 import java.io.File
-import java.util.random.RandomGenerator
 import javax.swing.{ImageIcon, JFrame, JLabel}
 import scala.collection.mutable
 
@@ -72,7 +70,7 @@ object FaultDAGViz {
     }
 
     def main(args: Array[String]): Unit = {
-//        given random: RandomGenerator = new java.util.Random()
+//        given random: java.util.random.RandomGenerator = new java.util.Random()
 //
 //        for (i <- 1 to 10) {
 //            display(i, toGraphViz(RandomDags.makeRandomDag(10)))

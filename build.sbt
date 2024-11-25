@@ -18,6 +18,10 @@ libraryDependencies ++= Seq(
 )
 
 enablePlugins(JmhPlugin)
+Jmh / javaOptions ++= Seq(
+    "-Djmh.resultsFormat=csv",
+    "-Djmh.resultPath=benchmark-results.csv"
+)
 
 lazy val root = (project in file("."))
   .settings(

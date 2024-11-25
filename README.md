@@ -20,11 +20,14 @@ Depending on your IDE/Editor setup, you should also install SBT itself.
 - Benchmark.scala: contains a [JMH](https://openjdk.org/projects/code-tools/jmh/) benchmark for comparing the running times of all algorithms mentioned in the Paper.
 - Conversion.scala: code which converts between Tree-Like FaultTree, Dag-Like FaultTree and BooleanFormula representations of fault trees.
 - RealLife.scala: calculates height approximations for some real-world fault trees.
+- DFT.scala: simple parser .dft files.
 
 ## Running the benchmarks
 
 Set your JAVA_HOME environment variable to a JDK 23 installation.
+<br>
 Windows example: `set JAVA_HOME=C:\Program Files\Eclipse Adoptium\jdk-23.0.1+11-hotspot`
+<br>
 Linux example: `export JAVA_HOME=/opt/jdk23`
 
 Execute `sbt jmh:run` from a terminal.
