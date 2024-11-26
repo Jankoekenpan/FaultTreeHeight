@@ -437,7 +437,7 @@ class RealWorldFaultTreesBenchmark {
 
     @Benchmark
     def timeChlorineRelease_ranger(): Double =
-        decisiontree.RandomBDTs.height(chlorineRelease_basicevents, chlorineRelease_formula, t0Chopper_probabilities)._1
+        decisiontree.RandomBDTs.height(chlorineRelease_basicevents, chlorineRelease_formula, chlorineRelease_probabilities)._1
 
     // LossContainerAtPort
 
