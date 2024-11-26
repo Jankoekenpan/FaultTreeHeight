@@ -16,7 +16,7 @@ Depending on your IDE/Editor setup, you should also install SBT itself.
 - BinaryDecisionTree.scala: contains the 'recursive' height approximation algorithm for dag-like fault trees (Remind).
 - CutSetAlgorithm4.scala: contains the 'MCS-based' height approximation algorithm for dag-like fault trees (Mince).
 - PathSetAlgorithm5.scala: contains the 'MPS-based' height approximation algorithm for dag-like fault trees (Pase).
-- RandomBDTS.scala: contains the 'random binatry decision tree' height approximation algorithm for dag-like fault trees (Ranger).
+- RandomBDTs.scala: contains the 'random binatry decision tree' height approximation algorithm for dag-like fault trees (Ranger).
 - Benchmark.scala: contains a [JMH](https://openjdk.org/projects/code-tools/jmh/) benchmark for comparing the running times of all algorithms mentioned in the Paper.
 - Conversion.scala: code which converts between Tree-Like FaultTree, Dag-Like FaultTree and BooleanFormula representations of fault trees.
 - RealLife.scala: calculates height approximations for some real-world fault trees.

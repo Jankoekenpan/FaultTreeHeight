@@ -272,6 +272,70 @@ object EnumerationAlgorithm {
     }
 }
 
+object RangerAlgorithm {
+    given random: java.util.random.RandomGenerator = new java.util.Random()
+
+    def main(args: Array[String]): Unit = {
+        val treelikeFaultTrees: Seq[TreeLikeFaultTree] = Seq(
+            AircraftRunwayExcursionAccidents,
+            //AircraftRunwayExcursionAccidentsFromDFT,
+            MainTrackTrainCollisionsLeadingToFatalitiesAndInjuries,
+            ATCFailsToResolveTheConflict,
+            LiquidStorageTank,
+            LossContainerAtPort,
+            //HSC,
+            SubmarinePipelineStopperFailure,
+            BHNGPipeline,
+            //BayesianNetwork,
+            LeakageFailure,
+            AssessingTheRisks1,
+            PCBA,
+            //ChemicalCargoShortage,
+        )
+
+        val daglikeFaultTrees: Seq[DagLikeFaultTree] = Seq(
+            ChlorineRelease,
+            T0Chopper,
+            OGPF,
+        )
+
+        for faultTree: SimpleFaultTree <- treelikeFaultTrees ++ daglikeFaultTrees do
+            val averageHeight = runRangerAlgorithm(faultTree, 25)
+            println(s"Ranger height of ${faultTree.name} = ${averageHeight}")
+        end for
+    }
+
+    def runRangerAlgorithm(faultTree: SimpleFaultTree, howManyTimes: Int): Double = {
+        var sum = 0.0
+        for _ <- 1 to howManyTimes do
+            sum += runRangerAlgorithm(faultTree)
+        end for
+        sum / howManyTimes
+    }
+
+    def runRangerAlgorithm(faultTree: SimpleFaultTree): Double = faultTree match {
+        case treeLike: TreeLikeFaultTree =>
+            val (booleanFormula, basicEventProbabilities) = Conversion.translateToBooleanFormula(treeLike.FT)
+            runRangerAlgorithm(booleanFormula, basicEventProbabilities)
+        case dagLike: DagLikeFaultTree =>
+            val (booleanFormula, basicEventProbabilities) = Conversion.translateToBooleanFormula(dagLike.FT)
+            runRangerAlgorithm(booleanFormula, basicEventProbabilities)
+        case _ => throw new RuntimeException("Impossible!")
+    }
+
+    def runRangerAlgorithm(booleanFormula: BooleanFormula, basicEventProbabilities: IntMap[Double]): Double = {
+        val events: Set[Int] = basicEventProbabilities.keySet
+        val time_before = System.nanoTime()
+        val height = decisiontree.RandomBDTs.height(events, booleanFormula, basicEventProbabilities)
+        val time_after = System.nanoTime()
+
+        val duration_ns = time_after - time_before
+        val duration_ms = duration_ns / 1_000_000D
+
+        height._1
+    }
+}
+
 object CSVOutput {
     import java.nio.file.{Files, Path, StandardOpenOption}
 
