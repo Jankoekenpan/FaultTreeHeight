@@ -155,7 +155,7 @@ class RealWorldFaultTreesBenchmark {
         }
 
         {
-            val liquidStorageTank_FT = reallife.LiquidStorageTank.FT
+            val liquidStorageTank_FT = reallife.LiquidStorageTankFromDFT.FT
             val (booleanFormula, probabilities) = Conversion.translateToBooleanFormula(liquidStorageTank_FT)
             liquidStorageTank_formula = booleanFormula
             liquidStorageTank_probabilities = probabilities
@@ -302,11 +302,11 @@ class RealWorldFaultTreesBenchmark {
         faulttree.height7(mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_flattened)
 
     @Benchmark
-    def timeMainTrackTrainCollisionsLeadingToFatalitiesAndInjuries_mince() =
+    def timeMainTrackTrainCollisionsLeadingToFatalitiesAndInjuries_mince(): Double =
         minimalcutpathset.algorithm4(mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_cutsets, mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_probabilities)._2
 
     @Benchmark
-    def timeMainTrackTrainCollisionsLeadingToFatalitiesAndInjuries_pase() =
+    def timeMainTrackTrainCollisionsLeadingToFatalitiesAndInjuries_pase(): Double =
         minimalcutpathset.algorithm5(mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_pathsets, mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_probabilities)._2
 
     @Benchmark
@@ -316,19 +316,19 @@ class RealWorldFaultTreesBenchmark {
     // T0Chopper
 
     @Benchmark
-    def timeT0Chopper_remind() =
+    def timeT0Chopper_remind(): Double =
         decisiontree.algorithm8(t0Chopper_flattened, t0Chopper_probabilities)._2
 
     @Benchmark
-    def timeT0Chopper_mince() =
+    def timeT0Chopper_mince(): Double =
         minimalcutpathset.algorithm4(t0Chopper_cutsets, t0Chopper_probabilities)._2
 
     @Benchmark
-    def timeT0Chopper_pase() =
+    def timeT0Chopper_pase(): Double =
         minimalcutpathset.algorithm5(t0Chopper_pathsets, t0Chopper_probabilities)._2
 
     @Benchmark
-    def timeT0Chopper_ranger() =
+    def timeT0Chopper_ranger(): Double =
         decisiontree.RandomBDTs.height(t0Chopper_basicevents, t0Chopper_formula, t0Chopper_probabilities)._1
 
     // ATCFailsToResolveTheConflict

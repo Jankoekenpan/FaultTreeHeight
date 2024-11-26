@@ -81,6 +81,7 @@ object RealLife {
             MainTrackTrainCollisionsLeadingToFatalitiesAndInjuries,
             ATCFailsToResolveTheConflict,
             LiquidStorageTank,
+            LiquidStorageTankFromDFT,
             LossContainerAtPort,
             //HSC, //TODO re-add this.   // TODO seems to take a very long time for Algorithm 4 (cut sets) (TODO possibly also the random BDT one..)
             SubmarinePipelineStopperFailure,
@@ -973,6 +974,12 @@ object LiquidStorageTank extends TreeLikeFaultTree {
         ))
     ))
 
+}
+
+object LiquidStorageTankFromDFT extends TreeLikeFaultTree {
+    import faulttree.FaultTree
+
+    val FT: FaultTree = DFT.readTreeLikeFaultTree(Source.fromResource("LiquidStorageTank.dft"))
 }
 
 object LossContainerAtPort extends TreeLikeFaultTree {
