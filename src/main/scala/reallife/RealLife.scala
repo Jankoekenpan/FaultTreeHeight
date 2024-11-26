@@ -325,14 +325,10 @@ object RangerAlgorithm {
 
     def runRangerAlgorithm(booleanFormula: BooleanFormula, basicEventProbabilities: IntMap[Double]): Double = {
         val events: Set[Int] = basicEventProbabilities.keySet
-        val time_before = System.nanoTime()
-        val height = decisiontree.RandomBDTs.height(events, booleanFormula, basicEventProbabilities)
-        val time_after = System.nanoTime()
 
-        val duration_ns = time_after - time_before
-        val duration_ms = duration_ns / 1_000_000D
+        val (height, binaryDecisionTree) = decisiontree.RandomBDTs.height(events, booleanFormula, basicEventProbabilities)
 
-        height._1
+        height
     }
 }
 
