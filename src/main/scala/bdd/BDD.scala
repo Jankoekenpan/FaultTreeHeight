@@ -1,5 +1,6 @@
 package bdd
 
+import java.io.File
 import scala.collection.immutable.IntMap
 
 /*
@@ -30,4 +31,9 @@ object BDD {
             1 + pk * height(trueBranch, probabilities) + (1 - pk) * height(falseBranch, probabilities)
     }
 
+    def readStormSylvanBDDDotFile(file: File): BDD = {
+        // TODO BDD file reading (using graphviz! ;))
+        ???
+    }
 }
+
