@@ -2,6 +2,7 @@ package dft
 
 import benchmark.Conversion
 
+import java.io.{BufferedWriter, File, FileWriter}
 import scala.collection.mutable
 import scala.io.Source
 
@@ -10,6 +11,18 @@ enum DFTNode:
     case OrEvent(id: Int, children: Seq[Int])
     case AndEvent(id: Int, children: Seq[Int])
     case TopLevel(id: Int)
+
+object Printing {
+
+    def print(dftNode: DFTNode): String = dftNode match {
+        case DFTNode.TopLevel(id) => s"""toplevel "${id}";"""
+        case DFTNode.OrEvent(id, children) => s""""${id}" or ${children.mkString("\"", "\" \"","\"")};"""
+        case DFTNode.AndEvent(id, children) => s""""${id}" and ${children.mkString("\"", "\" \"","\"")};"""
+        case DFTNode.BasicEvent(id, probability) => s""""${id}" prob=${probability};"""
+    }
+
+
+}
 
 object Parsing {
     enum DFTLine:
@@ -65,6 +78,15 @@ object Parsing {
 }
 
 object DFT {
+
+    def writeDFTFile(output: File, lines: Seq[DFTNode]): Unit = {
+        val writer = new BufferedWriter(new FileWriter(output))
+        for (line <- lines) {
+            writer.write(Printing.print(line))
+            writer.newLine()
+        }
+        writer.close()
+    }
 
     def readDFTFile(source: Source): Seq[DFTNode] = {
         var curId = 0

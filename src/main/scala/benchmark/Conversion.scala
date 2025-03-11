@@ -4,6 +4,35 @@ import scala.collection.immutable.IntMap
 
 object Conversion {
 
+    def translateToDFT(tree: faulttree.FaultTree): Seq[dft.DFTNode] = {
+
+        def translateToDFTNonTop(tree: faulttree.FaultTree): Seq[dft.DFTNode] = tree match {
+            case faulttree.FaultTree.BasicEvent(id, probability) => Seq(dft.DFTNode.BasicEvent(id, probability))
+            case faulttree.FaultTree.AndEvent(id, children) =>
+                dft.DFTNode.AndEvent(id, children.map(_.event)) +: children.flatMap(translateToDFTNonTop)
+            case faulttree.FaultTree.OrEvent(id, children) =>
+                dft.DFTNode.OrEvent(id, children.map(_.event)) +: children.flatMap(translateToDFTNonTop)
+        }
+
+        dft.DFTNode.TopLevel(tree.event) +: translateToDFTNonTop(tree)
+    }
+
+    def translateToDFT(tree: minimalcutpathset.FaultTree): Seq[dft.DFTNode] = {
+
+        def translateToDFTNonTop(events: Map[Int, minimalcutpathset.TreeNode]): Seq[dft.DFTNode] = {
+            events.values.map {
+                case minimalcutpathset.TreeNode.BasicEvent(id, probability) =>
+                    dft.DFTNode.BasicEvent(id, probability)
+                case minimalcutpathset.TreeNode.Combination(id, minimalcutpathset.Gate.And, children) =>
+                    dft.DFTNode.AndEvent(id, children.toSeq)
+                case minimalcutpathset.TreeNode.Combination(id, minimalcutpathset.Gate.Or, children) =>
+                    dft.DFTNode.OrEvent(id, children.toSeq)
+            }.toSeq
+        }
+
+        dft.DFTNode.TopLevel(tree.topEvent) +: translateToDFTNonTop(tree.events)
+    }
+
     def translateToTreeLikeFaultTree(dftNodes: Seq[dft.DFTNode]): faulttree.FaultTree =
         translateToTreeLikeFaultTree(translateToDagTree(dftNodes))
 

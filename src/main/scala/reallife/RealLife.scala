@@ -854,6 +854,7 @@ object T0Chopper extends DagLikeFaultTree {
     ))
 }
 
+/** @deprecated use [[LiquidStorageTankFromDFT]] instead. */
 @java.lang.Deprecated
 // Probabilities listed here might not actually be failure probabilities.
 // The values in the DFT benchmark set and the corresponding paper don't seem to be the same.
