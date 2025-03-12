@@ -1,0 +1,14 @@
+toplevel "Main-track_collisions_leading_to_fatalities,_serious_or_minor_injuries";
+"Main-track_collisions_leading_to_fatalities,_serious_or_minor_injuries" or "Mechanical_and_electrical_failures" "Train_operation_-_human_factor" "Miscellaneous_causes_not_otherwise_listed";
+"Mechanical_and_electrical_failures" or "Truck_componenets";
+"Miscellaneous_causes_not_otherwise_listed" or "Unusual_operating_situations";
+"Train_operation_-_human_factor" or "Brakes,_use_of_" "Flagging,_fixed,_hand_and_radio_signals" "General_switching_rules" "Main-track_authority" "Miscellaneous" "Speed" "Train_handling/train_makeup";
+"Truck_componenets" prob=3.7e-04;
+"Unusual_operating_situations" prob=3.7e-04;
+"Brakes,_use_of_" prob=1.1e-03;
+"Flagging,_fixed,_hand_and_radio_signals" prob=7.4e-04;
+"General_switching_rules" prob=3.7e-04;
+"Main-track_authority" prob=1.5e-03;
+"Miscellaneous" prob=7.4e-04;
+"Speed" prob=3.0e-03;
+"Train_handling/train_makeup" prob=3.7e-4;

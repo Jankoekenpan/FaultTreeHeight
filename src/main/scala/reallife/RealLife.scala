@@ -2,8 +2,9 @@ package reallife // or is this just fantasy?
 
 import benchmark.Conversion
 import decisiontree.{BooleanFormula, RandomBDTs}
-import dft.DFT
+import dft.{DFT, DFTNode}
 
+import java.io.File
 import java.util.random.RandomGenerator
 import scala.collection.immutable.IntMap
 import scala.io.Source
@@ -77,10 +78,10 @@ object RealLife {
 
         val treelikeFaultTrees: Seq[TreeLikeFaultTree] = Seq(
             AircraftRunwayExcursionAccidents,
-            AircraftRunwayExcursionAccidentsFromDFT, //TODO remove this one, or the line above.
+            //AircraftRunwayExcursionAccidentsFromDFT, //TODO remove this one, or the line above.
             MainTrackTrainCollisionsLeadingToFatalitiesAndInjuries,
             ATCFailsToResolveTheConflict,
-            LiquidStorageTank,
+            //LiquidStorageTank,    //TODO remove
             LiquidStorageTankFromDFT,
             LossContainerAtPort,
             //HSC, //TODO re-add this.   // TODO seems to take a very long time for Algorithm 4 (cut sets) (TODO possibly also the random BDT one..)
@@ -99,7 +100,6 @@ object RealLife {
             OGPF,
         )
 
-        // TODO put this back:
         runAlgorithms(treelikeFaultTrees, daglikeFaultTrees)
 
         // TODO temporary:
@@ -1651,7 +1651,7 @@ object BHNGPipeline extends TreeLikeFaultTree {
                 OrEvent(M3, Seq(
                     OrEvent(M8, Seq(
                         BasicEvent(X1,p1),
-                        BasicEvent(X2,p3)
+                        BasicEvent(X2,p2)
                     )),
                     BasicEvent(X3,p3)
                 )),
@@ -1698,7 +1698,7 @@ object BHNGPipeline extends TreeLikeFaultTree {
                     ))
                 )),
                 OrEvent(M7, Seq(
-                    OrEvent(M17, Seq(
+                    OrEvent(M17/*J14 external stress*/, Seq(
                         BasicEvent(X28,p28),
                         BasicEvent(X29,p29)
                     )),
@@ -1719,7 +1719,7 @@ object BHNGPipeline extends TreeLikeFaultTree {
             BasicEvent(X38,p38),
             BasicEvent(X44,p44),
             BasicEvent(X45,p45),
-            OrEvent(M17, Seq(
+            OrEvent(M18/*J17 anticorrosive coating*/, Seq(
                 BasicEvent(X39,p39),
                 BasicEvent(X40,p40),
                 BasicEvent(X41,p41),
