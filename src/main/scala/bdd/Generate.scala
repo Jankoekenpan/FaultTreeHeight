@@ -2,7 +2,7 @@ package bdd
 
 import benchmark.Conversion
 import dft.{DFT, DFTNode}
-import reallife.{ATCFailsToResolveTheConflict, AircraftRunwayExcursionAccidents, AssessingTheRisks1, BHNGPipeline, ChlorineRelease, DagLikeFaultTree, LeakageFailure, LiquidStorageTankFromDFT, LossContainerAtPort, MainTrackTrainCollisionsLeadingToFatalitiesAndInjuries, OGPF, PCBA, SimpleFaultTree, SubmarinePipelineStopperFailure, T0Chopper, TreeLikeFaultTree}
+import reallife.{ATCFailsToResolveTheConflict, AircraftRunwayExcursionAccidents, AssessingTheRisks1, BHNGPipeline, ChlorineRelease, DagLikeFaultTree, HSC, LeakageFailure, LiquidStorageTankFromDFT, LossContainerAtPort, MainTrackTrainCollisionsLeadingToFatalitiesAndInjuries, OGPF, PCBA, SimpleFaultTree, SubmarinePipelineStopperFailure, T0Chopper, TreeLikeFaultTree}
 
 import java.io.File
 
@@ -19,6 +19,7 @@ object Generate {
         LeakageFailure,
         AssessingTheRisks1,
         PCBA,
+        HSC,
 
         ChlorineRelease,
         T0Chopper,
