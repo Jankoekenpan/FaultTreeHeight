@@ -6,6 +6,7 @@ import guru.nidi.graphviz.parse.Parser
 import java.io.File
 import scala.collection.immutable.IntMap
 import scala.collection.mutable
+import scala.io.Source
 
 /*
 Explanation from Matthias regarding edges in the BDD:
@@ -51,21 +52,17 @@ object BDD {
             1 + pk * height(trueBranch, probabilities) + (1 - pk) * height(falseBranch, probabilities)
     }
 
-    def bddProbabilities(faultTree: faulttree.FaultTree): IntMap[Double] = {
-        // Note: events are numbered by the order of basic events in the .dft file which we fed to storm-dft.
-        // So we have to use the same ordering for our BDD probabilities.
-        ???
-    }
-
-    def bddProbabilities(faultTree: minimalcutpathset.FaultTree): IntMap[Double] = {
-        // idem.
-        // TODO maybe put this calculation in Conversion.scala?
-        ???
-    }
+    def bddProbabilities(dftNodes: Seq[dft.DFTNode]): IntMap[Double] =
+        IntMap.from(dftNodes.collect {
+            case dft.DFTNode.BasicEvent(_, probability) => probability
+        }.zipWithIndex.map { case (prob, idx) => (idx, prob) })
 
     def main(args: Array[String]): Unit = {
         val bdd = readStormSylvanBDDDotFile(new File("generated/bdd/AircraftRunwayExcursionAccidents.dot"))
+        val dftLines = dft.DFT.readDFTFile(Source.fromFile(new File("generated/dft/AircraftRunwayExcursionAccidents.dft")))
+        val probabilities = bddProbabilities(dftLines)
         println(bdd)
+        println(height(bdd, probabilities))
     }
 
     enum EdgeType:
