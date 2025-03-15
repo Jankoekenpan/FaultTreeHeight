@@ -85,7 +85,7 @@ object RealLife {
             //LiquidStorageTank,    //TODO remove
             LiquidStorageTankFromDFT,
             LossContainerAtPort,
-            HSC, //TODO re-add this.   // TODO seems to take a very long time for Algorithm 4 (cut sets) (TODO possibly also the random BDT one..)
+            //HSC, //TODO re-add this.   // TODO seems to take a very long time for Algorithm 4 (cut sets) (TODO possibly also the random BDT one..)
             SubmarinePipelineStopperFailure,
             BHNGPipeline,
             //BayesianNetwork, TODO re-add this.    // TODO don't use cut set algorithm for this one (because there are 2 billion cut sets) path set algorithm might be possible, but will still be slow
@@ -147,12 +147,12 @@ object RealLife {
             val time_pathset_ns = time_end_pathset - time_begin_pathset
             println(s"PathSet results: height=${heightPathSet}, time=${time_pathset_ns} (ns)")
 
-//            println(s"Calculate height of ${treeLikeFT.name} using CutSet algorithm...")
-//            val time_begin_cutset = System.nanoTime()
-//            val heightCutSet = minimalcutpathset.algorithm4(minimalCutSets, probabilities)._2
-//            val time_end_cutset = System.nanoTime()
-//            val time_cutset_ns = time_end_cutset - time_begin_cutset
-//            println(s"CutSet results: height=${heightCutSet}, time=${time_cutset_ns} (ns)")
+            println(s"Calculate height of ${treeLikeFT.name} using CutSet algorithm...")
+            val time_begin_cutset = System.nanoTime()
+            val heightCutSet = minimalcutpathset.algorithm4(minimalCutSets, probabilities)._2
+            val time_end_cutset = System.nanoTime()
+            val time_cutset_ns = time_end_cutset - time_begin_cutset
+            println(s"CutSet results: height=${heightCutSet}, time=${time_cutset_ns} (ns)")
 
             println(s"Calculate height of ${treeLikeFT.name} using BDD algorithm...")
             val time_begin_bdd = System.nanoTime()
@@ -173,8 +173,8 @@ object RealLife {
                 treeName = treeLikeFT.name,
                 heightRecursive = heightRecursive2,
                 timeRecursive = time_recursive2_ns,
-                heightCutSet = 0,//heightCutSet,
-                timeCutSet = 0,//time_cutset_ns,
+                heightCutSet = heightCutSet,
+                timeCutSet = time_cutset_ns,
                 heightPathSet = heightPathSet,
                 timePathSet = time_pathset_ns,
                 heightBDD = heightBDD
