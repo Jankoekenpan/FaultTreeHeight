@@ -1,5 +1,6 @@
 package reallife // or is this just fantasy?
 
+import bdd.BDD
 import benchmark.Conversion
 import decisiontree.{BooleanFormula, RandomBDTs}
 import dft.{DFT, DFTNode}
@@ -84,7 +85,7 @@ object RealLife {
             //LiquidStorageTank,    //TODO remove
             LiquidStorageTankFromDFT,
             LossContainerAtPort,
-            //HSC, //TODO re-add this.   // TODO seems to take a very long time for Algorithm 4 (cut sets) (TODO possibly also the random BDT one..)
+            HSC, //TODO re-add this.   // TODO seems to take a very long time for Algorithm 4 (cut sets) (TODO possibly also the random BDT one..)
             SubmarinePipelineStopperFailure,
             BHNGPipeline,
             //BayesianNetwork, TODO re-add this.    // TODO don't use cut set algorithm for this one (because there are 2 billion cut sets) path set algorithm might be possible, but will still be slow
@@ -114,10 +115,13 @@ object RealLife {
         CSVOutput.printTreeLikeHeader(csvOuputTree)
 
         for (treeLikeFT <- treelikeFaultTrees) {
+            println(s"Processing tree-like fault tree ${treeLikeFT.name}")
             val treeFT = treeLikeFT.FT
             val (dagFT, probabilities) = Conversion.translateToDagTree(treeFT)
             val basicEvents = minimalcutpathset.getBasicEvents(dagFT)
             val (booleanFormula, _) = Conversion.translateToBooleanFormula(treeFT)
+            val bdd = BDD.readStormSylvanBDDDotFile(new File(s"generated/bdd/${treeLikeFT.name}.dot"))
+            val bddProbabilities = BDD.bddProbabilities(DFT.readDFTFile(Source.fromFile(new File(s"generated/dft/${treeLikeFT.name}.dft"))))
 
             println("Flattening tree for recursive algorithm...")
             val flattenedTree = faulttree.flatten(treeFT)
@@ -143,12 +147,12 @@ object RealLife {
             val time_pathset_ns = time_end_pathset - time_begin_pathset
             println(s"PathSet results: height=${heightPathSet}, time=${time_pathset_ns} (ns)")
 
-            println(s"Calculate height of ${treeLikeFT.name} using CutSet algorithm...")
-            val time_begin_cutset = System.nanoTime()
-            val heightCutSet = minimalcutpathset.algorithm4(minimalCutSets, probabilities)._2
-            val time_end_cutset = System.nanoTime()
-            val time_cutset_ns = time_end_cutset - time_begin_cutset
-            println(s"CutSet results: height=${heightCutSet}, time=${time_cutset_ns} (ns)")
+//            println(s"Calculate height of ${treeLikeFT.name} using CutSet algorithm...")
+//            val time_begin_cutset = System.nanoTime()
+//            val heightCutSet = minimalcutpathset.algorithm4(minimalCutSets, probabilities)._2
+//            val time_end_cutset = System.nanoTime()
+//            val time_cutset_ns = time_end_cutset - time_begin_cutset
+//            println(s"CutSet results: height=${heightCutSet}, time=${time_cutset_ns} (ns)")
 
             println(s"Calculate height of ${treeLikeFT.name} using Random BDT algorithm...")
             val time_begin_randombdt = System.nanoTime()
@@ -156,6 +160,13 @@ object RealLife {
             val time_end_randombdt = System.nanoTime()
             val time_randombdt_ns = time_end_randombdt - time_begin_randombdt
             println(s"RandomBDT results: height=${heightRandomBDT}, time=${time_randombdt_ns} (ns)")
+
+            println(s"Calculate height of ${treeLikeFT.name} using BDD algorithm...")
+            val time_begin_bdd = System.nanoTime()
+            val heightBDD = BDD.height(bdd, bddProbabilities)
+            val time_end_bdd = System.nanoTime()
+            val time_bdd_ns = time_end_bdd - time_begin_bdd
+            println(s"BDD results: height=${heightBDD}, time=${time_bdd_ns} (ns)")
 
             println("Finished calculating heights!")
             println()
@@ -169,12 +180,11 @@ object RealLife {
                 treeName = treeLikeFT.name,
                 heightRecursive = heightRecursive2,
                 timeRecursive = time_recursive2_ns,
-                heightCutSet = heightCutSet,
-                timeCutSet = time_cutset_ns,
+                heightCutSet = 0,//heightCutSet,
+                timeCutSet = 0,//time_cutset_ns,
                 heightPathSet = heightPathSet,
                 timePathSet = time_pathset_ns,
-                heightRandomBDT = heightRandomBDT,
-                timeRandomBDT = time_randombdt_ns
+                heightBDD = heightBDD
             )
         }
 
@@ -182,9 +192,12 @@ object RealLife {
         CSVOutput.printDagLikeHeader(csvOutputDag)
 
         for (dagLikeFT <- daglikeFaultTrees) {
+            println(s"Processing dag-like fault tree ${dagLikeFT.name}")
             val dagFT = dagLikeFT.FT
             val basicEvents = minimalcutpathset.getBasicEvents(dagFT)
             val (booleanFormula, probabilities) = Conversion.translateToBooleanFormula(dagFT)
+            val bdd = BDD.readStormSylvanBDDDotFile(new File(s"generated/bdd/${dagLikeFT.name}.dot"))
+            val bddProbabilities = BDD.bddProbabilities(DFT.readDFTFile(Source.fromFile(new File(s"generated/dft/${dagLikeFT.name}.dft"))))
 
             println("Flattening tree for recursive algorithm")
             val flattenedDag = minimalcutpathset.flatten(dagFT)
@@ -209,6 +222,10 @@ object RealLife {
             val time_begin_randombdt = System.nanoTime()
             val heightRandomBDT = decisiontree.RandomBDTs.algorithm13(booleanFormula, probabilities)
             val time_end_randombdt = System.nanoTime()
+            println(s"Calculate ehight of ${dagLikeFT.name} using BDD algorithm...")
+            val time_begin_bdd = System.nanoTime()
+            val heightBDD = BDD.height(bdd, bddProbabilities)
+            val time_end_bdd = System.nanoTime()
             println("Finished calculating heights!")
             println()
 
@@ -216,6 +233,7 @@ object RealLife {
             val time_cutset_ns = time_end_cutset - time_begin_cutset
             val time_pathset_ns = time_end_pathset - time_begin_pathset
             val time_randombdt_ns = time_end_randombdt - time_begin_randombdt
+            val time_bdd_ns = time_end_bdd - time_begin_bdd
 
             CSVOutput.printData(
                 file = csvOutputDag,
@@ -229,8 +247,7 @@ object RealLife {
                 timeCutSet = time_cutset_ns,
                 heightPathSet = heightPathSet,
                 timePathSet = time_pathset_ns,
-                heightRandomBDT = heightRandomBDT,
-                timeRandomBDT = time_randombdt_ns
+                heightBDD = heightBDD
             )
         }
     }
@@ -348,17 +365,17 @@ object CSVOutput {
     }
 
     def printTreeLikeHeader(file: Path): Unit = {
-        val line = "Fault Tree,# Basic events,# Minimal cut sets,# Minimal path sets,Recursive algorithm 2 height,time (ns),Cut set algorithm height,time (ns),Path set algorithm height,time (ns),Random binary decision tree algorithm height,time (ns)\r\n"
+        val line = "Fault Tree,# Basic events,# Minimal cut sets,# Minimal path sets,Recursive algorithm 2 height,time (ns),Cut set algorithm height,time (ns),Path set algorithm height,time (ns),BDD algorithm height\r\n"
         writeString(file, line)
     }
 
     def printDagLikeHeader(file: Path): Unit = {
-        val line = "Fault Tree,# Basic events,# Minimal cut sets,# Minimal path sets,Recursive algorithm 3 height,time (ns),Cut set algorithm height,time (ns),Path set algorithm height,time (ns),Random binary decision tree algorithm height,time (ns)\r\n"
+        val line = "Fault Tree,# Basic events,# Minimal cut sets,# Minimal path sets,Recursive algorithm 3 height,time (ns),Cut set algorithm height,time (ns),Path set algorithm height,time (ns),BDD algorithm height\r\n"
         writeString(file, line)
     }
 
-    def printData(file: Path, basicEvents: Int, minimalCutSets: Int, minimalPathSets: Int, treeName: String, heightRecursive: Double, timeRecursive: Long, heightCutSet: Double, timeCutSet: Long, heightPathSet: Double, timePathSet: Long, heightRandomBDT: Double, timeRandomBDT: Long): Unit = {
-        val line = s""""${treeName}","${basicEvents}","${minimalCutSets}","${minimalPathSets}","${heightRecursive}","${timeRecursive}","${heightCutSet}","${timeCutSet}","${heightPathSet}","${timePathSet}","${heightRandomBDT}","${timeRandomBDT}"\r\n"""
+    def printData(file: Path, basicEvents: Int, minimalCutSets: Int, minimalPathSets: Int, treeName: String, heightRecursive: Double, timeRecursive: Long, heightCutSet: Double, timeCutSet: Long, heightPathSet: Double, timePathSet: Long, heightBDD: Double): Unit = {
+        val line = s""""${treeName}","${basicEvents}","${minimalCutSets}","${minimalPathSets}","${heightRecursive}","${timeRecursive}","${heightCutSet}","${timeCutSet}","${heightPathSet}","${timePathSet}","${heightBDD}"\r\n"""
         writeString(file, line)
     }
 

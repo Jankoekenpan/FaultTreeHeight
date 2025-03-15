@@ -85,7 +85,7 @@ object BDD {
 
         val nodesByName = graph.nodes().asScala.map(node => node.name().toString -> node).toMap
 
-        val topNode = graph.nodes().stream().filter(node => "0".equals(node.attrs().get("label").toString)).findFirst().get()
+        val topNode = graph.nodes().stream().filter(node => "0".equals(String.valueOf(node.attrs().get("label")))).findFirst().get()
 
         getBDDNode(topNode, new mutable.HashMap[String, BDD](), nodesByName)
     }
