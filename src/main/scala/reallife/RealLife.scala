@@ -154,13 +154,6 @@ object RealLife {
 //            val time_cutset_ns = time_end_cutset - time_begin_cutset
 //            println(s"CutSet results: height=${heightCutSet}, time=${time_cutset_ns} (ns)")
 
-            println(s"Calculate height of ${treeLikeFT.name} using Random BDT algorithm...")
-            val time_begin_randombdt = System.nanoTime()
-            val heightRandomBDT = decisiontree.RandomBDTs.algorithm13(booleanFormula, probabilities)
-            val time_end_randombdt = System.nanoTime()
-            val time_randombdt_ns = time_end_randombdt - time_begin_randombdt
-            println(s"RandomBDT results: height=${heightRandomBDT}, time=${time_randombdt_ns} (ns)")
-
             println(s"Calculate height of ${treeLikeFT.name} using BDD algorithm...")
             val time_begin_bdd = System.nanoTime()
             val heightBDD = BDD.height(bdd, bddProbabilities)
@@ -218,10 +211,6 @@ object RealLife {
             val time_begin_pathset = System.nanoTime()
             val heightPathSet = minimalcutpathset.algorithm5(minimalPathSets, probabilities)._2
             val time_end_pathset = System.nanoTime()
-            println(s"Calculate height of ${dagLikeFT.name} using Random BDT algorithm...")
-            val time_begin_randombdt = System.nanoTime()
-            val heightRandomBDT = decisiontree.RandomBDTs.algorithm13(booleanFormula, probabilities)
-            val time_end_randombdt = System.nanoTime()
             println(s"Calculate ehight of ${dagLikeFT.name} using BDD algorithm...")
             val time_begin_bdd = System.nanoTime()
             val heightBDD = BDD.height(bdd, bddProbabilities)
@@ -232,7 +221,6 @@ object RealLife {
             val time_recursive3_ns = time_end_recursive - time_begin_recursive
             val time_cutset_ns = time_end_cutset - time_begin_cutset
             val time_pathset_ns = time_end_pathset - time_begin_pathset
-            val time_randombdt_ns = time_end_randombdt - time_begin_randombdt
             val time_bdd_ns = time_end_bdd - time_begin_bdd
 
             CSVOutput.printData(
