@@ -42,11 +42,15 @@ object TreesInPaper {
 object FT1_AssessingTheRisks2 extends TreeLikeFaultTree {
     import faulttree.FaultTree
 
+    override def name = "AssessingtheRisks2(FT1)"
+
     val FT: FaultTree = DFT.readTreeLikeFaultTree(Source.fromFile("handcreated/AssessingtheRisks2(FT1).dft"))
 }
 
 object FT2_T0Chopper extends DagLikeFaultTree {
     import minimalcutpathset.FaultTree
+
+    override def name = "T0 Chopper(FT2)"
 
     val FT: FaultTree = DFT.readDagLikeFaultTree(Source.fromFile("handcreated/T0 Chopper(FT2).dft"))
 }
@@ -54,11 +58,15 @@ object FT2_T0Chopper extends DagLikeFaultTree {
 object FT3_ATC extends TreeLikeFaultTree {
     import faulttree.FaultTree
 
+    override def name = "ATC(FT3)";
+
     val FT: FaultTree = DFT.readTreeLikeFaultTree(Source.fromFile("handcreated/ATC(FT3).dft"))
 }
 
 object FT4_Aircraft extends TreeLikeFaultTree {
     import faulttree.FaultTree
+
+    override def name = "Aircraft(FT4)"
 
     val FT: FaultTree = DFT.readTreeLikeFaultTree(Source.fromFile("handcreated/Aircraft(FT4).dft"))
 }
@@ -66,11 +74,15 @@ object FT4_Aircraft extends TreeLikeFaultTree {
 object FT5_LiquidStorageTank extends TreeLikeFaultTree {
     import faulttree.FaultTree
 
+    override def name = "LiquidStorageTank(FT5)"
+
     val FT: FaultTree = DFT.readTreeLikeFaultTree(Source.fromFile("handcreated/LiquidStorageTank(FT5).dft"))
 }
 
 object FT6_LeakageFailure extends TreeLikeFaultTree {
     import faulttree.FaultTree
+
+    override def name = "Leakagefailure(FT6)"
 
     val FT: FaultTree = DFT.readTreeLikeFaultTree(Source.fromFile("handcreated/Leakagefailure(FT6).dft"))
 }
@@ -78,11 +90,15 @@ object FT6_LeakageFailure extends TreeLikeFaultTree {
 object FT7_AssessingTheRisks1 extends TreeLikeFaultTree {
     import faulttree.FaultTree
 
+    override def name = "AssessingtheRisks1(FT7)"
+
     val FT: FaultTree = DFT.readTreeLikeFaultTree(Source.fromFile("handcreated/AssessingtheRisks1(FT7).dft"))
 }
 
 object FT8_ChlorineRelease extends DagLikeFaultTree {
     import minimalcutpathset.FaultTree
+
+    override def name = "Chlorine_release(FT8)"
 
     val FT: FaultTree = DFT.readDagLikeFaultTree(Source.fromFile("handcreated/Chlorine_release(FT8).dft"))
 }
@@ -90,11 +106,15 @@ object FT8_ChlorineRelease extends DagLikeFaultTree {
 object FT9_LossContainerPort extends TreeLikeFaultTree {
     import faulttree.FaultTree
 
+    override def name = "loss_container_port(FT9)"
+
     val FT: FaultTree = DFT.readTreeLikeFaultTree(Source.fromFile("handcreated/loss_container_port(FT9).dft"))
 }
 
 object FT10_Stopper extends TreeLikeFaultTree {
     import faulttree.FaultTree
+
+    override def name = "stopper (FT10)"
 
     val FT: FaultTree = DFT.readTreeLikeFaultTree(Source.fromFile("handcreated/stopper (FT10).dft"))
 }
@@ -102,11 +122,15 @@ object FT10_Stopper extends TreeLikeFaultTree {
 object FT11_PCBA extends TreeLikeFaultTree {
     import faulttree.FaultTree
 
+    override def name = "PCBA(FT11)"
+
     val FT: FaultTree = DFT.readTreeLikeFaultTree(Source.fromFile("handcreated/PCBA(FT11).dft"))
 }
 
 object FT12_OGPF extends DagLikeFaultTree {
     import minimalcutpathset.FaultTree
+
+    override def name = "ogpf(FT12)"
 
     val FT: FaultTree = DFT.readDagLikeFaultTree(Source.fromFile("handcreated/ogpf(FT12).dft"))
 }
@@ -114,11 +138,15 @@ object FT12_OGPF extends DagLikeFaultTree {
 object FT13_BHNGPipeline extends TreeLikeFaultTree {
     import faulttree.FaultTree
 
+    override def name = "BHNGPipeline(FT13)"
+
     val FT: FaultTree = DFT.readTreeLikeFaultTree(Source.fromFile("handcreated/BHNGPipeline(FT13).dft"))
 }
 
 object FT14_HSC extends TreeLikeFaultTree {
     import faulttree.FaultTree
+
+    override def name = "HSC(FT14)"
 
     val FT: FaultTree = DFT.readTreeLikeFaultTree(Source.fromFile("handcreated/HSC(FT14).dft"))
 }
