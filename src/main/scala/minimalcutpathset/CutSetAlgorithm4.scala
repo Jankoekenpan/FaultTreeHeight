@@ -19,6 +19,7 @@ def height4(faultTree: FaultTree, basicEvents: Set[Event], probabilities: IntMap
     height
 }
 
+// paper: 'mince'.
 def algorithm4(cutSets: CutSets, basicEvents: IntMap[Probability]): (Etas, Double) = {
     val n = basicEvents.size
     val Cnil = cutSets

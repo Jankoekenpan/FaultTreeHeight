@@ -19,6 +19,7 @@ def height5(faultTree: FaultTree, basicEvents: Set[Event], probabilities: IntMap
     height
 }
 
+// paper: 'pase'.
 def algorithm5(pathSets: PathSets, basicEvents: IntMap[Probability]): (Etas, Double) = {
     val n = basicEvents.size
     val Pnil = pathSets

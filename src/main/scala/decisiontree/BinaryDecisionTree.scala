@@ -88,6 +88,7 @@ def replaceViaPath(top: BinaryDecisionTree, path: Path[Event], replacement: Bina
             case Path.ConsRight(_, tail) => BinaryDecisionTree.NonLeaf(id, left, replaceViaPath(right, tail, replacement))
 }
 
+@java.lang.Deprecated // unused
 def replaceAfterPathLeft(top: BinaryDecisionTree, path: Path[Event], replacement: BinaryDecisionTree): BinaryDecisionTree = top match {
     case BinaryDecisionTree.Zero | BinaryDecisionTree.One => replacement
     case BinaryDecisionTree.NonLeaf(id, left, right) =>
@@ -100,6 +101,7 @@ def replaceAfterPathLeft(top: BinaryDecisionTree, path: Path[Event], replacement
             case Path.ConsRight(_, tail) => BinaryDecisionTree.NonLeaf(id, left, replaceAfterPathLeft(right, tail, replacement))
 }
 
+@java.lang.Deprecated // unused
 def replaceAfterPathRight(top: BinaryDecisionTree, path: Path[Event], replacement: BinaryDecisionTree): BinaryDecisionTree = top match {
     case BinaryDecisionTree.Zero | BinaryDecisionTree.One => replacement
     case BinaryDecisionTree.NonLeaf(id, left, right) =>
@@ -289,6 +291,7 @@ def algorithm8(faultTree: FaultTree): (BinaryDecisionTree, Height) =
     import minimalcutpathset.getProbabilities
     algorithm8(faultTree, getProbabilities(faultTree)())
 
+// paper: 'remind' (for dag-like fault trees).
 def algorithm8(faultTree: FaultTree, basicEvents: BasicEvents): (BinaryDecisionTree, Height) =
     algorithm8(faultTree, basicEvents, layers(faultTree))
 

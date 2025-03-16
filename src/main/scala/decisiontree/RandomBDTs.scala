@@ -18,7 +18,7 @@ object RandomBDTs {
         seq(random.nextInt(seq.size))
     }
 
-    @java.lang.Deprecated // no longer used in paper.
+    @java.lang.Deprecated // 'ranger' algorithm no longer in paper.
     def height(events: Set[Event], formula: BooleanFormula, probabilities: IntMap[Probability])(using random: RandomGenerator): (Double, BinaryDecisionTree) = formula match {
         case True => (0D, BinaryDecisionTree.One)
         case False => (0D, BinaryDecisionTree.Zero)

@@ -2,6 +2,7 @@ package faulttree
 
 import scala.collection.mutable
 
+// paper: 'remind' (for tree-like fault trees).
 def height7(tree: FaultTree): Real = {
     height7(tree, layers(tree))
 }
