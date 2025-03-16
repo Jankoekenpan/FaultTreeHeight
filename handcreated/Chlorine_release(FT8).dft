@@ -5,7 +5,7 @@ toplevel "Chlorine_Release";
 "Release_of_chlorine_from_the_vessel" or "B10" "Leak_repture_due_to_over_pressure" "B6" "B25";
 "Release_of_chlorine_from_the_filling_point" or "B21" "B22" "B23" "B20" "B24";
 "Leak_between_tanks_and_A-A" or "Pipe_Rupture" "Flange_leak_in_Valve_V2";
-"Pipe_Rupture" or "B1" "B2"
+"Pipe_Rupture" or "B1" "B2";
 "Flange_leak_in_Valve_V2" or "B4" "B5";
 "Leak_between_A-A_and_B-B" or "Flange_leak_Valve_V21" "Pipe_Rupture";
 "Flange_leak_Valve_V21" or "B4" "B5";

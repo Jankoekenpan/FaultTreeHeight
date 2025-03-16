@@ -1,5 +1,5 @@
 toplevel "T";
-"T" or "M1" "M2" "M3" "M4" "M5" "M6"  "M7";
+"T" or "M1" "M2" "M3" "M4" "M5" "M6" "M7";
 "M1" or "X1" "X2" "X3" "X4";
 "M2" or "X5" "X6";
 "M3" or "X7" "X8" "X6";
