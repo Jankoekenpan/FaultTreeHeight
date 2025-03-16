@@ -21,7 +21,6 @@ object Printing {
         case DFTNode.BasicEvent(id, probability) => s""""${id}" prob=${probability};"""
     }
 
-
 }
 
 object Parsing {

@@ -278,6 +278,7 @@ object EnumerationAlgorithm {
     }
 }
 
+@java.lang.Deprecated // 'ranger' algorithm is removed from the paper.
 object RangerAlgorithm {
     given random: java.util.random.RandomGenerator = new java.util.Random()
 
@@ -640,7 +641,7 @@ object ChlorineRelease extends DagLikeFaultTree {
         HumanError -> Combination(HumanError, Or, Set(B16, B17, B18, B19)),
     ))
 
-    def exp(scalar: Double, exponent: Double) =
+    def exp(scalar: Double, exponent: Double): Double =
         scalar * Math.pow(10, exponent)
 }
 
