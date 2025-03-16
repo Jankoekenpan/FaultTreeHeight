@@ -309,10 +309,6 @@ class RealWorldFaultTreesBenchmark {
     def timeMainTrackTrainCollisionsLeadingToFatalitiesAndInjuries_pase(): Double =
         minimalcutpathset.algorithm5(mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_pathsets, mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_probabilities)._2
 
-    @Benchmark
-    def timeMainTrackTrainCollisionsLeadingToFatalitiesAndInjuries_ranger() =
-        decisiontree.RandomBDTs.height(mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_basicevents, mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_formula, mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_probabilities)._1
-
     // T0Chopper
 
     @Benchmark
@@ -326,10 +322,6 @@ class RealWorldFaultTreesBenchmark {
     @Benchmark
     def timeT0Chopper_pase(): Double =
         minimalcutpathset.algorithm5(t0Chopper_pathsets, t0Chopper_probabilities)._2
-
-    @Benchmark
-    def timeT0Chopper_ranger(): Double =
-        decisiontree.RandomBDTs.height(t0Chopper_basicevents, t0Chopper_formula, t0Chopper_probabilities)._1
 
     // ATCFailsToResolveTheConflict
 
@@ -345,10 +337,6 @@ class RealWorldFaultTreesBenchmark {
     def timeATCFailsToResolveTheConflict_pase(): Double =
         minimalcutpathset.algorithm5(atcFailsToResolveTheConflict_pathsets, atcFailsToResolveTheConflict_probabilities)._2
 
-    @Benchmark
-    def timeATCFailsToResolveTheConflict_ranger(): Double =
-        decisiontree.RandomBDTs.height(atcFailsToResolveTheConflict_basicevents, atcFailsToResolveTheConflict_formula, atcFailsToResolveTheConflict_probabilities)._1
-
     // AircraftRunwayExcursionAccidents
 
     @Benchmark
@@ -362,10 +350,6 @@ class RealWorldFaultTreesBenchmark {
     @Benchmark
     def timeAircraftRunwayExcursionAccidents_pase(): Double =
         minimalcutpathset.algorithm5(aircraftRunwayExcursionAccidents_pathsets, aircraftRunwayExcursionAccidents_probabilities)._2
-
-    @Benchmark
-    def timeAircraftRunwayExcursionAccidents_ranger(): Double =
-        decisiontree.RandomBDTs.height(aircraftRunwayExcursionAccidents_basicevents, aircraftRunwayExcursionAccidents_formula, aircraftRunwayExcursionAccidents_probabilities)._1
 
     // LiquidStorageTank
 
@@ -381,10 +365,6 @@ class RealWorldFaultTreesBenchmark {
     def timeLiquidStorageTank_pase(): Double =
         minimalcutpathset.algorithm5(liquidStorageTank_pathsets, liquidStorageTank_probabilities)._2
 
-    @Benchmark
-    def timeLiquidStorageTank_ranger(): Double =
-        decisiontree.RandomBDTs.height(liquidStorageTank_basicevents, liquidStorageTank_formula, liquidStorageTank_probabilities)._1
-
     // LeakageFailure
 
     @Benchmark
@@ -398,10 +378,6 @@ class RealWorldFaultTreesBenchmark {
     @Benchmark
     def timeLeakageFailure_pase(): Double =
         minimalcutpathset.algorithm5(leakageFailure_pathsets, leakageFailure_probabilities)._2
-
-    @Benchmark
-    def timeLeakageFailure_ranger(): Double =
-        decisiontree.RandomBDTs.height(leakageFailure_basicevents, leakageFailure_formula, leakageFailure_probabilities)._1
 
     // AssessingTheRisks1
 
@@ -417,10 +393,6 @@ class RealWorldFaultTreesBenchmark {
     def timeAssessingTheRisks1_pase(): Double =
         minimalcutpathset.algorithm5(assessingTheRisks1_pathsets, assessingTheRisks1_probabilities)._2
 
-    @Benchmark
-    def timeAssessingTheRisks1_ranger(): Double =
-        decisiontree.RandomBDTs.height(assessingTheRisks1_basicevents, assessingTheRisks1_formula, assessingTheRisks1_probabilities)._1
-
     // ChlorineRelease
 
     @Benchmark
@@ -434,10 +406,6 @@ class RealWorldFaultTreesBenchmark {
     @Benchmark
     def timeChlorineRelease_pase(): Double =
         minimalcutpathset.algorithm5(chlorineRelease_pathsets, chlorineRelease_probabilities)._2
-
-    @Benchmark
-    def timeChlorineRelease_ranger(): Double =
-        decisiontree.RandomBDTs.height(chlorineRelease_basicevents, chlorineRelease_formula, chlorineRelease_probabilities)._1
 
     // LossContainerAtPort
 
@@ -453,10 +421,6 @@ class RealWorldFaultTreesBenchmark {
     def timeLossContainerAtPort_pase(): Double =
         minimalcutpathset.algorithm5(lossContainerAtPort_pathsets, lossContainerAtPort_probabilities)._2
 
-    @Benchmark
-    def timeLossContainerAtPort_ranger(): Double =
-        decisiontree.RandomBDTs.height(lossContainerAtPort_basicevents, lossContainerAtPort_formula, lossContainerAtPort_probabilities)._1
-
     // SubmarinePipelineStopperFailure
 
     @Benchmark
@@ -470,10 +434,6 @@ class RealWorldFaultTreesBenchmark {
     @Benchmark
     def timeSubmarinePipelineStopperFailure_pase(): Double =
         minimalcutpathset.algorithm5(submarinePipelineStopperFailure_pathsets, submarinePipelineStopperFailure_probabilities)._2
-
-    @Benchmark
-    def timeSubmarinePipelineStopperFailure_ranger(): Double =
-        decisiontree.RandomBDTs.height(submarinePipelineStopperFailure_basicevents, submarinePipelineStopperFailure_formula, submarinePipelineStopperFailure_probabilities)._1
 
     // PCBA
 
@@ -489,10 +449,6 @@ class RealWorldFaultTreesBenchmark {
     def timePCBA_pase(): Double =
         minimalcutpathset.algorithm5(pcba_pathsets, pcba_probabilities)._2
 
-    @Benchmark
-    def timePCBA_ranger(): Double =
-        decisiontree.RandomBDTs.height(pcba_basicevents, pcba_formula, pcba_probabilities)._1
-
     // OGPF
 
     @Benchmark
@@ -507,10 +463,6 @@ class RealWorldFaultTreesBenchmark {
     def timeOGPF_pase(): Double =
         minimalcutpathset.algorithm5(ogpf_pathsets, ogpf_probabilities)._2
 
-    @Benchmark
-    def timeOGPF_ranger(): Double =
-        decisiontree.RandomBDTs.height(ogpf_basicevents, ogpf_formula, ogpf_probabilities)._1
-
     // BHNGPipeline
 
     @Benchmark
@@ -524,10 +476,6 @@ class RealWorldFaultTreesBenchmark {
     @Benchmark
     def timeBHNGPipeline_pase(): Double =
         minimalcutpathset.algorithm5(bhngPipeline_pathsets, bhngPipeline_probabilities)._2
-
-    @Benchmark
-    def timeBHNGPipeline_ranger(): Double =
-        decisiontree.RandomBDTs.height(bhngPipeline_basicevents, bhngPipeline_formula, bhngPipeline_probabilities)._1
 
     // HSC
 
