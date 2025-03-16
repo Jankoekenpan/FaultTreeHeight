@@ -52,6 +52,8 @@ object BDD {
             1 + pk * height(trueBranch, probabilities) + (1 - pk) * height(falseBranch, probabilities)
     }
 
+    // Storm's BDD node ordering is the same as the order in which basic events occur in the .dft file
+    // So we can just grab the index of the basic event and treat it as its node id.
     def bddProbabilities(dftNodes: Seq[dft.DFTNode]): IntMap[Double] =
         IntMap.from(dftNodes.collect {
             case dft.DFTNode.BasicEvent(_, probability) => probability

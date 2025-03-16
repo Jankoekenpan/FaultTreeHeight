@@ -7,6 +7,7 @@ toplevel "ATC_does_not_resolve_the_conflict";
 "7" and "21" "22";
 "8" and "23" "24";
 "9" or "25" "26";
+"3" prob=4.31e-03;
 "10" prob=1.29e-01;
 "11" prob=1.29e-01;
 "12" prob=1.29e-01;
