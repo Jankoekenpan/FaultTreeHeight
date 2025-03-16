@@ -20,7 +20,7 @@ Depending on your IDE/Editor setup, you should also install SBT itself.
 - Benchmark.scala: contains a [JMH](https://openjdk.org/projects/code-tools/jmh/) benchmark for comparing the running times of all algorithms mentioned in the Paper.
 - Conversion.scala: code which converts between Tree-Like FaultTree, Dag-Like FaultTree and BooleanFormula representations of fault trees.
 - RealLife.scala: calculates height approximations for some real-world fault trees.
-- DFT.scala: simple parser .dft files.
+- DFT.scala: simple parser and printer for .dft files.
 
 ## Running the benchmarks
 
@@ -32,9 +32,7 @@ Linux example: `export JAVA_HOME=/opt/jdk23`
 
 Execute `sbt jmh:run` from a terminal.
 <br>
-Note that this operation can take up to 8 hours.
-
-<!--- TODO do we want to keep RandomTrees and RandomDags? -->
+Note that this operation can take up to 6 hours.
 
 ## Random trees
 

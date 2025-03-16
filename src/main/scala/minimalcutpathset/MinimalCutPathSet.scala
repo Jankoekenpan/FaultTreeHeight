@@ -52,7 +52,7 @@ def flatten(faultTree: FaultTree): FaultTree = {
                         case TreeNode.Combination(_, Gate.Or, grandChildren) =>
                             newOrChildren = newOrChildren - orChild ++ grandChildren
                             intermediateEventsWhichMightBeRemoved.addOne(orChild)
-                        case _ => // basic event or and node, no substitutions
+                        case _ => // basic event or and-node, no substitutions
                     end match
                 end for
                 val replacementNode = TreeNode.Combination(orId, Gate.Or, newOrChildren)
@@ -69,7 +69,7 @@ def flatten(faultTree: FaultTree): FaultTree = {
                         case TreeNode.Combination(_, Gate.And, grandChildren) =>
                             newAndChildren = newAndChildren - andChild ++ grandChildren
                             intermediateEventsWhichMightBeRemoved.addOne(andChild)
-                        case _ => // basic event or or node, no substitutions
+                        case _ => // basic event or or-node, no substitutions
                     end match
                 end for
                 val replacementNode = TreeNode.Combination(andId, Gate.And, newAndChildren)

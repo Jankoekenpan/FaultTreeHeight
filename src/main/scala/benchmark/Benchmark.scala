@@ -11,8 +11,6 @@ import scala.compiletime.uninitialized
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 class RealWorldFaultTreesBenchmark {
 
-    private given randomGenerator: java.util.random.RandomGenerator = new java.util.Random()
-
     // Tree-like FaultTrees:
 
     private var aircraftRunwayExcursionAccidents_formula: decisiontree.BooleanFormula = uninitialized
@@ -116,7 +114,7 @@ class RealWorldFaultTreesBenchmark {
     @Setup
     def setup(): Unit = {
         {
-            val aircraftRunwayExcursionAccidents_FT = reallife.AircraftRunwayExcursionAccidents.FT
+            val aircraftRunwayExcursionAccidents_FT = reallife.FT4_Aircraft.FT
             val (booleanFormula, probabilities) = Conversion.translateToBooleanFormula(aircraftRunwayExcursionAccidents_FT)
             aircraftRunwayExcursionAccidents_formula = booleanFormula
             aircraftRunwayExcursionAccidents_probabilities = probabilities
@@ -129,7 +127,7 @@ class RealWorldFaultTreesBenchmark {
         }
 
         {
-            mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_faulttree = reallife.MainTrackTrainCollisionsLeadingToFatalitiesAndInjuries.FT
+            mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_faulttree = reallife.FT1_AssessingTheRisks2.FT
             val (booleanFormula, probabilities) = Conversion.translateToBooleanFormula(mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_faulttree)
             mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_formula = booleanFormula
             mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_probabilities = probabilities
@@ -142,7 +140,7 @@ class RealWorldFaultTreesBenchmark {
         }
 
         {
-            val atcFailsToResolveTheConflict_FT = reallife.ATCFailsToResolveTheConflict.FT
+            val atcFailsToResolveTheConflict_FT = reallife.FT3_ATC.FT
             val (booleanFormula, probabilities) = Conversion.translateToBooleanFormula(atcFailsToResolveTheConflict_FT)
             atcFailsToResolveTheConflict_formula = booleanFormula
             atcFailsToResolveTheConflict_probabilities = probabilities
@@ -155,7 +153,7 @@ class RealWorldFaultTreesBenchmark {
         }
 
         {
-            val liquidStorageTank_FT = reallife.LiquidStorageTankFromDFT.FT
+            val liquidStorageTank_FT = reallife.FT5_LiquidStorageTank.FT
             val (booleanFormula, probabilities) = Conversion.translateToBooleanFormula(liquidStorageTank_FT)
             liquidStorageTank_formula = booleanFormula
             liquidStorageTank_probabilities = probabilities
@@ -168,7 +166,7 @@ class RealWorldFaultTreesBenchmark {
         }
 
         {
-            val lossContainerAtPort_FT = reallife.LossContainerAtPort.FT
+            val lossContainerAtPort_FT = reallife.FT9_LossContainerPort.FT
             val (booleanFormula, probabilities) = Conversion.translateToBooleanFormula(lossContainerAtPort_FT)
             lossContainerAtPort_formula = booleanFormula
             lossContainerAtPort_probabilities = probabilities
@@ -181,7 +179,7 @@ class RealWorldFaultTreesBenchmark {
         }
 
         {
-            val submarinePipelineStopperFailure_FT = reallife.SubmarinePipelineStopperFailure.FT
+            val submarinePipelineStopperFailure_FT = reallife.FT10_Stopper.FT
             val (booleanFormula, probabilities) = Conversion.translateToBooleanFormula(submarinePipelineStopperFailure_FT)
             submarinePipelineStopperFailure_formula = booleanFormula
             submarinePipelineStopperFailure_probabilities = probabilities
@@ -194,7 +192,7 @@ class RealWorldFaultTreesBenchmark {
         }
 
         {
-            val bhngPipeline_FT = reallife.BHNGPipeline.FT
+            val bhngPipeline_FT = reallife.FT13_BHNGPipeline.FT
             val (booleanFormula, probabilities) = Conversion.translateToBooleanFormula(bhngPipeline_FT)
             bhngPipeline_formula = booleanFormula
             bhngPipeline_probabilities = probabilities
@@ -207,7 +205,7 @@ class RealWorldFaultTreesBenchmark {
         }
 
         {
-            val leakageFailure_FT = reallife.LeakageFailure.FT
+            val leakageFailure_FT = reallife.FT6_LeakageFailure.FT
             val (booleanFormula, probabilities) = Conversion.translateToBooleanFormula(leakageFailure_FT)
             leakageFailure_formula = booleanFormula
             leakageFailure_probabilities = probabilities
@@ -220,7 +218,7 @@ class RealWorldFaultTreesBenchmark {
         }
 
         {
-            val assessingTheRisks1_FT = reallife.AssessingTheRisks1.FT
+            val assessingTheRisks1_FT = reallife.FT7_AssessingTheRisks1.FT
             val (booleanFormula, probabilities) = Conversion.translateToBooleanFormula(assessingTheRisks1_FT)
             assessingTheRisks1_formula = booleanFormula
             assessingTheRisks1_probabilities = probabilities
@@ -233,7 +231,7 @@ class RealWorldFaultTreesBenchmark {
         }
 
         {
-            val pcba_FT = reallife.PCBA.FT
+            val pcba_FT = reallife.FT11_PCBA.FT
             val (booleanFormula, probabilities) = Conversion.translateToBooleanFormula(pcba_FT)
             pcba_formula = booleanFormula
             pcba_probabilities = probabilities
@@ -246,7 +244,7 @@ class RealWorldFaultTreesBenchmark {
         }
 
         {
-            val hsc_FT = reallife.HSC.FT
+            val hsc_FT = reallife.FT14_HSC.FT
             val (dagTree, probabilities) = Conversion.translateToDagTree(hsc_FT)
             hsc_flattened = faulttree.flatten(hsc_FT)
             hsc_probabilities = probabilities
@@ -255,7 +253,7 @@ class RealWorldFaultTreesBenchmark {
         }
 
         {
-            val chlorineRelease_FT = reallife.ChlorineRelease.FT
+            val chlorineRelease_FT = reallife.FT8_ChlorineRelease.FT
             val (booleanFormula, probabilities) = Conversion.translateToBooleanFormula(chlorineRelease_FT)
             chlorineRelease_formula = booleanFormula
             chlorineRelease_probabilities = probabilities
@@ -267,7 +265,7 @@ class RealWorldFaultTreesBenchmark {
         }
 
         {
-            val t0Chopper_FT = reallife.T0Chopper.FT
+            val t0Chopper_FT = reallife.FT2_T0Chopper.FT
             val (booleanFormula, probabilities) = Conversion.translateToBooleanFormula(t0Chopper_FT)
             t0Chopper_formula = booleanFormula
             t0Chopper_probabilities = probabilities
@@ -279,7 +277,7 @@ class RealWorldFaultTreesBenchmark {
         }
 
         {
-            val ogpf_FT = reallife.OGPF.FT
+            val ogpf_FT = reallife.FT12_OGPF.FT
             val (booleanFormula, probabilities) = Conversion.translateToBooleanFormula(ogpf_FT)
             ogpf_formula = booleanFormula
             ogpf_probabilities = probabilities
@@ -294,197 +292,197 @@ class RealWorldFaultTreesBenchmark {
     // MainTrackTrainCollisionsLeadingToFatalitiesAndInjuries
 
     @Benchmark
-    def timeMainTrackTrainCollisionsLeadingToFatalitiesAndInjuries_eminent(): Double =
+    def timeFT1_MainTrackTrainCollisionsLeadingToFatalitiesAndInjuries_eminent(): Double =
         decisiontree.height(mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_formula, mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_probabilities)
 
     @Benchmark
-    def timeMainTrackTrainCollisionsLeadingToFatalitiesAndInjuries_remind(): Double =
+    def timeFT1_MainTrackTrainCollisionsLeadingToFatalitiesAndInjuries_remind(): Double =
         faulttree.height7(mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_flattened)
 
     @Benchmark
-    def timeMainTrackTrainCollisionsLeadingToFatalitiesAndInjuries_mince(): Double =
+    def timeFT1_MainTrackTrainCollisionsLeadingToFatalitiesAndInjuries_mince(): Double =
         minimalcutpathset.algorithm4(mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_cutsets, mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_probabilities)._2
 
     @Benchmark
-    def timeMainTrackTrainCollisionsLeadingToFatalitiesAndInjuries_pase(): Double =
+    def timeFT1_MainTrackTrainCollisionsLeadingToFatalitiesAndInjuries_pase(): Double =
         minimalcutpathset.algorithm5(mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_pathsets, mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_probabilities)._2
 
     // T0Chopper
 
     @Benchmark
-    def timeT0Chopper_remind(): Double =
+    def timeFT2_T0Chopper_remind(): Double =
         decisiontree.algorithm8(t0Chopper_flattened, t0Chopper_probabilities)._2
 
     @Benchmark
-    def timeT0Chopper_mince(): Double =
+    def timeFT2_T0Chopper_mince(): Double =
         minimalcutpathset.algorithm4(t0Chopper_cutsets, t0Chopper_probabilities)._2
 
     @Benchmark
-    def timeT0Chopper_pase(): Double =
+    def timeFT2_T0Chopper_pase(): Double =
         minimalcutpathset.algorithm5(t0Chopper_pathsets, t0Chopper_probabilities)._2
 
     // ATCFailsToResolveTheConflict
 
     @Benchmark
-    def timeATCFailsToResolveTheConflict_remind(): Double =
+    def timeFT3_ATCFailsToResolveTheConflict_remind(): Double =
         faulttree.height7(atcFailsToResolveTheConflict_flattened)
 
     @Benchmark
-    def timeATCFailsToResolveTheConflict_mince(): Double =
+    def timeFT3_ATCFailsToResolveTheConflict_mince(): Double =
         minimalcutpathset.algorithm4(atcFailsToResolveTheConflict_cutsets, atcFailsToResolveTheConflict_probabilities)._2
 
     @Benchmark
-    def timeATCFailsToResolveTheConflict_pase(): Double =
+    def timeFT3_ATCFailsToResolveTheConflict_pase(): Double =
         minimalcutpathset.algorithm5(atcFailsToResolveTheConflict_pathsets, atcFailsToResolveTheConflict_probabilities)._2
 
     // AircraftRunwayExcursionAccidents
 
     @Benchmark
-    def timeAircraftRunwayExcursionAccidents_remind(): Double =
+    def timeFT4_AircraftRunwayExcursionAccidents_remind(): Double =
         faulttree.height7(aircraftRunwayExcursionAccidents_flattened)
 
     @Benchmark
-    def timeAircraftRunwayExcursionAccidents_mince(): Double =
+    def timeFT4_AircraftRunwayExcursionAccidents_mince(): Double =
         minimalcutpathset.algorithm4(aircraftRunwayExcursionAccidents_cutsets, aircraftRunwayExcursionAccidents_probabilities)._2
 
     @Benchmark
-    def timeAircraftRunwayExcursionAccidents_pase(): Double =
+    def timeFT4_AircraftRunwayExcursionAccidents_pase(): Double =
         minimalcutpathset.algorithm5(aircraftRunwayExcursionAccidents_pathsets, aircraftRunwayExcursionAccidents_probabilities)._2
 
     // LiquidStorageTank
 
     @Benchmark
-    def timeLiquidStorageTank_remind(): Double =
+    def timeFT5_LiquidStorageTank_remind(): Double =
         faulttree.height7(liquidStorageTank_flattened)
 
     @Benchmark
-    def timeLiquidStorageTank_mince(): Double =
+    def timeFT5_LiquidStorageTank_mince(): Double =
         minimalcutpathset.algorithm4(liquidStorageTank_cutsets, liquidStorageTank_probabilities)._2
 
     @Benchmark
-    def timeLiquidStorageTank_pase(): Double =
+    def timeFT5_LiquidStorageTank_pase(): Double =
         minimalcutpathset.algorithm5(liquidStorageTank_pathsets, liquidStorageTank_probabilities)._2
 
     // LeakageFailure
 
     @Benchmark
-    def timeLeakageFailure_remind(): Double =
+    def timeFT6_LeakageFailure_remind(): Double =
         faulttree.height7(leakageFailure_flattened)
 
     @Benchmark
-    def timeLeakageFailure_mince(): Double =
+    def timeFT6_LeakageFailure_mince(): Double =
         minimalcutpathset.algorithm4(leakageFailure_cutsets, leakageFailure_probabilities)._2
 
     @Benchmark
-    def timeLeakageFailure_pase(): Double =
+    def timeFT6_LeakageFailure_pase(): Double =
         minimalcutpathset.algorithm5(leakageFailure_pathsets, leakageFailure_probabilities)._2
 
     // AssessingTheRisks1
 
     @Benchmark
-    def timeAssessingTheRisks1_remind(): Double =
+    def timeFT7_AssessingTheRisks1_remind(): Double =
         faulttree.height7(assessingTheRisks1_flattened)
 
     @Benchmark
-    def timeAssessingTheRisks1_mince(): Double =
+    def timeFT7_AssessingTheRisks1_mince(): Double =
         minimalcutpathset.algorithm4(assessingTheRisks1_cutsets, assessingTheRisks1_probabilities)._2
 
     @Benchmark
-    def timeAssessingTheRisks1_pase(): Double =
+    def timeFT7_AssessingTheRisks1_pase(): Double =
         minimalcutpathset.algorithm5(assessingTheRisks1_pathsets, assessingTheRisks1_probabilities)._2
 
     // ChlorineRelease
 
     @Benchmark
-    def timeChlorineRelease_remind(): Double =
+    def timeFT8_ChlorineRelease_remind(): Double =
         decisiontree.algorithm8(chlorineRelease_flattened, chlorineRelease_probabilities)._2
 
     @Benchmark
-    def timeChlorineRelease_mince(): Double =
+    def timeFT8_ChlorineRelease_mince(): Double =
         minimalcutpathset.algorithm4(chlorineRelease_cutsets, chlorineRelease_probabilities)._2
 
     @Benchmark
-    def timeChlorineRelease_pase(): Double =
+    def timeFT8_ChlorineRelease_pase(): Double =
         minimalcutpathset.algorithm5(chlorineRelease_pathsets, chlorineRelease_probabilities)._2
 
     // LossContainerAtPort
 
     @Benchmark
-    def timeLossContainerAtPort_remind(): Double =
+    def timeFT9_LossContainerAtPort_remind(): Double =
         faulttree.height7(lossContainerAtPort_flattened)
 
     @Benchmark
-    def timeLossContainerAtPort_mince(): Double =
+    def timeFT9_LossContainerAtPort_mince(): Double =
         minimalcutpathset.algorithm4(lossContainerAtPort_cutsets, lossContainerAtPort_probabilities)._2
 
     @Benchmark
-    def timeLossContainerAtPort_pase(): Double =
+    def timeFT9_LossContainerAtPort_pase(): Double =
         minimalcutpathset.algorithm5(lossContainerAtPort_pathsets, lossContainerAtPort_probabilities)._2
 
     // SubmarinePipelineStopperFailure
 
     @Benchmark
-    def timeSubmarinePipelineStopperFailure_remind(): Double =
+    def timeFT10_SubmarinePipelineStopperFailure_remind(): Double =
         faulttree.height7(submarinePipelineStopperFailure_flattened)
 
     @Benchmark
-    def timeSubmarinePipelineStopperFailure_mince(): Double =
+    def timeFT10_SubmarinePipelineStopperFailure_mince(): Double =
         minimalcutpathset.algorithm4(submarinePipelineStopperFailure_cutsets, submarinePipelineStopperFailure_probabilities)._2
 
     @Benchmark
-    def timeSubmarinePipelineStopperFailure_pase(): Double =
+    def timeFT10_SubmarinePipelineStopperFailure_pase(): Double =
         minimalcutpathset.algorithm5(submarinePipelineStopperFailure_pathsets, submarinePipelineStopperFailure_probabilities)._2
 
     // PCBA
 
     @Benchmark
-    def timePCBA_remind(): Double =
+    def timeFT11_PCBA_remind(): Double =
         faulttree.height7(pcba_flattened)
 
     @Benchmark
-    def timePCBA_mince(): Double =
+    def timeFT11_PCBA_mince(): Double =
         minimalcutpathset.algorithm4(pcba_cutsets, pcba_probabilities)._2
 
     @Benchmark
-    def timePCBA_pase(): Double =
+    def timeFT11_PCBA_pase(): Double =
         minimalcutpathset.algorithm5(pcba_pathsets, pcba_probabilities)._2
 
     // OGPF
 
     @Benchmark
-    def timeOGPF_remind(): Double =
+    def timeFT12_OGPF_remind(): Double =
         decisiontree.algorithm8(ogpf_flattened, ogpf_probabilities)._2
 
     @Benchmark
-    def timeOGPF_mince(): Double =
+    def timeFT12_OGPF_mince(): Double =
         minimalcutpathset.algorithm4(ogpf_cutsets, ogpf_probabilities)._2
 
     @Benchmark
-    def timeOGPF_pase(): Double =
+    def timeFT12_OGPF_pase(): Double =
         minimalcutpathset.algorithm5(ogpf_pathsets, ogpf_probabilities)._2
 
     // BHNGPipeline
 
     @Benchmark
-    def timeBHNGPipeline_remind(): Double =
+    def timeFT13_BHNGPipeline_remind(): Double =
         faulttree.height7(bhngPipeline_flattened)
 
     @Benchmark
-    def timeBHNGPipeline_mince(): Double =
+    def timeFT13_BHNGPipeline_mince(): Double =
         minimalcutpathset.algorithm4(bhngPipeline_cutsets, bhngPipeline_probabilities)._2
 
     @Benchmark
-    def timeBHNGPipeline_pase(): Double =
+    def timeFT13_BHNGPipeline_pase(): Double =
         minimalcutpathset.algorithm5(bhngPipeline_pathsets, bhngPipeline_probabilities)._2
 
     // HSC
 
     @Benchmark
-    def timeHSC_remind(): Double =
+    def timeFT14_HSC_remind(): Double =
         faulttree.height7(hsc_flattened)
 
     @Benchmark
-    def timeHSC_pase(): Double =
+    def timeFT14_HSC_pase(): Double =
         minimalcutpathset.algorithm5(hsc_pathsets, hsc_probabilities)._2
 
 }

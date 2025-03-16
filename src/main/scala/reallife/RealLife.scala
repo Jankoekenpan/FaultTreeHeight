@@ -3,7 +3,7 @@ package reallife // or is this just fantasy?
 import bdd.BDD
 import benchmark.Conversion
 import decisiontree.{BooleanFormula, RandomBDTs}
-import dft.{DFT, DFTNode}
+import dft.DFT
 
 import java.io.File
 import java.util.random.RandomGenerator
@@ -211,7 +211,7 @@ object RealLife {
             val time_begin_pathset = System.nanoTime()
             val heightPathSet = minimalcutpathset.algorithm5(minimalPathSets, probabilities)._2
             val time_end_pathset = System.nanoTime()
-            println(s"Calculate ehight of ${dagLikeFT.name} using BDD algorithm...")
+            println(s"Calculate height of ${dagLikeFT.name} using BDD algorithm...")
             val time_begin_bdd = System.nanoTime()
             val heightBDD = BDD.height(bdd, bddProbabilities)
             val time_end_bdd = System.nanoTime()
@@ -492,12 +492,10 @@ object AircraftRunwayExcursionAccidentsFromDFT extends TreeLikeFaultTree {
 }
 
 object ChlorineRelease extends DagLikeFaultTree {
-    import minimalcutpathset.FaultTree
     import minimalcutpathset.FaultTree.*
-    import minimalcutpathset.TreeNode
-    import minimalcutpathset.TreeNode.*
-    import minimalcutpathset.Gate
     import minimalcutpathset.Gate.*
+    import minimalcutpathset.{FaultTree, Gate, TreeNode}
+    import minimalcutpathset.TreeNode.*
 
     final val B1 = 1
     final val B2 = 2
@@ -779,12 +777,10 @@ object ATCFailsToResolveTheConflict extends TreeLikeFaultTree {
 }
 
 object T0Chopper extends DagLikeFaultTree {
-    import minimalcutpathset.FaultTree
     import minimalcutpathset.FaultTree.*
-    import minimalcutpathset.TreeNode
-    import minimalcutpathset.TreeNode.*
-    import minimalcutpathset.Gate
     import minimalcutpathset.Gate.*
+    import minimalcutpathset.{FaultTree, Gate, TreeNode}
+    import minimalcutpathset.TreeNode.*
 
     final val X1 = 1
     final val X2 = 2

@@ -1,3 +1,4 @@
+[info] # Run complete. Total time: 05:55:49
 [info] REMEMBER: The numbers below are just data. To gain reusable insights, you need to follow up on
 [info] why the numbers are the way they are. Use profilers (see -prof, -lprof), design factorial
 [info] experiments, perform baseline and negative tests that provide experimental control, make sure
@@ -8,59 +9,46 @@
 [info] works, and factor in a small probability of new VM bugs. Additionally, while comparisons between
 [info] different JVMs are already problematic, the performance difference caused by different Blackhole
 [info] modes can be very significant. Please make sure you use the consistent Blackhole mode for comparisons.
-[info] Benchmark                                                                                        Mode  Cnt     Score     Error  Units
-[info] RealWorldFaultTreesBenchmark.timeATCFailsToResolveTheConflict_mince                              avgt   25     1,086 ∩┐╜   0,066  ms/op
-[info] RealWorldFaultTreesBenchmark.timeATCFailsToResolveTheConflict_pase                               avgt   25     1,447 ∩┐╜   0,047  ms/op
-[info] RealWorldFaultTreesBenchmark.timeATCFailsToResolveTheConflict_ranger                             avgt   25     0,158 ∩┐╜   0,003  ms/op
-[info] RealWorldFaultTreesBenchmark.timeATCFailsToResolveTheConflict_remind                             avgt   25     0,037 ∩┐╜   0,010  ms/op
-[info] RealWorldFaultTreesBenchmark.timeAircraftRunwayExcursionAccidents_mince                          avgt   25     4,722 ∩┐╜   0,657  ms/op
-[info] RealWorldFaultTreesBenchmark.timeAircraftRunwayExcursionAccidents_pase                           avgt   25     1,500 ∩┐╜   0,016  ms/op
-[info] RealWorldFaultTreesBenchmark.timeAircraftRunwayExcursionAccidents_ranger                         avgt   25     6,093 ∩┐╜   0,111  ms/op
-[info] RealWorldFaultTreesBenchmark.timeAircraftRunwayExcursionAccidents_remind                         avgt   25     0,022 ∩┐╜   0,001  ms/op
-[info] RealWorldFaultTreesBenchmark.timeAssessingTheRisks1_mince                                        avgt   25     0,248 ∩┐╜   0,003  ms/op
-[info] RealWorldFaultTreesBenchmark.timeAssessingTheRisks1_pase                                         avgt   25     0,195 ∩┐╜   0,067  ms/op
-[info] RealWorldFaultTreesBenchmark.timeAssessingTheRisks1_ranger                                       avgt   25     0,033 ∩┐╜   0,008  ms/op
-[info] RealWorldFaultTreesBenchmark.timeAssessingTheRisks1_remind                                       avgt   25     0,032 ∩┐╜   0,005  ms/op
-[info] RealWorldFaultTreesBenchmark.timeBHNGPipeline_mince                                              avgt   25     1,310 ∩┐╜   0,009  ms/op
-[info] RealWorldFaultTreesBenchmark.timeBHNGPipeline_pase                                               avgt   25     0,448 ∩┐╜   0,006  ms/op
-[info] RealWorldFaultTreesBenchmark.timeBHNGPipeline_ranger                                             avgt   25     0,070 ∩┐╜   0,001  ms/op
-[info] RealWorldFaultTreesBenchmark.timeBHNGPipeline_remind                                             avgt   25     0,081 ∩┐╜   0,001  ms/op
-[info] RealWorldFaultTreesBenchmark.timeChlorineRelease_mince                                           avgt   25     0,744 ∩┐╜   0,024  ms/op
-[info] RealWorldFaultTreesBenchmark.timeChlorineRelease_pase                                            avgt   25     0,203 ∩┐╜   0,003  ms/op
-[info] RealWorldFaultTreesBenchmark.timeChlorineRelease_ranger                                          avgt   25     4,582 ∩┐╜   0,048  ms/op
-[info] RealWorldFaultTreesBenchmark.timeChlorineRelease_remind                                          avgt   25     1,342 ∩┐╜   0,073  ms/op
-[info] RealWorldFaultTreesBenchmark.timeHSC_pase                                                        avgt   25     8,482 ∩┐╜   0,104  ms/op
-[info] RealWorldFaultTreesBenchmark.timeHSC_remind                                                      avgt   25     0,448 ∩┐╜   0,005  ms/op
-[info] RealWorldFaultTreesBenchmark.timeLeakageFailure_mince                                            avgt   25     0,250 ∩┐╜   0,026  ms/op
-[info] RealWorldFaultTreesBenchmark.timeLeakageFailure_pase                                             avgt   25     0,180 ∩┐╜   0,004  ms/op
-[info] RealWorldFaultTreesBenchmark.timeLeakageFailure_ranger                                           avgt   25     0,065 ∩┐╜   0,001  ms/op
-[info] RealWorldFaultTreesBenchmark.timeLeakageFailure_remind                                           avgt   25     0,026 ∩┐╜   0,001  ms/op
-[info] RealWorldFaultTreesBenchmark.timeLiquidStorageTank_mince                                         avgt   25     0,171 ∩┐╜   0,019  ms/op
-[info] RealWorldFaultTreesBenchmark.timeLiquidStorageTank_pase                                          avgt   25     0,122 ∩┐╜   0,002  ms/op
-[info] RealWorldFaultTreesBenchmark.timeLiquidStorageTank_ranger                                        avgt   25     0,030 ∩┐╜   0,001  ms/op
-[info] RealWorldFaultTreesBenchmark.timeLiquidStorageTank_remind                                        avgt   25     0,024 ∩┐╜   0,001  ms/op
-[info] RealWorldFaultTreesBenchmark.timeLossContainerAtPort_mince                                       avgt   25     0,485 ∩┐╜   0,004  ms/op
-[info] RealWorldFaultTreesBenchmark.timeLossContainerAtPort_pase                                        avgt   25     0,214 ∩┐╜   0,004  ms/op
-[info] RealWorldFaultTreesBenchmark.timeLossContainerAtPort_ranger                                      avgt   25     0,112 ∩┐╜   0,001  ms/op
-[info] RealWorldFaultTreesBenchmark.timeLossContainerAtPort_remind                                      avgt   25     0,043 ∩┐╜   0,005  ms/op
-[info] RealWorldFaultTreesBenchmark.timeMainTrackTrainCollisionsLeadingToFatalitiesAndInjuries_eminent  avgt   25     7,028 ∩┐╜   0,153  ms/op
-[info] RealWorldFaultTreesBenchmark.timeMainTrackTrainCollisionsLeadingToFatalitiesAndInjuries_mince    avgt   25     0,022 ∩┐╜   0,001  ms/op
-[info] RealWorldFaultTreesBenchmark.timeMainTrackTrainCollisionsLeadingToFatalitiesAndInjuries_pase     avgt   25     0,016 ∩┐╜   0,001  ms/op
-[info] RealWorldFaultTreesBenchmark.timeMainTrackTrainCollisionsLeadingToFatalitiesAndInjuries_ranger   avgt   25     0,003 ∩┐╜   0,001  ms/op
-[info] RealWorldFaultTreesBenchmark.timeMainTrackTrainCollisionsLeadingToFatalitiesAndInjuries_remind   avgt   25     0,006 ∩┐╜   0,001  ms/op
-[info] RealWorldFaultTreesBenchmark.timeOGPF_mince                                                      avgt   25  5199,896 ∩┐╜  71,939  ms/op
-[info] RealWorldFaultTreesBenchmark.timeOGPF_pase                                                       avgt   25     0,833 ∩┐╜   0,008  ms/op
-[info] RealWorldFaultTreesBenchmark.timeOGPF_ranger                                                     avgt   25  1960,826 ∩┐╜ 239,834  ms/op
-[info] RealWorldFaultTreesBenchmark.timeOGPF_remind                                                     avgt   25   860,345 ∩┐╜   9,774  ms/op
-[info] RealWorldFaultTreesBenchmark.timePCBA_mince                                                      avgt   25     0,564 ∩┐╜   0,003  ms/op
-[info] RealWorldFaultTreesBenchmark.timePCBA_pase                                                       avgt   25     1,921 ∩┐╜   0,015  ms/op
-[info] RealWorldFaultTreesBenchmark.timePCBA_ranger                                                     avgt   25     0,418 ∩┐╜   0,003  ms/op
-[info] RealWorldFaultTreesBenchmark.timePCBA_remind                                                     avgt   25     0,051 ∩┐╜   0,001  ms/op
-[info] RealWorldFaultTreesBenchmark.timeSubmarinePipelineStopperFailure_mince                           avgt   25     0,478 ∩┐╜   0,009  ms/op
-[info] RealWorldFaultTreesBenchmark.timeSubmarinePipelineStopperFailure_pase                            avgt   25     0,217 ∩┐╜   0,024  ms/op
-[info] RealWorldFaultTreesBenchmark.timeSubmarinePipelineStopperFailure_ranger                          avgt   25     0,031 ∩┐╜   0,001  ms/op
-[info] RealWorldFaultTreesBenchmark.timeSubmarinePipelineStopperFailure_remind                          avgt   25     0,042 ∩┐╜   0,001  ms/op
-[info] RealWorldFaultTreesBenchmark.timeT0Chopper_mince                                                 avgt   25     0,084 ∩┐╜   0,002  ms/op
-[info] RealWorldFaultTreesBenchmark.timeT0Chopper_pase                                                  avgt   25     0,045 ∩┐╜   0,001  ms/op
-[info] RealWorldFaultTreesBenchmark.timeT0Chopper_ranger                                                avgt   25     0,009 ∩┐╜   0,001  ms/op
-[info] RealWorldFaultTreesBenchmark.timeT0Chopper_remind                                                avgt   25     0,161 ∩┐╜   0,002  ms/op
+[info] Benchmark                                                                                            Mode  Cnt      Score     Error  Units
+[info] RealWorldFaultTreesBenchmark.timeFT10_SubmarinePipelineStopperFailure_mince                          avgt   25      0,442 ∩┐╜   0,007  ms/op
+[info] RealWorldFaultTreesBenchmark.timeFT10_SubmarinePipelineStopperFailure_pase                           avgt   25      0,184 ∩┐╜   0,010  ms/op
+[info] RealWorldFaultTreesBenchmark.timeFT10_SubmarinePipelineStopperFailure_remind                         avgt   25      0,045 ∩┐╜   0,001  ms/op
+[info] RealWorldFaultTreesBenchmark.timeFT11_PCBA_mince                                                     avgt   25      0,549 ∩┐╜   0,008  ms/op
+[info] RealWorldFaultTreesBenchmark.timeFT11_PCBA_pase                                                      avgt   25      1,834 ∩┐╜   0,023  ms/op
+[info] RealWorldFaultTreesBenchmark.timeFT11_PCBA_remind                                                    avgt   25      0,051 ∩┐╜   0,001  ms/op
+[info] RealWorldFaultTreesBenchmark.timeFT12_OGPF_mince                                                     avgt   25  11208,881 ∩┐╜ 309,098  ms/op
+[info] RealWorldFaultTreesBenchmark.timeFT12_OGPF_pase                                                      avgt   25      1,292 ∩┐╜   0,025  ms/op
+[info] RealWorldFaultTreesBenchmark.timeFT12_OGPF_remind                                                    avgt   25    999,464 ∩┐╜   8,930  ms/op
+[info] RealWorldFaultTreesBenchmark.timeFT13_BHNGPipeline_mince                                             avgt   25      1,419 ∩┐╜   0,033  ms/op
+[info] RealWorldFaultTreesBenchmark.timeFT13_BHNGPipeline_pase                                              avgt   25      0,484 ∩┐╜   0,009  ms/op
+[info] RealWorldFaultTreesBenchmark.timeFT13_BHNGPipeline_remind                                            avgt   25      0,085 ∩┐╜   0,001  ms/op
+[info] RealWorldFaultTreesBenchmark.timeFT14_HSC_pase                                                       avgt   25      8,020 ∩┐╜   0,090  ms/op
+[info] RealWorldFaultTreesBenchmark.timeFT14_HSC_remind                                                     avgt   25      0,435 ∩┐╜   0,006  ms/op
+[info] RealWorldFaultTreesBenchmark.timeFT1_MainTrackTrainCollisionsLeadingToFatalitiesAndInjuries_eminent  avgt   25      6,327 ∩┐╜   0,111  ms/op
+[info] RealWorldFaultTreesBenchmark.timeFT1_MainTrackTrainCollisionsLeadingToFatalitiesAndInjuries_mince    avgt   25      0,021 ∩┐╜   0,001  ms/op
+[info] RealWorldFaultTreesBenchmark.timeFT1_MainTrackTrainCollisionsLeadingToFatalitiesAndInjuries_pase     avgt   25      0,015 ∩┐╜   0,001  ms/op
+[info] RealWorldFaultTreesBenchmark.timeFT1_MainTrackTrainCollisionsLeadingToFatalitiesAndInjuries_remind   avgt   25      0,006 ∩┐╜   0,001  ms/op
+[info] RealWorldFaultTreesBenchmark.timeFT2_T0Chopper_mince                                                 avgt   25      0,071 ∩┐╜   0,001  ms/op
+[info] RealWorldFaultTreesBenchmark.timeFT2_T0Chopper_pase                                                  avgt   25      0,043 ∩┐╜   0,001  ms/op
+[info] RealWorldFaultTreesBenchmark.timeFT2_T0Chopper_remind                                                avgt   25      0,156 ∩┐╜   0,002  ms/op
+[info] RealWorldFaultTreesBenchmark.timeFT3_ATCFailsToResolveTheConflict_mince                              avgt   25      0,590 ∩┐╜   0,008  ms/op
+[info] RealWorldFaultTreesBenchmark.timeFT3_ATCFailsToResolveTheConflict_pase                               avgt   25      0,874 ∩┐╜   0,010  ms/op
+[info] RealWorldFaultTreesBenchmark.timeFT3_ATCFailsToResolveTheConflict_remind                             avgt   25      0,033 ∩┐╜   0,004  ms/op
+[info] RealWorldFaultTreesBenchmark.timeFT4_AircraftRunwayExcursionAccidents_mince                          avgt   25      4,622 ∩┐╜   0,142  ms/op
+[info] RealWorldFaultTreesBenchmark.timeFT4_AircraftRunwayExcursionAccidents_pase                           avgt   25      1,826 ∩┐╜   0,078  ms/op
+[info] RealWorldFaultTreesBenchmark.timeFT4_AircraftRunwayExcursionAccidents_remind                         avgt   25      0,028 ∩┐╜   0,002  ms/op
+[info] RealWorldFaultTreesBenchmark.timeFT5_LiquidStorageTank_mince                                         avgt   25      0,279 ∩┐╜   0,131  ms/op
+[info] RealWorldFaultTreesBenchmark.timeFT5_LiquidStorageTank_pase                                          avgt   25      0,165 ∩┐╜   0,039  ms/op
+[info] RealWorldFaultTreesBenchmark.timeFT5_LiquidStorageTank_remind                                        avgt   25      0,033 ∩┐╜   0,007  ms/op
+[info] RealWorldFaultTreesBenchmark.timeFT6_LeakageFailure_mince                                            avgt   25      0,384 ∩┐╜   0,052  ms/op
+[info] RealWorldFaultTreesBenchmark.timeFT6_LeakageFailure_pase                                             avgt   25      0,331 ∩┐╜   0,039  ms/op
+[info] RealWorldFaultTreesBenchmark.timeFT6_LeakageFailure_remind                                           avgt   25      0,048 ∩┐╜   0,009  ms/op
+[info] RealWorldFaultTreesBenchmark.timeFT7_AssessingTheRisks1_mince                                        avgt   25      0,263 ∩┐╜   0,028  ms/op
+[info] RealWorldFaultTreesBenchmark.timeFT7_AssessingTheRisks1_pase                                         avgt   25      0,130 ∩┐╜   0,011  ms/op
+[info] RealWorldFaultTreesBenchmark.timeFT7_AssessingTheRisks1_remind                                       avgt   25      0,039 ∩┐╜   0,006  ms/op
+[info] RealWorldFaultTreesBenchmark.timeFT8_ChlorineRelease_mince                                           avgt   25      0,848 ∩┐╜   0,096  ms/op
+[info] RealWorldFaultTreesBenchmark.timeFT8_ChlorineRelease_pase                                            avgt   25      0,268 ∩┐╜   0,040  ms/op
+[info] RealWorldFaultTreesBenchmark.timeFT8_ChlorineRelease_remind                                          avgt   25      1,214 ∩┐╜   0,044  ms/op
+[info] RealWorldFaultTreesBenchmark.timeFT9_LossContainerAtPort_mince                                       avgt   25      0,313 ∩┐╜   0,013  ms/op
+[info] RealWorldFaultTreesBenchmark.timeFT9_LossContainerAtPort_pase                                        avgt   25      0,178 ∩┐╜   0,028  ms/op
+[info] RealWorldFaultTreesBenchmark.timeFT9_LossContainerAtPort_remind                                      avgt   25      0,049 ∩┐╜   0,005  ms/op
