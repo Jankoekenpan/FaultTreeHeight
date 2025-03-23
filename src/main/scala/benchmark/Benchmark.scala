@@ -9,6 +9,7 @@ import scala.compiletime.uninitialized
 @State(Scope.Thread)
 @BenchmarkMode(Array(Mode.AverageTime))
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
+//@Fork(1) // enables faster benchmark runs, but results may be slightly less accurate
 class RealWorldFaultTreesBenchmark {
 
     // Tree-like FaultTrees:

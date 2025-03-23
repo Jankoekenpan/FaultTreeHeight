@@ -47,7 +47,7 @@ object BDDOrdering {
 
     def readBddProbabilities(dftGalileoFile: File, bddDotFile: File): IntMap[Double] = {
         val (dftLines, internalMapping) = DFT.readDFTFile(Source.fromFile(dftGalileoFile))
-        val internalProbabilities: DFT.getProbabilities(dftLines)
+        val internalProbabilities: IntMap[Double] = DFT.getProbabilities(dftLines)
         bddProbabilities(internalMapping, internalProbabilities, bddDotFile)
     }
 }
