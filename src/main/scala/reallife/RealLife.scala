@@ -110,7 +110,7 @@ object RealLife {
         //runAlgorithms(Seq(HSC), Seq())
     }
 
-    def runAlgorithms(treelikeFaultTrees: Seq[TreeLikeFaultTree], daglikeFaultTrees: Seq[DagLikeFaultTree])(using random: java.util.random.RandomGenerator): Unit = {
+    def runAlgorithms(treelikeFaultTrees: Seq[TreeLikeFaultTree], daglikeFaultTrees: Seq[DagLikeFaultTree]): Unit = {
         val csvOuputTree = CSVOutput.createTreeLikeFile()
         CSVOutput.printTreeLikeHeader(csvOuputTree)
 
@@ -280,9 +280,10 @@ object EnumerationAlgorithm {
 
 @java.lang.Deprecated // 'ranger' algorithm is removed from the paper.
 object RangerAlgorithm {
-    given random: java.util.random.RandomGenerator = new java.util.Random()
 
     def main(args: Array[String]): Unit = {
+        given random: java.util.random.RandomGenerator = new java.util.Random()
+
         val treelikeFaultTrees: Seq[TreeLikeFaultTree] = Seq(
             AircraftRunwayExcursionAccidents,
             //AircraftRunwayExcursionAccidentsFromDFT,
@@ -312,7 +313,8 @@ object RangerAlgorithm {
         end for
     }
 
-    def runRangerAlgorithm(faultTree: SimpleFaultTree, howManyTimes: Int): Double = {
+    @java.lang.Deprecated
+    def runRangerAlgorithm(faultTree: SimpleFaultTree, howManyTimes: Int)(using random: java.util.random.RandomGenerator): Double = {
         var sum = 0.0
         for _ <- 1 to howManyTimes do
             sum += runRangerAlgorithm(faultTree)
@@ -320,7 +322,8 @@ object RangerAlgorithm {
         sum / howManyTimes
     }
 
-    def runRangerAlgorithm(faultTree: SimpleFaultTree): Double = faultTree match {
+    @java.lang.Deprecated
+    def runRangerAlgorithm(faultTree: SimpleFaultTree)(using random: java.util.random.RandomGenerator): Double = faultTree match {
         case treeLike: TreeLikeFaultTree =>
             val (booleanFormula, basicEventProbabilities) = Conversion.translateToBooleanFormula(treeLike.FT)
             runRangerAlgorithm(booleanFormula, basicEventProbabilities)
@@ -330,7 +333,8 @@ object RangerAlgorithm {
         case _ => throw new RuntimeException("Impossible!")
     }
 
-    def runRangerAlgorithm(booleanFormula: BooleanFormula, basicEventProbabilities: IntMap[Double]): Double = {
+    @java.lang.Deprecated
+    def runRangerAlgorithm(booleanFormula: BooleanFormula, basicEventProbabilities: IntMap[Double])(using random: java.util.random.RandomGenerator): Double = {
         val events: Set[Int] = basicEventProbabilities.keySet
 
         val (height, binaryDecisionTree) = decisiontree.RandomBDTs.height(events, booleanFormula, basicEventProbabilities)
