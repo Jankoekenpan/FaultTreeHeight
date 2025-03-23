@@ -33,3 +33,13 @@ root -> 33554470 [style=solid dir=both arrowtail=none];
 33554470 -> 33554469 [style=dashed];
 33554470 -> 0 [style=solid dir=both arrowtail=dot];
 }
+// Mapping from BDD nodes to DFT BEs as follows: 
+// 0 -> Truck_componenets
+// 1 -> Brakes,_use_of_
+// 2 -> Flagging,_fixed,_hand_and_radio_signals
+// 3 -> General_switching_rules
+// 4 -> Main-track_authority
+// 5 -> Miscellaneous
+// 6 -> Speed
+// 7 -> Train_handling/train_makeup
+// 8 -> Unusual_operating_situations

@@ -32,7 +32,7 @@ Linux example: `export JAVA_HOME=/opt/jdk23`
 
 Execute `sbt jmh:run` from a terminal.
 <br>
-Note that this operation can take up to 6 hours.
+Note that this operation can take up to 10 hours.
 
 ## Random trees
 

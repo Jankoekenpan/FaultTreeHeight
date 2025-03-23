@@ -3,111 +3,147 @@ graph [dpi = 300];
 center = true;
 edge [dir = forward];
 root [style=invis];
-root -> 16777378 [style=solid dir=both arrowtail=none];
-16777378 [label="0"];
-16777377 [label="1"];
-16777376 [label="2"];
-16777375 [label="3"];
-16777374 [label="4"];
-16777373 [label="5"];
-16777372 [label="6"];
-16777371 [label="7"];
-16777370 [label="8"];
-16777369 [label="9"];
-33554440 [label="11"];
-16777368 [label="12"];
-16777367 [label="13"];
-16777366 [label="14"];
-33554439 [label="15"];
-16777365 [label="16"];
-16777364 [label="17"];
-33554438 [label="18"];
-16777363 [label="19"];
-33554437 [label="20"];
-33554436 [label="22"];
-33554435 [label="23"];
-41943041 [label="24"];
-16777362 [label="25"];
-33554434 [label="26"];
-50331656 [label="27"];
-16777359 [label="30"];
-33554433 [label="31"];
-16777358 [label="32"];
-16777357 [label="33"];
-16777250 [label="34"];
+root -> 58720416 [style=solid dir=both arrowtail=none];
+58720416 [label="0"];
+58720415 [label="1"];
+58720414 [label="2"];
+58720413 [label="3"];
+58720412 [label="4"];
+58720411 [label="5"];
+58720410 [label="6"];
+58720409 [label="7"];
+58720408 [label="8"];
+58720407 [label="9"];
+58720406 [label="11"];
+58720405 [label="12"];
+50331661 [label="13"];
+58720404 [label="14"];
+50331660 [label="15"];
+58720403 [label="16"];
+50331659 [label="17"];
+50331658 [label="18"];
+58720402 [label="19"];
+50331657 [label="20"];
+25165829 [label="22"];
+58720401 [label="23"];
+58720400 [label="24"];
+25165828 [label="25"];
+50331656 [label="26"];
+25165827 [label="27"];
+50331655 [label="30"];
+50331654 [label="31"];
+58720399 [label="32"];
+58720398 [label="33"];
+58720290 [label="34"];
 0 [shape=box, style=filled, label="F"];
-16777250 -> 0 [style=dashed];
-16777250 -> 0 [style=solid dir=both arrowtail=dot];
-16777357 -> 16777250 [style=dashed];
-16777357 -> 0 [style=solid dir=both arrowtail=dot];
-16777358 -> 16777357 [style=dashed];
-16777358 -> 0 [style=solid dir=both arrowtail=dot];
-33554433 -> 16777358 [style=dashed];
-33554433 -> 0 [style=solid dir=both arrowtail=dot];
-16777359 -> 33554433 [style=dashed];
-16777359 -> 0 [style=solid dir=both arrowtail=dot];
-16777361 [label="28"];
-16777360 [label="29"];
-16777360 -> 16777359 [style=dashed];
-16777360 -> 0 [style=solid dir=both arrowtail=dot];
-16777361 -> 16777359 [style=dashed];
-16777361 -> 16777360 [style=solid dir=both arrowtail=none];
-50331656 -> 16777359 [style=dashed];
-50331656 -> 16777361 [style=solid dir=both arrowtail=none];
-33554434 -> 50331656 [style=dashed];
-33554434 -> 0 [style=solid dir=both arrowtail=dot];
-16777362 -> 33554434 [style=dashed];
-16777362 -> 0 [style=solid dir=both arrowtail=dot];
-41943041 -> 16777362 [style=dashed];
-41943041 -> 0 [style=solid dir=both arrowtail=dot];
-33554435 -> 41943041 [style=dashed];
-33554435 -> 0 [style=solid dir=both arrowtail=dot];
-33554436 -> 33554435 [style=dashed];
-33554436 -> 0 [style=solid dir=both arrowtail=dot];
-41943042 [label="21"];
-41943042 -> 33554436 [style=dashed];
-41943042 -> 0 [style=solid dir=both arrowtail=dot];
-33554437 -> 33554436 [style=dashed];
-33554437 -> 41943042 [style=solid dir=both arrowtail=none];
-16777363 -> 33554437 [style=dashed];
-16777363 -> 0 [style=solid dir=both arrowtail=dot];
-33554438 -> 16777363 [style=dashed];
-33554438 -> 0 [style=solid dir=both arrowtail=dot];
-16777364 -> 33554438 [style=dashed];
-16777364 -> 0 [style=solid dir=both arrowtail=dot];
-16777365 -> 16777364 [style=dashed];
-16777365 -> 0 [style=solid dir=both arrowtail=dot];
-33554439 -> 16777365 [style=dashed];
-33554439 -> 0 [style=solid dir=both arrowtail=dot];
-16777366 -> 33554439 [style=dashed];
-16777366 -> 0 [style=solid dir=both arrowtail=dot];
-16777367 -> 16777366 [style=dashed];
-16777367 -> 0 [style=solid dir=both arrowtail=dot];
-16777368 -> 16777367 [style=dashed];
-16777368 -> 0 [style=solid dir=both arrowtail=dot];
-33554440 -> 16777368 [style=dashed];
-33554440 -> 0 [style=solid dir=both arrowtail=dot];
-33554441 [label="10"];
-33554441 -> 33554440 [style=dashed];
-33554441 -> 0 [style=solid dir=both arrowtail=dot];
-16777369 -> 33554440 [style=dashed];
-16777369 -> 33554441 [style=solid dir=both arrowtail=none];
-16777370 -> 16777369 [style=dashed];
-16777370 -> 0 [style=solid dir=both arrowtail=dot];
-16777371 -> 16777370 [style=dashed];
-16777371 -> 0 [style=solid dir=both arrowtail=dot];
-16777372 -> 16777371 [style=dashed];
-16777372 -> 0 [style=solid dir=both arrowtail=dot];
-16777373 -> 16777372 [style=dashed];
-16777373 -> 0 [style=solid dir=both arrowtail=dot];
-16777374 -> 16777373 [style=dashed];
-16777374 -> 0 [style=solid dir=both arrowtail=dot];
-16777375 -> 16777374 [style=dashed];
-16777375 -> 0 [style=solid dir=both arrowtail=dot];
-16777376 -> 16777375 [style=dashed];
-16777376 -> 0 [style=solid dir=both arrowtail=dot];
-16777377 -> 16777376 [style=dashed];
-16777377 -> 0 [style=solid dir=both arrowtail=dot];
-16777378 -> 16777377 [style=dashed];
-16777378 -> 0 [style=solid dir=both arrowtail=dot];
+58720290 -> 0 [style=dashed];
+58720290 -> 0 [style=solid dir=both arrowtail=dot];
+58720398 -> 58720290 [style=dashed];
+58720398 -> 0 [style=solid dir=both arrowtail=dot];
+58720399 -> 58720398 [style=dashed];
+58720399 -> 0 [style=solid dir=both arrowtail=dot];
+50331654 -> 58720399 [style=dashed];
+50331654 -> 0 [style=solid dir=both arrowtail=dot];
+50331655 -> 50331654 [style=dashed];
+50331655 -> 0 [style=solid dir=both arrowtail=dot];
+16777218 [label="28"];
+8388609 [label="29"];
+8388609 -> 50331655 [style=dashed];
+8388609 -> 0 [style=solid dir=both arrowtail=dot];
+16777218 -> 50331655 [style=dashed];
+16777218 -> 8388609 [style=solid dir=both arrowtail=none];
+25165827 -> 50331655 [style=dashed];
+25165827 -> 16777218 [style=solid dir=both arrowtail=none];
+50331656 -> 25165827 [style=dashed];
+50331656 -> 0 [style=solid dir=both arrowtail=dot];
+25165828 -> 50331656 [style=dashed];
+25165828 -> 0 [style=solid dir=both arrowtail=dot];
+58720400 -> 25165828 [style=dashed];
+58720400 -> 0 [style=solid dir=both arrowtail=dot];
+58720401 -> 58720400 [style=dashed];
+58720401 -> 0 [style=solid dir=both arrowtail=dot];
+25165829 -> 58720401 [style=dashed];
+25165829 -> 0 [style=solid dir=both arrowtail=dot];
+25165830 [label="21"];
+25165830 -> 25165829 [style=dashed];
+25165830 -> 0 [style=solid dir=both arrowtail=dot];
+50331657 -> 25165829 [style=dashed];
+50331657 -> 25165830 [style=solid dir=both arrowtail=none];
+58720402 -> 50331657 [style=dashed];
+58720402 -> 0 [style=solid dir=both arrowtail=dot];
+50331658 -> 58720402 [style=dashed];
+50331658 -> 0 [style=solid dir=both arrowtail=dot];
+50331659 -> 50331658 [style=dashed];
+50331659 -> 0 [style=solid dir=both arrowtail=dot];
+58720403 -> 50331659 [style=dashed];
+58720403 -> 0 [style=solid dir=both arrowtail=dot];
+50331660 -> 58720403 [style=dashed];
+50331660 -> 0 [style=solid dir=both arrowtail=dot];
+58720404 -> 50331660 [style=dashed];
+58720404 -> 0 [style=solid dir=both arrowtail=dot];
+50331661 -> 58720404 [style=dashed];
+50331661 -> 0 [style=solid dir=both arrowtail=dot];
+58720405 -> 50331661 [style=dashed];
+58720405 -> 0 [style=solid dir=both arrowtail=dot];
+58720406 -> 58720405 [style=dashed];
+58720406 -> 0 [style=solid dir=both arrowtail=dot];
+50331662 [label="10"];
+50331662 -> 58720406 [style=dashed];
+50331662 -> 0 [style=solid dir=both arrowtail=dot];
+58720407 -> 58720406 [style=dashed];
+58720407 -> 50331662 [style=solid dir=both arrowtail=none];
+58720408 -> 58720407 [style=dashed];
+58720408 -> 0 [style=solid dir=both arrowtail=dot];
+58720409 -> 58720408 [style=dashed];
+58720409 -> 0 [style=solid dir=both arrowtail=dot];
+58720410 -> 58720409 [style=dashed];
+58720410 -> 0 [style=solid dir=both arrowtail=dot];
+58720411 -> 58720410 [style=dashed];
+58720411 -> 0 [style=solid dir=both arrowtail=dot];
+58720412 -> 58720411 [style=dashed];
+58720412 -> 0 [style=solid dir=both arrowtail=dot];
+58720413 -> 58720412 [style=dashed];
+58720413 -> 0 [style=solid dir=both arrowtail=dot];
+58720414 -> 58720413 [style=dashed];
+58720414 -> 0 [style=solid dir=both arrowtail=dot];
+58720415 -> 58720414 [style=dashed];
+58720415 -> 0 [style=solid dir=both arrowtail=dot];
+58720416 -> 58720415 [style=dashed];
+58720416 -> 0 [style=solid dir=both arrowtail=dot];
 }
+// Mapping from BDD nodes to DFT BEs as follows: 
+// 0 -> A1
+// 1 -> A2
+// 2 -> A3
+// 3 -> B
+// 4 -> C
+// 5 -> D
+// 6 -> E1
+// 7 -> E2
+// 8 -> E3
+// 9 -> F1
+// 10 -> F2
+// 11 -> G1
+// 12 -> G2
+// 13 -> G3
+// 14 -> H1
+// 15 -> H2
+// 16 -> H3
+// 17 -> I1
+// 18 -> I2
+// 19 -> I3
+// 20 -> J1
+// 21 -> J2
+// 22 -> K
+// 23 -> L
+// 24 -> M1
+// 25 -> M2
+// 26 -> M3
+// 27 -> N1
+// 28 -> N2
+// 29 -> N3
+// 30 -> O
+// 31 -> P
+// 32 -> Q
+// 33 -> R
+// 34 -> S

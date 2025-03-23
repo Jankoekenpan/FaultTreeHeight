@@ -3,81 +3,112 @@ graph [dpi = 300];
 center = true;
 edge [dir = forward];
 root [style=invis];
-root -> 58720354 [style=solid dir=both arrowtail=none];
-58720354 [label="0"];
-58720353 [label="1"];
-58720352 [label="2"];
-8388609 [label="5"];
-3 [label="6"];
-50331650 [label="7"];
-50331649 [label="8"];
-8388608 [label="9"];
-2 [label="10"];
-58720351 [label="11"];
-58720350 [label="12"];
-58720349 [label="13"];
-58720348 [label="14"];
-58720347 [label="15"];
-58720346 [label="16"];
-58720345 [label="17"];
-58720344 [label="18"];
-58720343 [label="19"];
-58720342 [label="20"];
-58720341 [label="21"];
-58720340 [label="22"];
-58720339 [label="23"];
-58720280 [label="24"];
+root -> 25165924 [style=solid dir=both arrowtail=none];
+25165924 [label="0"];
+25165923 [label="1"];
+25165922 [label="2"];
+58720257 [label="5"];
+25165921 [label="6"];
+41943040 [label="7"];
+58720256 [label="8"];
+50331648 [label="9"];
+25165920 [label="10"];
+25165919 [label="11"];
+25165918 [label="12"];
+25165917 [label="13"];
+25165916 [label="14"];
+25165915 [label="15"];
+25165914 [label="16"];
+25165913 [label="17"];
+25165912 [label="18"];
+25165911 [label="19"];
+25165910 [label="20"];
+25165909 [label="21"];
+25165908 [label="22"];
+25165907 [label="23"];
+25165848 [label="24"];
 0 [shape=box, style=filled, label="F"];
-58720280 -> 0 [style=dashed];
-58720280 -> 0 [style=solid dir=both arrowtail=dot];
-58720339 -> 58720280 [style=dashed];
-58720339 -> 0 [style=solid dir=both arrowtail=dot];
-58720340 -> 58720339 [style=dashed];
-58720340 -> 0 [style=solid dir=both arrowtail=dot];
-58720341 -> 58720340 [style=dashed];
-58720341 -> 0 [style=solid dir=both arrowtail=dot];
-58720342 -> 58720341 [style=dashed];
-58720342 -> 0 [style=solid dir=both arrowtail=dot];
-58720343 -> 58720342 [style=dashed];
-58720343 -> 0 [style=solid dir=both arrowtail=dot];
-58720344 -> 58720343 [style=dashed];
-58720344 -> 0 [style=solid dir=both arrowtail=dot];
-58720345 -> 58720344 [style=dashed];
-58720345 -> 0 [style=solid dir=both arrowtail=dot];
-58720346 -> 58720345 [style=dashed];
-58720346 -> 0 [style=solid dir=both arrowtail=dot];
-58720347 -> 58720346 [style=dashed];
-58720347 -> 0 [style=solid dir=both arrowtail=dot];
-58720348 -> 58720347 [style=dashed];
-58720348 -> 0 [style=solid dir=both arrowtail=dot];
-58720349 -> 58720348 [style=dashed];
-58720349 -> 0 [style=solid dir=both arrowtail=dot];
-58720350 -> 58720349 [style=dashed];
-58720350 -> 0 [style=solid dir=both arrowtail=dot];
-58720351 -> 58720350 [style=dashed];
-58720351 -> 0 [style=solid dir=both arrowtail=dot];
-2 -> 58720351 [style=dashed];
-2 -> 0 [style=solid dir=both arrowtail=dot];
-8388608 -> 2 [style=dashed];
-8388608 -> 0 [style=solid dir=both arrowtail=dot];
-50331649 -> 8388608 [style=dashed];
+25165848 -> 0 [style=dashed];
+25165848 -> 0 [style=solid dir=both arrowtail=dot];
+25165907 -> 25165848 [style=dashed];
+25165907 -> 0 [style=solid dir=both arrowtail=dot];
+25165908 -> 25165907 [style=dashed];
+25165908 -> 0 [style=solid dir=both arrowtail=dot];
+25165909 -> 25165908 [style=dashed];
+25165909 -> 0 [style=solid dir=both arrowtail=dot];
+25165910 -> 25165909 [style=dashed];
+25165910 -> 0 [style=solid dir=both arrowtail=dot];
+25165911 -> 25165910 [style=dashed];
+25165911 -> 0 [style=solid dir=both arrowtail=dot];
+25165912 -> 25165911 [style=dashed];
+25165912 -> 0 [style=solid dir=both arrowtail=dot];
+25165913 -> 25165912 [style=dashed];
+25165913 -> 0 [style=solid dir=both arrowtail=dot];
+25165914 -> 25165913 [style=dashed];
+25165914 -> 0 [style=solid dir=both arrowtail=dot];
+25165915 -> 25165914 [style=dashed];
+25165915 -> 0 [style=solid dir=both arrowtail=dot];
+25165916 -> 25165915 [style=dashed];
+25165916 -> 0 [style=solid dir=both arrowtail=dot];
+25165917 -> 25165916 [style=dashed];
+25165917 -> 0 [style=solid dir=both arrowtail=dot];
+25165918 -> 25165917 [style=dashed];
+25165918 -> 0 [style=solid dir=both arrowtail=dot];
+25165919 -> 25165918 [style=dashed];
+25165919 -> 0 [style=solid dir=both arrowtail=dot];
+25165920 -> 25165919 [style=dashed];
+25165920 -> 0 [style=solid dir=both arrowtail=dot];
+50331648 -> 25165920 [style=dashed];
+50331648 -> 0 [style=solid dir=both arrowtail=dot];
+58720256 -> 50331648 [style=dashed];
+58720256 -> 0 [style=solid dir=both arrowtail=dot];
+41943040 -> 58720256 [style=dashed];
+41943040 -> 0 [style=solid dir=both arrowtail=dot];
+25165921 -> 41943040 [style=dashed];
+25165921 -> 0 [style=solid dir=both arrowtail=dot];
+58720257 -> 25165921 [style=dashed];
+58720257 -> 0 [style=solid dir=both arrowtail=dot];
+41943041 [label="3"];
+50331649 [label="4"];
+50331649 -> 58720257 [style=dashed];
 50331649 -> 0 [style=solid dir=both arrowtail=dot];
-50331650 -> 50331649 [style=dashed];
-50331650 -> 0 [style=solid dir=both arrowtail=dot];
-3 -> 50331650 [style=dashed];
-3 -> 0 [style=solid dir=both arrowtail=dot];
-8388609 -> 3 [style=dashed];
-8388609 -> 0 [style=solid dir=both arrowtail=dot];
-8388610 [label="3"];
-4 [label="4"];
-4 -> 8388609 [style=dashed];
-4 -> 0 [style=solid dir=both arrowtail=dot];
-8388610 -> 4 [style=dashed];
-8388610 -> 0 [style=solid dir=both arrowtail=dot];
-58720352 -> 8388609 [style=dashed];
-58720352 -> 8388610 [style=solid dir=both arrowtail=none];
-58720353 -> 58720352 [style=dashed];
-58720353 -> 8388610 [style=solid dir=both arrowtail=none];
-58720354 -> 58720353 [style=dashed];
-58720354 -> 8388610 [style=solid dir=both arrowtail=none];
+41943041 -> 50331649 [style=dashed];
+41943041 -> 0 [style=solid dir=both arrowtail=dot];
+25165922 -> 58720257 [style=dashed];
+25165922 -> 41943041 [style=solid dir=both arrowtail=none];
+25165923 -> 25165922 [style=dashed];
+25165923 -> 41943041 [style=solid dir=both arrowtail=none];
+25165924 -> 25165923 [style=dashed];
+25165924 -> 41943041 [style=solid dir=both arrowtail=none];
 }
+// Mapping from BDD nodes to DFT BEs as follows: 
+// 0 -> BE1
+// 1 -> BE2
+// 2 -> BE3
+// 3 -> BE4
+// 4 -> BE5
+// 5 -> BE6
+// 6 -> BE7
+// 7 -> BE8
+// 8 -> BE9
+// 9 -> BE10
+// 10 -> BE11
+// 11 -> BE12
+// 12 -> BE13
+// 13 -> BE14
+// 14 -> BE15
+// 15 -> BE16
+// 16 -> BE17
+// 17 -> BE18
+// 18 -> BE19
+// 19 -> BE20
+// 20 -> BE21
+// 21 -> BE22
+// 22 -> BE23
+// 23 -> BE24
+// 24 -> BE25
+// 25 -> BE26
+// 26 -> BE27
+// 27 -> BE28
+// 28 -> BE29
+// 29 -> BE30

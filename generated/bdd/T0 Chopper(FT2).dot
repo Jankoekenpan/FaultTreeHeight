@@ -3,54 +3,71 @@ graph [dpi = 300];
 center = true;
 edge [dir = forward];
 root [style=invis];
-root -> 16777298 [style=solid dir=both arrowtail=none];
-16777298 [label="0"];
-16777297 [label="1"];
-16777296 [label="2"];
-16777295 [label="3"];
-16777294 [label="4"];
-16777293 [label="5"];
-16777292 [label="6"];
-16777291 [label="7"];
-16777290 [label="8"];
-16777289 [label="9"];
-16777288 [label="10"];
-16777287 [label="11"];
-16777286 [label="12"];
-16777285 [label="13"];
-16777284 [label="14"];
-16777231 [label="15"];
+root -> 58720338 [style=solid dir=both arrowtail=none];
+58720338 [label="0"];
+58720337 [label="1"];
+58720336 [label="2"];
+58720335 [label="3"];
+58720334 [label="4"];
+58720333 [label="5"];
+58720332 [label="6"];
+58720331 [label="7"];
+58720330 [label="8"];
+58720329 [label="9"];
+58720328 [label="10"];
+58720327 [label="11"];
+58720326 [label="12"];
+58720325 [label="13"];
+58720324 [label="14"];
+58720271 [label="15"];
 0 [shape=box, style=filled, label="F"];
-16777231 -> 0 [style=dashed];
-16777231 -> 0 [style=solid dir=both arrowtail=dot];
-16777284 -> 16777231 [style=dashed];
-16777284 -> 0 [style=solid dir=both arrowtail=dot];
-16777285 -> 16777284 [style=dashed];
-16777285 -> 0 [style=solid dir=both arrowtail=dot];
-16777286 -> 16777285 [style=dashed];
-16777286 -> 0 [style=solid dir=both arrowtail=dot];
-16777287 -> 16777286 [style=dashed];
-16777287 -> 0 [style=solid dir=both arrowtail=dot];
-16777288 -> 16777287 [style=dashed];
-16777288 -> 0 [style=solid dir=both arrowtail=dot];
-16777289 -> 16777288 [style=dashed];
-16777289 -> 0 [style=solid dir=both arrowtail=dot];
-16777290 -> 16777289 [style=dashed];
-16777290 -> 0 [style=solid dir=both arrowtail=dot];
-16777291 -> 16777290 [style=dashed];
-16777291 -> 0 [style=solid dir=both arrowtail=dot];
-16777292 -> 16777291 [style=dashed];
-16777292 -> 0 [style=solid dir=both arrowtail=dot];
-16777293 -> 16777292 [style=dashed];
-16777293 -> 0 [style=solid dir=both arrowtail=dot];
-16777294 -> 16777293 [style=dashed];
-16777294 -> 0 [style=solid dir=both arrowtail=dot];
-16777295 -> 16777294 [style=dashed];
-16777295 -> 0 [style=solid dir=both arrowtail=dot];
-16777296 -> 16777295 [style=dashed];
-16777296 -> 0 [style=solid dir=both arrowtail=dot];
-16777297 -> 16777296 [style=dashed];
-16777297 -> 0 [style=solid dir=both arrowtail=dot];
-16777298 -> 16777297 [style=dashed];
-16777298 -> 0 [style=solid dir=both arrowtail=dot];
+58720271 -> 0 [style=dashed];
+58720271 -> 0 [style=solid dir=both arrowtail=dot];
+58720324 -> 58720271 [style=dashed];
+58720324 -> 0 [style=solid dir=both arrowtail=dot];
+58720325 -> 58720324 [style=dashed];
+58720325 -> 0 [style=solid dir=both arrowtail=dot];
+58720326 -> 58720325 [style=dashed];
+58720326 -> 0 [style=solid dir=both arrowtail=dot];
+58720327 -> 58720326 [style=dashed];
+58720327 -> 0 [style=solid dir=both arrowtail=dot];
+58720328 -> 58720327 [style=dashed];
+58720328 -> 0 [style=solid dir=both arrowtail=dot];
+58720329 -> 58720328 [style=dashed];
+58720329 -> 0 [style=solid dir=both arrowtail=dot];
+58720330 -> 58720329 [style=dashed];
+58720330 -> 0 [style=solid dir=both arrowtail=dot];
+58720331 -> 58720330 [style=dashed];
+58720331 -> 0 [style=solid dir=both arrowtail=dot];
+58720332 -> 58720331 [style=dashed];
+58720332 -> 0 [style=solid dir=both arrowtail=dot];
+58720333 -> 58720332 [style=dashed];
+58720333 -> 0 [style=solid dir=both arrowtail=dot];
+58720334 -> 58720333 [style=dashed];
+58720334 -> 0 [style=solid dir=both arrowtail=dot];
+58720335 -> 58720334 [style=dashed];
+58720335 -> 0 [style=solid dir=both arrowtail=dot];
+58720336 -> 58720335 [style=dashed];
+58720336 -> 0 [style=solid dir=both arrowtail=dot];
+58720337 -> 58720336 [style=dashed];
+58720337 -> 0 [style=solid dir=both arrowtail=dot];
+58720338 -> 58720337 [style=dashed];
+58720338 -> 0 [style=solid dir=both arrowtail=dot];
 }
+// Mapping from BDD nodes to DFT BEs as follows: 
+// 0 -> X1
+// 1 -> X2
+// 2 -> X3
+// 3 -> X4
+// 4 -> X5
+// 5 -> X6
+// 6 -> X7
+// 7 -> X8
+// 8 -> X9
+// 9 -> X10
+// 10 -> X11
+// 11 -> X12
+// 12 -> X13
+// 13 -> X14
+// 14 -> X15
+// 15 -> X16

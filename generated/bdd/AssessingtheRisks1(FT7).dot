@@ -3,81 +3,107 @@ graph [dpi = 300];
 center = true;
 edge [dir = forward];
 root [style=invis];
-root -> 132 [style=solid dir=both arrowtail=none];
-132 [label="0"];
-131 [label="1"];
-130 [label="2"];
-129 [label="3"];
-128 [label="4"];
-127 [label="5"];
-126 [label="6"];
-125 [label="7"];
-124 [label="8"];
-123 [label="9"];
-122 [label="10"];
-121 [label="11"];
-120 [label="12"];
-119 [label="13"];
-118 [label="14"];
-117 [label="15"];
-116 [label="16"];
-115 [label="17"];
-114 [label="18"];
-113 [label="19"];
-112 [label="20"];
-111 [label="21"];
-110 [label="22"];
-109 [label="23"];
-26 [label="24"];
+root -> 33554562 [style=solid dir=both arrowtail=none];
+33554562 [label="0"];
+33554561 [label="1"];
+33554560 [label="2"];
+33554559 [label="3"];
+33554558 [label="4"];
+33554557 [label="5"];
+33554556 [label="6"];
+33554555 [label="7"];
+33554554 [label="8"];
+33554553 [label="9"];
+33554552 [label="10"];
+33554551 [label="11"];
+33554550 [label="12"];
+33554549 [label="13"];
+33554548 [label="14"];
+33554547 [label="15"];
+33554546 [label="16"];
+33554545 [label="17"];
+33554544 [label="18"];
+33554543 [label="19"];
+33554542 [label="20"];
+33554541 [label="21"];
+33554540 [label="22"];
+33554539 [label="23"];
+33554456 [label="24"];
 0 [shape=box, style=filled, label="F"];
-26 -> 0 [style=dashed];
-26 -> 0 [style=solid dir=both arrowtail=dot];
-109 -> 26 [style=dashed];
-109 -> 0 [style=solid dir=both arrowtail=dot];
-110 -> 109 [style=dashed];
-110 -> 0 [style=solid dir=both arrowtail=dot];
-111 -> 110 [style=dashed];
-111 -> 0 [style=solid dir=both arrowtail=dot];
-112 -> 111 [style=dashed];
-112 -> 0 [style=solid dir=both arrowtail=dot];
-113 -> 112 [style=dashed];
-113 -> 0 [style=solid dir=both arrowtail=dot];
-114 -> 113 [style=dashed];
-114 -> 0 [style=solid dir=both arrowtail=dot];
-115 -> 114 [style=dashed];
-115 -> 0 [style=solid dir=both arrowtail=dot];
-116 -> 115 [style=dashed];
-116 -> 0 [style=solid dir=both arrowtail=dot];
-117 -> 116 [style=dashed];
-117 -> 0 [style=solid dir=both arrowtail=dot];
-118 -> 117 [style=dashed];
-118 -> 0 [style=solid dir=both arrowtail=dot];
-119 -> 118 [style=dashed];
-119 -> 0 [style=solid dir=both arrowtail=dot];
-120 -> 119 [style=dashed];
-120 -> 0 [style=solid dir=both arrowtail=dot];
-121 -> 120 [style=dashed];
-121 -> 0 [style=solid dir=both arrowtail=dot];
-122 -> 121 [style=dashed];
-122 -> 0 [style=solid dir=both arrowtail=dot];
-123 -> 122 [style=dashed];
-123 -> 0 [style=solid dir=both arrowtail=dot];
-124 -> 123 [style=dashed];
-124 -> 0 [style=solid dir=both arrowtail=dot];
-125 -> 124 [style=dashed];
-125 -> 0 [style=solid dir=both arrowtail=dot];
-126 -> 125 [style=dashed];
-126 -> 0 [style=solid dir=both arrowtail=dot];
-127 -> 126 [style=dashed];
-127 -> 0 [style=solid dir=both arrowtail=dot];
-128 -> 127 [style=dashed];
-128 -> 0 [style=solid dir=both arrowtail=dot];
-129 -> 128 [style=dashed];
-129 -> 0 [style=solid dir=both arrowtail=dot];
-130 -> 129 [style=dashed];
-130 -> 0 [style=solid dir=both arrowtail=dot];
-131 -> 130 [style=dashed];
-131 -> 0 [style=solid dir=both arrowtail=dot];
-132 -> 131 [style=dashed];
-132 -> 0 [style=solid dir=both arrowtail=dot];
+33554456 -> 0 [style=dashed];
+33554456 -> 0 [style=solid dir=both arrowtail=dot];
+33554539 -> 33554456 [style=dashed];
+33554539 -> 0 [style=solid dir=both arrowtail=dot];
+33554540 -> 33554539 [style=dashed];
+33554540 -> 0 [style=solid dir=both arrowtail=dot];
+33554541 -> 33554540 [style=dashed];
+33554541 -> 0 [style=solid dir=both arrowtail=dot];
+33554542 -> 33554541 [style=dashed];
+33554542 -> 0 [style=solid dir=both arrowtail=dot];
+33554543 -> 33554542 [style=dashed];
+33554543 -> 0 [style=solid dir=both arrowtail=dot];
+33554544 -> 33554543 [style=dashed];
+33554544 -> 0 [style=solid dir=both arrowtail=dot];
+33554545 -> 33554544 [style=dashed];
+33554545 -> 0 [style=solid dir=both arrowtail=dot];
+33554546 -> 33554545 [style=dashed];
+33554546 -> 0 [style=solid dir=both arrowtail=dot];
+33554547 -> 33554546 [style=dashed];
+33554547 -> 0 [style=solid dir=both arrowtail=dot];
+33554548 -> 33554547 [style=dashed];
+33554548 -> 0 [style=solid dir=both arrowtail=dot];
+33554549 -> 33554548 [style=dashed];
+33554549 -> 0 [style=solid dir=both arrowtail=dot];
+33554550 -> 33554549 [style=dashed];
+33554550 -> 0 [style=solid dir=both arrowtail=dot];
+33554551 -> 33554550 [style=dashed];
+33554551 -> 0 [style=solid dir=both arrowtail=dot];
+33554552 -> 33554551 [style=dashed];
+33554552 -> 0 [style=solid dir=both arrowtail=dot];
+33554553 -> 33554552 [style=dashed];
+33554553 -> 0 [style=solid dir=both arrowtail=dot];
+33554554 -> 33554553 [style=dashed];
+33554554 -> 0 [style=solid dir=both arrowtail=dot];
+33554555 -> 33554554 [style=dashed];
+33554555 -> 0 [style=solid dir=both arrowtail=dot];
+33554556 -> 33554555 [style=dashed];
+33554556 -> 0 [style=solid dir=both arrowtail=dot];
+33554557 -> 33554556 [style=dashed];
+33554557 -> 0 [style=solid dir=both arrowtail=dot];
+33554558 -> 33554557 [style=dashed];
+33554558 -> 0 [style=solid dir=both arrowtail=dot];
+33554559 -> 33554558 [style=dashed];
+33554559 -> 0 [style=solid dir=both arrowtail=dot];
+33554560 -> 33554559 [style=dashed];
+33554560 -> 0 [style=solid dir=both arrowtail=dot];
+33554561 -> 33554560 [style=dashed];
+33554561 -> 0 [style=solid dir=both arrowtail=dot];
+33554562 -> 33554561 [style=dashed];
+33554562 -> 0 [style=solid dir=both arrowtail=dot];
 }
+// Mapping from BDD nodes to DFT BEs as follows: 
+// 0 -> Signal_and_communication
+// 1 -> Frogs,_switches_and_track_appliances
+// 2 -> Other_way_and_structure
+// 3 -> Rail,_joint_bar_and_rail_anchoring
+// 4 -> Roadbed
+// 5 -> Track_geometry
+// 6 -> Brakes,_use_of
+// 7 -> General_switching_rules
+// 8 -> Loading_procedures
+// 9 -> Miscellaneous
+// 10 -> Speed
+// 11 -> Switches,_use_of
+// 12 -> Train_handling/train_makeup
+// 13 -> Axles_and_journal_bearings
+// 14 -> Body
+// 15 -> Brakes
+// 16 -> Coupler_and_draft_system
+// 17 -> General_mechanical_and_electrical_failures
+// 18 -> Locomotive
+// 19 -> Truck_component
+// 20 -> Wheels
+// 21 -> Environmental_conditions
+// 22 -> Loading_procedures_misc
+// 23 -> Other_miscellaneous
+// 24 -> Unusual_operating_situations
