@@ -1,6 +1,6 @@
 package reallife
 
-import bdd.BDD
+import bdd.{BDD, BDDOrdering}
 import benchmark.Conversion
 import dft.DFT
 
@@ -86,8 +86,11 @@ object TreesInPaper {
         val (dagFT, probabilities) = Conversion.translateToDagTree(treeFT)
         val basicEvents = minimalcutpathset.getBasicEvents(dagFT)
         val (booleanFormula, _) = Conversion.translateToBooleanFormula(treeFT)
-        val bdd = BDD.readStormSylvanBDDDotFile(new File(s"generated/bdd/${treeLikeFT.name}.dot"))
-        val bddProbabilities = BDD.bddProbabilities(DFT.readDFTFile(Source.fromFile(new File(s"handcreated/${treeLikeFT.name}.dft"))))
+        val bddFile = new File(s"generated/bdd/${treeLikeFT.name}.dot")
+        val dftFile = new File(s"handcreated/${treeLikeFT.name}.dft")
+        val bdd = BDD.readStormSylvanBDDDotFile(bddFile)
+        val (dftLines, dft2InternalMapping) = DFT.readDFTFile(Source.fromFile(dftFile))
+        val bddProbabilities = BDDOrdering.bddProbabilities(dft2InternalMapping, probabilities, bddFile)
 
         println("Flattening tree for recursive algorithm...")
         val flattenedTree = faulttree.flatten(treeFT)
@@ -147,8 +150,12 @@ object TreesInPaper {
         val dagFT = dagLikeFT.FT
         val basicEvents = minimalcutpathset.getBasicEvents(dagFT)
         val (booleanFormula, probabilities) = Conversion.translateToBooleanFormula(dagFT)
-        val bdd = BDD.readStormSylvanBDDDotFile(new File(s"generated/bdd/${dagLikeFT.name}.dot"))
-        val bddProbabilities = BDD.bddProbabilities(DFT.readDFTFile(Source.fromFile(new File(s"handcreated/${dagLikeFT.name}.dft"))))
+        val bddFile = new File(s"generated/bdd/${dagLikeFT.name}.dot")
+        val dftFile = new File(s"handcreated/${dagLikeFT.name}.dft")
+        val bdd = BDD.readStormSylvanBDDDotFile(bddFile)
+        val (dftLines, dft2InternalMapping) = DFT.readDFTFile(Source.fromFile(dftFile))
+        val bddProbabilities = BDDOrdering.bddProbabilities(dft2InternalMapping, probabilities, bddFile)
+
 
         println("Flattening tree for recursive algorithm")
         val flattenedDag = minimalcutpathset.flatten(dagFT)

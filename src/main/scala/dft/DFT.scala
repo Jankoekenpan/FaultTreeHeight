@@ -3,6 +3,7 @@ package dft
 import benchmark.Conversion
 
 import java.io.{BufferedWriter, File, FileWriter}
+import scala.collection.immutable.IntMap
 import scala.collection.mutable
 import scala.io.Source
 
@@ -77,6 +78,11 @@ object Parsing {
 }
 
 object DFT {
+    
+    def getProbabilities(dftLines: Seq[DFTNode]): IntMap[Double] =
+        IntMap.from(dftLines.collect {
+            case DFTNode.BasicEvent(id, prob) => (id, prob)
+        })
 
     def writeDFTFile(output: File, lines: Seq[DFTNode]): Unit = {
         val writer = new BufferedWriter(new FileWriter(output))
@@ -87,7 +93,7 @@ object DFT {
         writer.close()
     }
 
-    def readDFTFile(source: Source): Seq[DFTNode] = {
+    def readDFTFile(source: Source): (Seq[DFTNode], Map[String, Int]) = {
         var curId = 0
         def nextId(): Int = {
             val id = curId
@@ -116,19 +122,19 @@ object DFT {
             }
         }
 
-        result.toList
+        (result.toList, idMapping.toMap)
     }
 
     def readTreeLikeFaultTree(source: Source): faulttree.FaultTree =
-        Conversion.translateToTreeLikeFaultTree(readDFTFile(source))
+        Conversion.translateToTreeLikeFaultTree(readDFTFile(source)._1)
 
     def readDagLikeFaultTree(source: Source): minimalcutpathset.FaultTree =
-        Conversion.translateToDagTree(readDFTFile(source))
+        Conversion.translateToDagTree(readDFTFile(source)._1)
     
     def main(args: Array[String]): Unit = {
         val source = Source.fromResource("AssessingtheRisks1.dft")
 
-        val dftNodes = DFT.readDFTFile(source)
+        val dftNodes = DFT.readDFTFile(source)._1
         println(s"DEBUG: how many lines?: ${dftNodes.size}")
 
         for (node <- dftNodes) {

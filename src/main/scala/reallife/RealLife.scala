@@ -121,7 +121,7 @@ object RealLife {
             val basicEvents = minimalcutpathset.getBasicEvents(dagFT)
             val (booleanFormula, _) = Conversion.translateToBooleanFormula(treeFT)
             val bdd = BDD.readStormSylvanBDDDotFile(new File(s"generated/bdd/${treeLikeFT.name}.dot"))
-            val bddProbabilities = BDD.bddProbabilities(DFT.readDFTFile(Source.fromFile(new File(s"generated/dft/${treeLikeFT.name}.dft"))))
+            val bddProbabilities = BDD.bddProbabilities(DFT.readDFTFile(Source.fromFile(new File(s"generated/dft/${treeLikeFT.name}.dft")))._1)
 
             println("Flattening tree for recursive algorithm...")
             val flattenedTree = faulttree.flatten(treeFT)
@@ -190,7 +190,7 @@ object RealLife {
             val basicEvents = minimalcutpathset.getBasicEvents(dagFT)
             val (booleanFormula, probabilities) = Conversion.translateToBooleanFormula(dagFT)
             val bdd = BDD.readStormSylvanBDDDotFile(new File(s"generated/bdd/${dagLikeFT.name}.dot"))
-            val bddProbabilities = BDD.bddProbabilities(DFT.readDFTFile(Source.fromFile(new File(s"generated/dft/${dagLikeFT.name}.dft"))))
+            val bddProbabilities = BDD.bddProbabilities(DFT.readDFTFile(Source.fromFile(new File(s"generated/dft/${dagLikeFT.name}.dft")))._1)
 
             println("Flattening tree for recursive algorithm")
             val flattenedDag = minimalcutpathset.flatten(dagFT)

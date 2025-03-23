@@ -22,6 +22,6 @@ object Comparison {
 
     private def readDFT(path: String): faulttree.FaultTree = {
         val source = Source.fromFile(new File(path))
-        Conversion.translateToTreeLikeFaultTree(DFT.readDFTFile(source))
+        Conversion.translateToTreeLikeFaultTree(DFT.readDFTFile(source)._1)
     }
 }

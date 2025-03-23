@@ -54,6 +54,10 @@ object BDD {
 
     // Storm's BDD node ordering is the same as the order in which basic events occur in the .dft file
     // So we can just grab the index of the basic event and treat it as its node id.
+    // UPDATE 2025-03-21: there is a bug in Storm which always overrides the ordering with the ordering of BE
+    // sorted topologically by distance to the top event. See https://github.com/moves-rwth/storm/pull/690
+    /** Use [[BDDOrdering.bddProbabilities]] instead. */
+    @java.lang.Deprecated
     def bddProbabilities(dftNodes: Seq[dft.DFTNode]): IntMap[Double] =
         IntMap.from(dftNodes.collect {
             case dft.DFTNode.BasicEvent(_, probability) => probability
@@ -61,7 +65,7 @@ object BDD {
 
     def main(args: Array[String]): Unit = {
         val bdd = readStormSylvanBDDDotFile(new File("generated/bdd/AircraftRunwayExcursionAccidents.dot"))
-        val dftLines = dft.DFT.readDFTFile(Source.fromFile(new File("generated/dft/AircraftRunwayExcursionAccidents.dft")))
+        val (dftLines, bddIdMapping) = dft.DFT.readDFTFile(Source.fromFile(new File("generated/dft/AircraftRunwayExcursionAccidents.dft")))
         val probabilities = bddProbabilities(dftLines)
         println(bdd)
         println(height(bdd, probabilities))
