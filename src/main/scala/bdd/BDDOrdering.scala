@@ -37,9 +37,11 @@ object BDDOrdering {
 
         val result = IntMap.newBuilder[Double]
         for ((dftId, internalId) <- dft2InternalMapping) {
-            val bddId = bddIds(dftId)
-            val probability = internalProbabilities(internalId)
-            result.addOne(bddId -> probability)
+            internalProbabilities.get(internalId) match
+                case Some(probability) =>
+                    val bddId = bddIds(dftId)
+                    result.addOne(bddId -> probability)
+                case _ => // not a basic event
         }
 
         result.result()

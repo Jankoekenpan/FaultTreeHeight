@@ -1,0 +1,6 @@
+toplevel "D";
+"D" and "A" "E";
+"E" or "B" "C";
+"A" prob=0.1;
+"B" prob=0.1;
+"C" prob=0.1;

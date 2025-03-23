@@ -1,0 +1,21 @@
+digraph "DD" {
+graph [dpi = 300];
+center = true;
+edge [dir = forward];
+root [style=invis];
+root -> 33554436 [style=solid dir=both arrowtail=none];
+33554436 [label="0"];
+0 [shape=box, style=filled, label="F"];
+33554435 [label="1"];
+33554434 [label="2"];
+33554434 -> 0 [style=dashed];
+33554434 -> 0 [style=solid dir=both arrowtail=dot];
+33554435 -> 33554434 [style=dashed];
+33554435 -> 0 [style=solid dir=both arrowtail=dot];
+33554436 -> 0 [style=dashed];
+33554436 -> 33554435 [style=solid dir=both arrowtail=none];
+}
+// Mapping from BDD nodes to DFT BEs as follows: 
+// 0 -> A
+// 1 -> B
+// 2 -> C

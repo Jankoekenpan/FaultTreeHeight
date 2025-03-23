@@ -15,7 +15,9 @@ object TestBDDHeights {
 //        println(TreesInPaper.runTreeLikeFaultTree(FT3_ATC2))
 //        println(TreesInPaper.runTreeLikeFaultTree(FT3_ATC3))
 //        println(TreesInPaper.runTreeLikeFaultTree(FT3_ATC4))
-        println(TreesInPaper.runDagLikeFaultTree(FT12_OGPF2))
+//        println(TreesInPaper.runDagLikeFaultTree(FT12_OGPF2))
+        println(TreesInPaper.runTreeLikeFaultTree(FT_Example))
+        println(TreesInPaper.runTreeLikeFaultTree(FT_Example1))
     }
 }
 
@@ -344,4 +346,16 @@ object FT14_HSC extends TreeLikeFaultTree {
     import faulttree.FaultTree
     override def name = "HSC(FT14)"
     val FT: FaultTree = DFT.readTreeLikeFaultTree(Source.fromFile("handcreated/HSC(FT14).dft"))
+}
+
+object FT_Example extends TreeLikeFaultTree {
+    import faulttree.FaultTree
+    override def name = "Example"
+    val FT: FaultTree = DFT.readTreeLikeFaultTree(Source.fromFile("handcreated/Example.dft"))
+}
+
+object FT_Example1 extends TreeLikeFaultTree {
+    import faulttree.FaultTree
+    override def name = "Example1"
+    val FT: FaultTree = DFT.readTreeLikeFaultTree(Source.fromFile("handcreated/Example1.dft"))
 }
