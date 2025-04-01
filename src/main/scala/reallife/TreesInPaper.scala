@@ -3,6 +3,7 @@ package reallife
 import bdd.{BDD, BDDOrdering}
 import benchmark.Conversion
 import dft.DFT
+import minimalcutpathset.{MinceNormalised, MinceOrderedSet}
 
 import java.io.File
 import java.nio.file.{Files, Path, StandardOpenOption}
@@ -129,6 +130,16 @@ object TreesInPaper {
             BDD.height(bdd, bddProbabilities)
         } else -1
 
+        val heightMinceNormalised: Double = if runMince then {
+            println(s"Calculate height of ${treeLikeFT.name} using mince-normalised algorithm...")
+            MinceNormalised.minceNormalised(minimalCutSets, probabilities)._2
+        } else -1
+
+        val heightMinceOrderedSet: Double = if runMince then {
+            println(s"Calculate height of ${treeLikeFT.name} using mince-ordered-set algorithm...")
+            MinceOrderedSet.minceOrderedSet(minimalCutSets, probabilities)._2
+        } else -1
+
         HeightResults(
             treeName = treeLikeFT.name,
             basicEvents = basicEvents.size,
@@ -138,7 +149,9 @@ object TreesInPaper {
             heightRecursive = heightRecursive2,
             heightCutSet = heightCutSet,
             heightPathSet = heightPathSet,
-            heightBDD = heightBDD
+            heightBDD = heightBDD,
+            heightMinceNormalised = heightMinceNormalised,
+            heightMinceOrderedSet = heightMinceOrderedSet,
         )
     }
 
@@ -191,6 +204,16 @@ object TreesInPaper {
             BDD.height(bdd, bddProbabilities)
         } else -1
 
+        val heightMinceNormalised: Double = if runMince then {
+            println(s"Calculate height of ${dagLikeFT.name} using mince-normalised algorithm...")
+            MinceNormalised.minceNormalised(minimalCutSets, probabilities)._2
+        } else -1
+
+        val heightMinceOrderedSet: Double = if runMince then {
+            println(s"Calculate height of ${dagLikeFT.name} using mince-ordered-set algorithm...")
+            MinceOrderedSet.minceOrderedSet(minimalCutSets, probabilities)._2
+        } else -1
+
         HeightResults(
             treeName = dagLikeFT.name,
             basicEvents = basicEvents.size,
@@ -200,7 +223,9 @@ object TreesInPaper {
             heightRecursive = heightRecursive3,
             heightCutSet = heightCutSet,
             heightPathSet = heightPathSet,
-            heightBDD = heightBDD
+            heightBDD = heightBDD,
+            heightMinceNormalised = heightMinceNormalised,
+            heightMinceOrderedSet = heightMinceOrderedSet,
         )
     }
 
@@ -215,7 +240,9 @@ case class HeightResults(
     heightRecursive: Double,
     heightCutSet: Double,
     heightPathSet: Double,
-    heightBDD: Double
+    heightBDD: Double,
+    heightMinceNormalised: Double = -1,
+    heightMinceOrderedSet: Double = -1,
 )
 
 object HeightResults {
@@ -225,12 +252,12 @@ object HeightResults {
         Files.createFile(Path.of(outFile))
 
     def printHeader(file: Path): Unit = {
-        val line = "Fault Tree,# Basic events, # Minimal cut sets,# Minimal path sets,Height (eminent),Height (remind),Height (mince),Height (pase),Height (storm-dft bdd)"
+        val line = "Fault Tree,# Basic events, # Minimal cut sets,# Minimal path sets,Height (eminent),Height (remind),Height (mince),Height (pase),Height (storm-dft bdd),Height (mince-normalised),Height (mince-ordered-set)"
         writeLine(file, line)
     }
 
     def printResults(file: Path, results: HeightResults): Unit = {
-        val line = s""""${results.treeName}","${results.basicEvents}","${results.cutSets}","${results.pathSets}","${results.heightExact}","${results.heightRecursive}","${results.heightCutSet}","${results.heightPathSet}","${results.heightBDD}""""
+        val line = s""""${results.treeName}","${results.basicEvents}","${results.cutSets}","${results.pathSets}","${results.heightExact}","${results.heightRecursive}","${results.heightCutSet}","${results.heightPathSet}","${results.heightBDD}","${results.heightMinceNormalised}","${results.heightMinceOrderedSet}""""
         writeLine(file, line)
     }
 

@@ -99,7 +99,7 @@ def height(k/*zero-based*/: Int, formula: BooleanFormula, probabilities: IntMap[
     result
 }
 
-// paper: 'eminent'.
+// paper: 'eminent' or 'EDA'.
 def height(formula: BooleanFormula, probabilities: IntMap[RealNumber]): RealNumber =
     height(formula, probabilities, computeLookupById(), Cache())
 

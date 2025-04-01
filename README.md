@@ -11,15 +11,15 @@ Depending on your IDE/Editor setup, you should also install SBT itself.
 
 ## Project setup
 
-- DecisionTree.scala: contains the exact height calculation for boolean formulae (Eminent).
-- RecursiveAlgorithm2.scala: contains the 'recursive' height approximation algorithm for tree-like fault trees (Remind).
-- BinaryDecisionTree.scala: contains the 'recursive' height approximation algorithm for dag-like fault trees (Remind).
-- CutSetAlgorithm4.scala: contains the 'MCS-based' height approximation algorithm for dag-like fault trees (Mince).
-- PathSetAlgorithm5.scala: contains the 'MPS-based' height approximation algorithm for dag-like fault trees (Pase).
+- DecisionTree.scala: contains the exact height calculation for boolean formulae (Eminent/EDA).
+- RecursiveAlgorithm2.scala: contains the 'recursive' height approximation algorithm for tree-like fault trees (Remind/BUDA).
+- BinaryDecisionTree.scala: contains the 'recursive' height approximation algorithm for dag-like fault trees (Remind/BUDA).
+- CutSetAlgorithm4.scala: contains the 'MCS-based' height approximation algorithm for dag-like fault trees (Mince/CuDA).
+- PathSetAlgorithm5.scala: contains the 'MPS-based' height approximation algorithm for dag-like fault trees (Pase/PaDA).
 - RandomBDTs.scala: contains the 'random binatry decision tree' height approximation algorithm for dag-like fault trees (Ranger).
 - Benchmark.scala: contains a [JMH](https://openjdk.org/projects/code-tools/jmh/) benchmark for comparing the running times of all algorithms mentioned in the Paper.
 - Conversion.scala: code which converts between Tree-Like FaultTree, Dag-Like FaultTree and BooleanFormula representations of fault trees.
-- RealLife.scala: calculates height approximations for some real-world fault trees.
+- TreesInPaper.scala: calculates height approximations for some real-world fault trees.
 - DFT.scala: simple parser and printer for .dft files.
 
 ## Running the benchmarks

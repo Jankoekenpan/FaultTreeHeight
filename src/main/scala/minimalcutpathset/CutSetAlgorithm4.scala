@@ -19,12 +19,10 @@ def height4(faultTree: FaultTree, basicEvents: Set[Event], probabilities: IntMap
     height
 }
 
-// paper: 'mince'.
+// paper: 'mince' or 'CuDA'.
 def algorithm4(cutSets: CutSets, basicEvents: IntMap[Probability]): (Etas, Double) = {
     val n = basicEvents.size
     val Cnil = cutSets
-
-    //println(s"DEBUG: Cnil = ${Cnil}") //TODO remove
 
     val setFamiliesByPath = scala.collection.mutable.Map.empty[Path, CutSets]
     setFamiliesByPath.put(List(), Cnil)
