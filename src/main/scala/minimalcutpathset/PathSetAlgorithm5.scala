@@ -3,7 +3,7 @@ package minimalcutpathset
 import scala.collection.immutable.IntMap
 
 def pathSetProbability(pathSet: PathSet, probabilities: IntMap[Probability]): Probability =
-    pathSet.toSeq.map(basicEvent => (1D - probabilities(basicEvent))).product
+    pathSet.toSeq.map(basicEvent => 1D - probabilities(basicEvent)).product
 
 def height5(faultTree: FaultTree): Double = {
     val basicEvents = getBasicEvents(faultTree)

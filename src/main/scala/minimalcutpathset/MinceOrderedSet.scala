@@ -11,7 +11,7 @@ object MinceOrderedSet {
         cutSet.toSeq.map(basicEvent => probabilities(basicEvent)).product
 
     def getSmallestCutSetWithHighestProbability(cutSets: CutSets, probabilities: IntMap[Probability]): (CutSet, Probability) = {
-        val cutSetsSeq = cutSets.toSeq;
+        val cutSetsSeq = cutSets.toSeq
         LazyList.from(cutSetsSeq)
             .zip(LazyList.from(cutSetsSeq).map(cs => cutSetProbability(cs, probabilities)))
             .sorted(
