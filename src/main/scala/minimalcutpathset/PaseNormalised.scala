@@ -7,22 +7,22 @@ object PaseNormalised {
     def pathSetProbability(pathSet: PathSet, probabilities: IntMap[Probability]): Probability =
         pathSet.toSeq.map(basicEvent => 1D - probabilities(basicEvent)).product / pathSet.size
 
-    def height5(faultTree: FaultTree): Double = {
+    def paseNormalised(faultTree: FaultTree): Double = {
         val basicEvents = getBasicEvents(faultTree)
         val probabilities = getProbabilities(faultTree)(basicEvents)
-        height5(faultTree, basicEvents, probabilities)
+        paseNormalised(faultTree, basicEvents, probabilities)
     }
 
-    def height5(faultTree: FaultTree, basicEvents: Set[Event], probabilities: IntMap[Probability]): Double = {
+    def paseNormalised(faultTree: FaultTree, basicEvents: Set[Event], probabilities: IntMap[Probability]): Double = {
         val pathSets = minimalPathSets(faultTree)(basicEvents)
 
-        val (etas, height) = algorithm5(pathSets, probabilities)
+        val (etas, height) = paseNormalised(pathSets, probabilities)
 
         height
     }
 
     // paper: 'pase' or 'PaDA'.
-    def algorithm5(pathSets: PathSets, basicEvents: IntMap[Probability]): (Etas, Double) = {
+    def paseNormalised(pathSets: PathSets, basicEvents: IntMap[Probability]): (Etas, Double) = {
         val n = basicEvents.size
         val Pnil = pathSets
 

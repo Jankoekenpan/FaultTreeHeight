@@ -3,7 +3,7 @@ package reallife
 import bdd.{BDD, BDDOrdering}
 import benchmark.Conversion
 import dft.DFT
-import minimalcutpathset.{MinceNormalised, MinceOrderedSet}
+import minimalcutpathset.{MinceNormalised, MinceOrderedSet, PaseNormalised, PaseOrderedSet}
 
 import java.io.File
 import java.nio.file.{Files, Path, StandardOpenOption}
@@ -140,6 +140,16 @@ object TreesInPaper {
             MinceOrderedSet.minceOrderedSet(minimalCutSets, probabilities)._2
         } else -1
 
+        val heightPaseNormalised: Double = if runPase then {
+            println(s"Calculate height of ${treeLikeFT.name} using pase-normalised algorithm...")
+            PaseNormalised.paseNormalised(minimalPathSets, probabilities)._2
+        } else -1
+
+        val heightPaseOrderedSet: Double = if runPase then {
+            println(s"Calculate height of ${treeLikeFT.name} using pase-ordered-set algorithm...")
+            PaseOrderedSet.paseOrderedSet(minimalPathSets, probabilities)._2
+        } else -1
+
         HeightResults(
             treeName = treeLikeFT.name,
             basicEvents = basicEvents.size,
@@ -152,6 +162,8 @@ object TreesInPaper {
             heightBDD = heightBDD,
             heightMinceNormalised = heightMinceNormalised,
             heightMinceOrderedSet = heightMinceOrderedSet,
+            heightPaseNormalised = heightPaseNormalised,
+            heightPaseOrderedSet = heightPaseOrderedSet,
         )
     }
 
@@ -214,6 +226,16 @@ object TreesInPaper {
             MinceOrderedSet.minceOrderedSet(minimalCutSets, probabilities)._2
         } else -1
 
+        val heightPaseNormalised: Double = if runPase then {
+            println(s"Calculate height of ${dagLikeFT.name} using pase-normalised algorithm...")
+            PaseNormalised.paseNormalised(minimalPathSets, probabilities)._2
+        } else -1
+
+        val heightPaseOrderedSet: Double = if runPase then {
+            println(s"Calculate height of ${dagLikeFT.name} using pase-ordered-set algorithm...")
+            PaseOrderedSet.paseOrderedSet(minimalPathSets, probabilities)._2
+        } else -1
+
         HeightResults(
             treeName = dagLikeFT.name,
             basicEvents = basicEvents.size,
@@ -226,6 +248,8 @@ object TreesInPaper {
             heightBDD = heightBDD,
             heightMinceNormalised = heightMinceNormalised,
             heightMinceOrderedSet = heightMinceOrderedSet,
+            heightPaseNormalised = heightPaseNormalised,
+            heightPaseOrderedSet = heightPaseOrderedSet,
         )
     }
 
@@ -243,6 +267,8 @@ case class HeightResults(
     heightBDD: Double,
     heightMinceNormalised: Double = -1,
     heightMinceOrderedSet: Double = -1,
+    heightPaseNormalised: Double = -1,
+    heightPaseOrderedSet: Double = -1,
 )
 
 object HeightResults {
@@ -252,12 +278,12 @@ object HeightResults {
         Files.createFile(Path.of(outFile))
 
     def printHeader(file: Path): Unit = {
-        val line = "Fault Tree,# Basic events, # Minimal cut sets,# Minimal path sets,Height (eminent),Height (remind),Height (mince),Height (pase),Height (storm-dft bdd),Height (mince-normalised),Height (mince-ordered-set)"
+        val line = "Fault Tree,# Basic events, # Minimal cut sets,# Minimal path sets,Height (eminent),Height (remind),Height (mince),Height (pase),Height (storm-dft bdd),Height (mince-normalised),Height (mince-ordered-set),Height (pase-normalised),Height (pase-ordered-set)"
         writeLine(file, line)
     }
 
     def printResults(file: Path, results: HeightResults): Unit = {
-        val line = s""""${results.treeName}","${results.basicEvents}","${results.cutSets}","${results.pathSets}","${results.heightExact}","${results.heightRecursive}","${results.heightCutSet}","${results.heightPathSet}","${results.heightBDD}","${results.heightMinceNormalised}","${results.heightMinceOrderedSet}""""
+        val line = s""""${results.treeName}","${results.basicEvents}","${results.cutSets}","${results.pathSets}","${results.heightExact}","${results.heightRecursive}","${results.heightCutSet}","${results.heightPathSet}","${results.heightBDD}","${results.heightMinceNormalised}","${results.heightMinceOrderedSet}","${results.heightPaseNormalised}","${results.heightPaseOrderedSet}""""
         writeLine(file, line)
     }
 

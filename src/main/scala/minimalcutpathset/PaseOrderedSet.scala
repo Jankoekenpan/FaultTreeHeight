@@ -17,22 +17,22 @@ object PaseOrderedSet {
             ).head
     }
 
-    def height5(faultTree: FaultTree): Double = {
+    def paseOrderedSet(faultTree: FaultTree): Double = {
         val basicEvents = getBasicEvents(faultTree)
         val probabilities = getProbabilities(faultTree)(basicEvents)
-        height5(faultTree, basicEvents, probabilities)
+        paseOrderedSet(faultTree, basicEvents, probabilities)
     }
 
-    def height5(faultTree: FaultTree, basicEvents: Set[Event], probabilities: IntMap[Probability]): Double = {
+    def paseOrderedSet(faultTree: FaultTree, basicEvents: Set[Event], probabilities: IntMap[Probability]): Double = {
         val pathSets = minimalPathSets(faultTree)(basicEvents)
 
-        val (etas, height) = algorithm5(pathSets, probabilities)
+        val (etas, height) = paseOrderedSet(pathSets, probabilities)
 
         height
     }
 
     // paper: 'pase' or 'PaDA'.
-    def algorithm5(pathSets: PathSets, basicEvents: IntMap[Probability]): (Etas, Double) = {
+    def paseOrderedSet(pathSets: PathSets, basicEvents: IntMap[Probability]): (Etas, Double) = {
         val n = basicEvents.size
         val Pnil = pathSets
 
