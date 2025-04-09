@@ -316,15 +316,15 @@ class RealWorldFaultTreesBenchmark {
 
     // MainTrackTrainCollisionsLeadingToFatalitiesAndInjuries
 
-    //@Benchmark // TODO re-enable
+    @Benchmark
     def timeFT1_MainTrackTrainCollisionsLeadingToFatalitiesAndInjuries_EDA(): Double =
         decisiontree.height(mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_formula, mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_probabilities)
 
-    //@Benchmark // TODO re-enable
+    @Benchmark
     def timeFT1_MainTrackTrainCollisionsLeadingToFatalitiesAndInjuries_BUDA(): Double =
         faulttree.height7(mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_flattened)
 
-    //@Benchmark // TODO re-enable
+    @Benchmark
     def timeFT1_MainTrackTrainCollisionsLeadingToFatalitiesAndInjuries_CuDA(): Double =
         val cutsets = minimalcutpathset.minimalCutSets(mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_dagtree)(mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_basicevents)
         minimalcutpathset.algorithm4(cutsets, mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_probabilities)._2
@@ -339,7 +339,7 @@ class RealWorldFaultTreesBenchmark {
         val cutsets = minimalcutpathset.minimalCutSets(mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_dagtree)(mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_basicevents)
         MinceOrderedSet.minceOrderedSet(cutsets, mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_probabilities)._2
 
-    //@Benchmark // TODO re-enable
+    @Benchmark
     def timeFT1_MainTrackTrainCollisionsLeadingToFatalitiesAndInjuries_PaDA(): Double =
         val pathsets = minimalcutpathset.minimalPathSets(mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_dagtree)(mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_basicevents)
         minimalcutpathset.algorithm5(pathsets, mainTrackTrainCollisionLeadingToFatalitiesAndInjuries_probabilities)._2
@@ -356,11 +356,11 @@ class RealWorldFaultTreesBenchmark {
 
     // T0Chopper
 
-    //@Benchmark // TODO re-enable
+    @Benchmark
     def timeFT2_T0Chopper_BUDA(): Double =
         decisiontree.algorithm8(t0Chopper_flattened, t0Chopper_probabilities)._2
 
-    //@Benchmark // TODO re-enable
+    @Benchmark
     def timeFT2_T0Chopper_CuDA(): Double =
         val cutsets = minimalcutpathset.minimalCutSets(t0Chopper_flattened)(t0Chopper_basicevents)
         minimalcutpathset.algorithm4(cutsets, t0Chopper_probabilities)._2
@@ -375,7 +375,7 @@ class RealWorldFaultTreesBenchmark {
         val cutsets = minimalcutpathset.minimalCutSets(t0Chopper_flattened)(t0Chopper_basicevents)
         MinceOrderedSet.minceOrderedSet(cutsets, t0Chopper_probabilities)._2
 
-    //@Benchmark // TODO re-enable
+    @Benchmark
     def timeFT2_T0Chopper_PaDA(): Double =
         val pathsets = minimalcutpathset.minimalPathSets(t0Chopper_flattened)(t0Chopper_basicevents)
         minimalcutpathset.algorithm5(pathsets, t0Chopper_probabilities)._2
@@ -392,11 +392,11 @@ class RealWorldFaultTreesBenchmark {
 
     // ATCFailsToResolveTheConflict
 
-    //@Benchmark // TODO re-enable
+    @Benchmark
     def timeFT3_ATCFailsToResolveTheConflict_BUDA(): Double =
         faulttree.height7(atcFailsToResolveTheConflict_flattened)
 
-    //@Benchmark // TODO re-enable
+    @Benchmark
     def timeFT3_ATCFailsToResolveTheConflict_CuDA(): Double =
         val cutsets = minimalcutpathset.minimalCutSets(atcFailsToResolveTheConflict_dagtree)(atcFailsToResolveTheConflict_basicevents)
         minimalcutpathset.algorithm4(cutsets, atcFailsToResolveTheConflict_probabilities)._2
@@ -411,7 +411,7 @@ class RealWorldFaultTreesBenchmark {
         val cutsets = minimalcutpathset.minimalCutSets(atcFailsToResolveTheConflict_dagtree)(atcFailsToResolveTheConflict_basicevents)
         MinceOrderedSet.minceOrderedSet(cutsets, atcFailsToResolveTheConflict_probabilities)._2
 
-    //@Benchmark // TODO re-enable
+    @Benchmark
     def timeFT3_ATCFailsToResolveTheConflict_PaDA(): Double =
         val pathsets = minimalcutpathset.minimalPathSets(atcFailsToResolveTheConflict_dagtree)(atcFailsToResolveTheConflict_basicevents)
         minimalcutpathset.algorithm5(pathsets, atcFailsToResolveTheConflict_probabilities)._2
@@ -428,11 +428,11 @@ class RealWorldFaultTreesBenchmark {
 
     // AircraftRunwayExcursionAccidents
 
-    //@Benchmark // TODO re-enable
+    @Benchmark
     def timeFT4_AircraftRunwayExcursionAccidents_BUDA(): Double =
         faulttree.height7(aircraftRunwayExcursionAccidents_flattened)
 
-    //@Benchmark // TODO re-enable
+    @Benchmark
     def timeFT4_AircraftRunwayExcursionAccidents_CuDA(): Double =
         val cutsets = minimalcutpathset.minimalCutSets(aircraftRunwayExcursionAccidents_dagtree)(aircraftRunwayExcursionAccidents_basicevents)
         minimalcutpathset.algorithm4(cutsets, aircraftRunwayExcursionAccidents_probabilities)._2
@@ -447,7 +447,7 @@ class RealWorldFaultTreesBenchmark {
         val cutsets = minimalcutpathset.minimalCutSets(aircraftRunwayExcursionAccidents_dagtree)(aircraftRunwayExcursionAccidents_basicevents)
         MinceOrderedSet.minceOrderedSet(cutsets, aircraftRunwayExcursionAccidents_probabilities)._2
 
-    //@Benchmark // TODO re-enable
+    @Benchmark
     def timeFT4_AircraftRunwayExcursionAccidents_PaDA(): Double =
         val pathsets = minimalcutpathset.minimalPathSets(aircraftRunwayExcursionAccidents_dagtree)(aircraftRunwayExcursionAccidents_basicevents)
         minimalcutpathset.algorithm5(pathsets, aircraftRunwayExcursionAccidents_probabilities)._2
@@ -464,11 +464,11 @@ class RealWorldFaultTreesBenchmark {
 
     // LiquidStorageTank
 
-    //@Benchmark // TODO re-enable
+    @Benchmark
     def timeFT5_LiquidStorageTank_BUDA(): Double =
         faulttree.height7(liquidStorageTank_flattened)
 
-    //@Benchmark // TODO re-enable
+    @Benchmark
     def timeFT5_LiquidStorageTank_CuDA(): Double =
         val cutsets = minimalcutpathset.minimalCutSets(liquidStorageTank_dagtree)(liquidStorageTank_basicevents)
         minimalcutpathset.algorithm4(cutsets, liquidStorageTank_probabilities)._2
@@ -483,7 +483,7 @@ class RealWorldFaultTreesBenchmark {
         val cutsets = minimalcutpathset.minimalCutSets(liquidStorageTank_dagtree)(liquidStorageTank_basicevents)
         MinceOrderedSet.minceOrderedSet(cutsets, liquidStorageTank_probabilities)._2
 
-    //@Benchmark // TODO re-enable
+    @Benchmark
     def timeFT5_LiquidStorageTank_PaDA(): Double =
         val pathsets = minimalcutpathset.minimalPathSets(liquidStorageTank_dagtree)(liquidStorageTank_basicevents)
         minimalcutpathset.algorithm5(pathsets, liquidStorageTank_probabilities)._2
@@ -500,11 +500,11 @@ class RealWorldFaultTreesBenchmark {
 
     // LeakageFailure
 
-    //@Benchmark // TODO re-enable
+    @Benchmark
     def timeFT6_LeakageFailure_BUDA(): Double =
         faulttree.height7(leakageFailure_flattened)
 
-    //@Benchmark // TODO re-enable
+    @Benchmark
     def timeFT6_LeakageFailure_CuDA(): Double =
         val cutsets = minimalcutpathset.minimalCutSets(leakageFailure_dagtree)(leakageFailure_basicevents)
         minimalcutpathset.algorithm4(cutsets, leakageFailure_probabilities)._2
@@ -519,7 +519,7 @@ class RealWorldFaultTreesBenchmark {
         val cutsets = minimalcutpathset.minimalCutSets(leakageFailure_dagtree)(leakageFailure_basicevents)
         MinceOrderedSet.minceOrderedSet(cutsets, leakageFailure_probabilities)._2
 
-    //@Benchmark // TODO re-enable
+    @Benchmark
     def timeFT6_LeakageFailure_PaDA(): Double =
         val pathsets = minimalcutpathset.minimalPathSets(leakageFailure_dagtree)(leakageFailure_basicevents)
         minimalcutpathset.algorithm5(pathsets, leakageFailure_probabilities)._2
@@ -536,11 +536,11 @@ class RealWorldFaultTreesBenchmark {
 
     // AssessingTheRisks1
 
-    //@Benchmark // TODO re-enable
+    @Benchmark
     def timeFT7_AssessingTheRisks1_BUDA(): Double =
         faulttree.height7(assessingTheRisks1_flattened)
 
-    //@Benchmark // TODO re-enable
+    @Benchmark
     def timeFT7_AssessingTheRisks1_CuDA(): Double =
         val cutsets = minimalcutpathset.minimalCutSets(assessingTheRisks1_dagtree)(assessingTheRisks1_basicevents)
         minimalcutpathset.algorithm4(cutsets, assessingTheRisks1_probabilities)._2
@@ -555,7 +555,7 @@ class RealWorldFaultTreesBenchmark {
         val cutsets = minimalcutpathset.minimalCutSets(assessingTheRisks1_dagtree)(assessingTheRisks1_basicevents)
         MinceOrderedSet.minceOrderedSet(cutsets, assessingTheRisks1_probabilities)._2
 
-    //@Benchmark // TODO re-enable
+    @Benchmark
     def timeFT7_AssessingTheRisks1_PaDA(): Double =
         val pathsets = minimalcutpathset.minimalPathSets(assessingTheRisks1_dagtree)(assessingTheRisks1_basicevents)
         minimalcutpathset.algorithm5(pathsets, assessingTheRisks1_probabilities)._2
@@ -572,11 +572,11 @@ class RealWorldFaultTreesBenchmark {
 
     // ChlorineRelease
 
-    //@Benchmark // TODO re-enable
+    @Benchmark
     def timeFT8_ChlorineRelease_BUDA(): Double =
         decisiontree.algorithm8(chlorineRelease_flattened, chlorineRelease_probabilities)._2
 
-    //@Benchmark // TODO re-enable
+    @Benchmark
     def timeFT8_ChlorineRelease_CuDA(): Double =
         val cutsets = minimalcutpathset.minimalCutSets(chlorineRelease_flattened)(chlorineRelease_basicevents)
         minimalcutpathset.algorithm4(cutsets, chlorineRelease_probabilities)._2
@@ -591,7 +591,7 @@ class RealWorldFaultTreesBenchmark {
         val cutsets = minimalcutpathset.minimalCutSets(chlorineRelease_flattened)(chlorineRelease_basicevents)
         MinceOrderedSet.minceOrderedSet(cutsets, chlorineRelease_probabilities)._2
 
-    //@Benchmark // TODO re-enable
+    @Benchmark
     def timeFT8_ChlorineRelease_PaDA(): Double =
         val pathsets = minimalcutpathset.minimalPathSets(chlorineRelease_flattened)(chlorineRelease_basicevents)
         minimalcutpathset.algorithm5(pathsets, chlorineRelease_probabilities)._2
@@ -608,11 +608,11 @@ class RealWorldFaultTreesBenchmark {
 
     // LossContainerAtPort
 
-    //@Benchmark // TODO re-enable
+    @Benchmark
     def timeFT9_LossContainerAtPort_BUDA(): Double =
         faulttree.height7(lossContainerAtPort_flattened)
 
-    //@Benchmark // TODO re-enable
+    @Benchmark
     def timeFT9_LossContainerAtPort_CuDA(): Double =
         val cutsets = minimalcutpathset.minimalCutSets(lossContainerAtPort_dagtree)(lossContainerAtPort_basicevents)
         minimalcutpathset.algorithm4(cutsets, lossContainerAtPort_probabilities)._2
@@ -627,7 +627,7 @@ class RealWorldFaultTreesBenchmark {
         val cutsets = minimalcutpathset.minimalCutSets(lossContainerAtPort_dagtree)(lossContainerAtPort_basicevents)
         MinceOrderedSet.minceOrderedSet(cutsets, lossContainerAtPort_probabilities)._2
 
-    //@Benchmark // TODO re-enable
+    @Benchmark
     def timeFT9_LossContainerAtPort_PaDA(): Double =
         val pathsets = minimalcutpathset.minimalPathSets(lossContainerAtPort_dagtree)(lossContainerAtPort_basicevents)
         minimalcutpathset.algorithm5(pathsets, lossContainerAtPort_probabilities)._2
@@ -644,11 +644,11 @@ class RealWorldFaultTreesBenchmark {
 
     // SubmarinePipelineStopperFailure
 
-    //@Benchmark // TODO re-enable
+    @Benchmark
     def timeFT10_SubmarinePipelineStopperFailure_BUDA(): Double =
         faulttree.height7(submarinePipelineStopperFailure_flattened)
 
-    //@Benchmark // TODO re-enable
+    @Benchmark
     def timeFT10_SubmarinePipelineStopperFailure_CuDA(): Double =
         val cutsets = minimalcutpathset.minimalCutSets(submarinePipelineStopperFailure_dagtree)(submarinePipelineStopperFailure_basicevents)
         minimalcutpathset.algorithm4(cutsets, submarinePipelineStopperFailure_probabilities)._2
@@ -663,7 +663,7 @@ class RealWorldFaultTreesBenchmark {
         val cutsets = minimalcutpathset.minimalCutSets(submarinePipelineStopperFailure_dagtree)(submarinePipelineStopperFailure_basicevents)
         MinceOrderedSet.minceOrderedSet(cutsets, submarinePipelineStopperFailure_probabilities)._2
 
-    //@Benchmark // TODO re-enable
+    @Benchmark
     def timeFT10_SubmarinePipelineStopperFailure_PaDA(): Double =
         val pathsets = minimalcutpathset.minimalPathSets(submarinePipelineStopperFailure_dagtree)(submarinePipelineStopperFailure_basicevents)
         minimalcutpathset.algorithm5(pathsets, submarinePipelineStopperFailure_probabilities)._2
@@ -680,11 +680,11 @@ class RealWorldFaultTreesBenchmark {
 
     // PCBA
 
-    //@Benchmark // TODO re-enable
+    @Benchmark
     def timeFT11_PCBA_BUDA(): Double =
         faulttree.height7(pcba_flattened)
 
-    //@Benchmark // TODO re-enable
+    @Benchmark
     def timeFT11_PCBA_CuDA(): Double =
         val cutsets = minimalcutpathset.minimalCutSets(pcba_dagtree)(pcba_basicevents)
         minimalcutpathset.algorithm4(cutsets, pcba_probabilities)._2
@@ -699,7 +699,7 @@ class RealWorldFaultTreesBenchmark {
         val cutsets = minimalcutpathset.minimalCutSets(pcba_dagtree)(pcba_basicevents)
         MinceOrderedSet.minceOrderedSet(cutsets, pcba_probabilities)._2
 
-    //@Benchmark // TODO re-enable
+    @Benchmark
     def timeFT11_PCBA_PaDA(): Double =
         val pathsets = minimalcutpathset.minimalPathSets(pcba_dagtree)(pcba_basicevents)
         minimalcutpathset.algorithm5(pathsets, pcba_probabilities)._2
@@ -716,11 +716,11 @@ class RealWorldFaultTreesBenchmark {
 
     // OGPF
 
-    //@Benchmark // TODO re-enable
+    @Benchmark
     def timeFT12_OGPF_BUDA(): Double =
         decisiontree.algorithm8(ogpf_flattened, ogpf_probabilities)._2
 
-    //@Benchmark // TODO re-enable
+    @Benchmark
     def timeFT12_OGPF_CuDA(): Double =
         val cutsets = minimalcutpathset.minimalCutSets(ogpf_flattened)(ogpf_basicevents)
         minimalcutpathset.algorithm4(cutsets, ogpf_probabilities)._2
@@ -735,7 +735,7 @@ class RealWorldFaultTreesBenchmark {
         val cutsets = minimalcutpathset.minimalCutSets(ogpf_flattened)(ogpf_basicevents)
         MinceOrderedSet.minceOrderedSet(cutsets, ogpf_probabilities)._2
 
-    //@Benchmark // TODO re-enable
+    @Benchmark
     def timeFT12_OGPF_PaDA(): Double =
         val pathsets = minimalcutpathset.minimalPathSets(ogpf_flattened)(ogpf_basicevents)
         minimalcutpathset.algorithm5(pathsets, ogpf_probabilities)._2
@@ -752,11 +752,11 @@ class RealWorldFaultTreesBenchmark {
 
     // BHNGPipeline
 
-    //@Benchmark // TODO re-enable
+    @Benchmark
     def timeFT13_BHNGPipeline_BUDA(): Double =
         faulttree.height7(bhngPipeline_flattened)
 
-    //@Benchmark // TODO re-enable
+    @Benchmark
     def timeFT13_BHNGPipeline_CuDA(): Double =
         val cutsets = minimalcutpathset.minimalCutSets(bhngPipeline_dagtree)(bhngPipeline_basicevents)
         minimalcutpathset.algorithm4(cutsets, bhngPipeline_probabilities)._2
@@ -771,7 +771,7 @@ class RealWorldFaultTreesBenchmark {
         val cutsets = minimalcutpathset.minimalCutSets(bhngPipeline_dagtree)(bhngPipeline_basicevents)
         MinceOrderedSet.minceOrderedSet(cutsets, bhngPipeline_probabilities)._2
 
-    //@Benchmark // TODO re-enable
+    @Benchmark
     def timeFT13_BHNGPipeline_PaDA(): Double =
         val pathsets = minimalcutpathset.minimalPathSets(bhngPipeline_dagtree)(bhngPipeline_basicevents)
         minimalcutpathset.algorithm5(pathsets, bhngPipeline_probabilities)._2
@@ -788,11 +788,11 @@ class RealWorldFaultTreesBenchmark {
 
     // HSC
 
-    //@Benchmark // TODO re-enable
+    @Benchmark
     def timeFT14_HSC_BUDA(): Double =
         faulttree.height7(hsc_flattened)
 
-    //@Benchmark // TODO re-enable
+    @Benchmark
     def timeFT14_HSC_PaDA(): Double =
         val pathsets = minimalcutpathset.minimalPathSets(hsc_dagtree)(hsc_basicevents)
         minimalcutpathset.algorithm5(pathsets, hsc_probabilities)._2
