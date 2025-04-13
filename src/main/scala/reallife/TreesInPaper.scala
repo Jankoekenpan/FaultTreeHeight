@@ -19,6 +19,8 @@ object TestBDDHeights {
 //        println(TreesInPaper.runDagLikeFaultTree(FT12_OGPF2))
         println(TreesInPaper.runTreeLikeFaultTree(FT_Example))
         println(TreesInPaper.runTreeLikeFaultTree(FT_Example1))
+
+
     }
 }
 

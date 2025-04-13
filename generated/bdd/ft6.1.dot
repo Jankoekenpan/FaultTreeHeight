@@ -1,0 +1,182 @@
+digraph "DD" {
+graph [dpi = 300];
+center = true;
+edge [dir = forward];
+root [style=invis];
+root -> 8388715 [style=solid dir=both arrowtail=none];
+8388715 [label="0"];
+8388714 [label="1"];
+8388713 [label="2"];
+8388712 [label="3"];
+8388711 [label="4"];
+8388710 [label="5"];
+8388709 [label="6"];
+8388708 [label="7"];
+8388707 [label="8"];
+8388706 [label="9"];
+8388705 [label="10"];
+8388704 [label="11"];
+8388703 [label="12"];
+8388702 [label="13"];
+8388701 [label="14"];
+8388700 [label="15"];
+8388699 [label="16"];
+8388698 [label="17"];
+8388697 [label="18"];
+8388696 [label="19"];
+50331648 [label="21"];
+8388630 [label="22"];
+0 [shape=box, style=filled, label="F"];
+8388630 -> 0 [style=dashed];
+8388630 -> 0 [style=solid dir=both arrowtail=dot];
+50331648 -> 8388630 [style=dashed];
+50331648 -> 0 [style=solid dir=both arrowtail=dot];
+8388696 -> 50331648 [style=dashed];
+8388696 -> 0 [style=solid dir=both arrowtail=dot];
+8388697 -> 8388696 [style=dashed];
+8388697 -> 0 [style=solid dir=both arrowtail=dot];
+58720263 [label="18"];
+25165826 [label="19"];
+16777217 [label="20"];
+16777217 -> 50331648 [style=dashed];
+16777217 -> 0 [style=solid dir=both arrowtail=dot];
+25165826 -> 16777217 [style=dashed];
+25165826 -> 0 [style=solid dir=both arrowtail=dot];
+58720263 -> 25165826 [style=dashed];
+58720263 -> 0 [style=solid dir=both arrowtail=dot];
+8388698 -> 8388697 [style=dashed];
+8388698 -> 58720263 [style=solid dir=both arrowtail=none];
+8388699 -> 8388698 [style=dashed];
+8388699 -> 0 [style=solid dir=both arrowtail=dot];
+16777218 [label="16"];
+16777218 -> 58720263 [style=dashed];
+16777218 -> 0 [style=solid dir=both arrowtail=dot];
+8388700 -> 8388699 [style=dashed];
+8388700 -> 16777218 [style=solid dir=both arrowtail=none];
+8388701 -> 8388700 [style=dashed];
+8388701 -> 0 [style=solid dir=both arrowtail=dot];
+8388702 -> 8388701 [style=dashed];
+8388702 -> 0 [style=solid dir=both arrowtail=dot];
+8388703 -> 8388702 [style=dashed];
+8388703 -> 0 [style=solid dir=both arrowtail=dot];
+8388704 -> 8388703 [style=dashed];
+8388704 -> 0 [style=solid dir=both arrowtail=dot];
+8388705 -> 8388704 [style=dashed];
+8388705 -> 0 [style=solid dir=both arrowtail=dot];
+8388706 -> 8388705 [style=dashed];
+8388706 -> 0 [style=solid dir=both arrowtail=dot];
+8388707 -> 8388706 [style=dashed];
+8388707 -> 0 [style=solid dir=both arrowtail=dot];
+58720270 [label="8"];
+58720269 [label="9"];
+58720268 [label="10"];
+58720267 [label="11"];
+58720266 [label="12"];
+58720265 [label="13"];
+58720264 [label="14"];
+58720264 -> 16777218 [style=dashed];
+58720264 -> 0 [style=solid dir=both arrowtail=dot];
+58720265 -> 58720264 [style=dashed];
+58720265 -> 0 [style=solid dir=both arrowtail=dot];
+58720266 -> 58720265 [style=dashed];
+58720266 -> 0 [style=solid dir=both arrowtail=dot];
+58720267 -> 58720266 [style=dashed];
+58720267 -> 0 [style=solid dir=both arrowtail=dot];
+58720268 -> 58720267 [style=dashed];
+58720268 -> 0 [style=solid dir=both arrowtail=dot];
+58720269 -> 58720268 [style=dashed];
+58720269 -> 0 [style=solid dir=both arrowtail=dot];
+58720270 -> 58720269 [style=dashed];
+58720270 -> 0 [style=solid dir=both arrowtail=dot];
+8388708 -> 8388707 [style=dashed];
+8388708 -> 58720270 [style=solid dir=both arrowtail=none];
+8388709 -> 8388708 [style=dashed];
+8388709 -> 0 [style=solid dir=both arrowtail=dot];
+8388710 -> 8388709 [style=dashed];
+8388710 -> 0 [style=solid dir=both arrowtail=dot];
+8388711 -> 8388710 [style=dashed];
+8388711 -> 0 [style=solid dir=both arrowtail=dot];
+8388712 -> 8388711 [style=dashed];
+8388712 -> 0 [style=solid dir=both arrowtail=dot];
+8388713 -> 8388712 [style=dashed];
+8388713 -> 0 [style=solid dir=both arrowtail=dot];
+8388714 -> 8388713 [style=dashed];
+8388714 -> 0 [style=solid dir=both arrowtail=dot];
+50331665 [label="1"];
+50331664 [label="2"];
+50331663 [label="3"];
+50331662 [label="4"];
+50331661 [label="5"];
+50331660 [label="6"];
+50331659 [label="7"];
+50331658 [label="8"];
+50331657 [label="9"];
+50331656 [label="10"];
+50331655 [label="11"];
+50331654 [label="12"];
+50331653 [label="13"];
+50331652 [label="14"];
+50331651 [label="15"];
+50331650 [label="16"];
+50331649 [label="17"];
+50331649 -> 8388697 [style=dashed];
+50331649 -> 0 [style=solid dir=both arrowtail=dot];
+50331650 -> 50331649 [style=dashed];
+50331650 -> 0 [style=solid dir=both arrowtail=dot];
+50331651 -> 50331650 [style=dashed];
+50331651 -> 0 [style=solid dir=both arrowtail=dot];
+50331652 -> 50331651 [style=dashed];
+50331652 -> 0 [style=solid dir=both arrowtail=dot];
+50331653 -> 50331652 [style=dashed];
+50331653 -> 0 [style=solid dir=both arrowtail=dot];
+50331654 -> 50331653 [style=dashed];
+50331654 -> 0 [style=solid dir=both arrowtail=dot];
+50331655 -> 50331654 [style=dashed];
+50331655 -> 0 [style=solid dir=both arrowtail=dot];
+50331656 -> 50331655 [style=dashed];
+50331656 -> 0 [style=solid dir=both arrowtail=dot];
+50331657 -> 50331656 [style=dashed];
+50331657 -> 0 [style=solid dir=both arrowtail=dot];
+50331658 -> 50331657 [style=dashed];
+50331658 -> 0 [style=solid dir=both arrowtail=dot];
+50331659 -> 50331658 [style=dashed];
+50331659 -> 0 [style=solid dir=both arrowtail=dot];
+50331660 -> 50331659 [style=dashed];
+50331660 -> 0 [style=solid dir=both arrowtail=dot];
+50331661 -> 50331660 [style=dashed];
+50331661 -> 0 [style=solid dir=both arrowtail=dot];
+50331662 -> 50331661 [style=dashed];
+50331662 -> 0 [style=solid dir=both arrowtail=dot];
+50331663 -> 50331662 [style=dashed];
+50331663 -> 0 [style=solid dir=both arrowtail=dot];
+50331664 -> 50331663 [style=dashed];
+50331664 -> 0 [style=solid dir=both arrowtail=dot];
+50331665 -> 50331664 [style=dashed];
+50331665 -> 0 [style=solid dir=both arrowtail=dot];
+8388715 -> 8388714 [style=dashed];
+8388715 -> 50331665 [style=solid dir=both arrowtail=none];
+}
+// Mapping from BDD nodes to DFT BEs as follows: 
+// 0 -> Seabed_soil_are_eroded_easily
+// 1 -> Seabed_movement
+// 2 -> Auxiliaries_aging
+// 3 -> Not_adding_corrosion_inhibitor
+// 4 -> Not_removing_the_corrosion_gas_and_impurities
+// 5 -> Design_defect_of_material
+// 6 -> Construction_defect_of_material
+// 7 -> Design_burial_depth_is_not_enough
+// 8 -> Construction_defect_of_weld-seam
+// 9 -> Anticorrosive_coating_failure
+// 10 -> Cathodic_protection_failure
+// 11 -> Fishing_gear_interaction
+// 12 -> Design_defect_of_weld-seam
+// 13 -> Not_pigging_regularly
+// 14 -> Anchoring_work
+// 15 -> Failure_of_treatment_timely
+// 16 -> Dropped_objects_hit
+// 17 -> Operation_of_burial_depth_is_not_enough
+// 18 -> Typhoon
+// 19 -> Offshore_construction
+// 20 -> Strong_current_and_wave
+// 21 -> Design_defect_of_auxiliaries
+// 22 -> Subsea_earthquake
