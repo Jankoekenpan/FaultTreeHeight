@@ -3,7 +3,7 @@ package viz
 import bdd.{BDD, BDDOrdering}
 import benchmark.Conversion
 import dft.DFT
-import reallife.FT6_LeakageFailure
+import reallife.{FT4_Aircraft, FT6_LeakageFailure}
 
 import java.io.File
 import scala.io.Source
@@ -74,4 +74,20 @@ object FT6Repro {
 
     def printOrderingStrings(ordering: Seq[String]): String =
         ordering.mkString(" ")
+}
+
+object FT4Repro {
+
+    def main(args: Array[String]): Unit = {
+        val treeLikeFT = FT4_Aircraft
+        val treeFT = treeLikeFT.FT
+        val (dagTree, probabilities) = Conversion.translateToDagTree(treeFT)
+        val dftFile = new File(s"handcreated/${treeLikeFT.name}.dft")
+        val (_, dft2InternalMapping) = DFT.readDFTFile(Source.fromFile(dftFile))
+
+        val cutSets = minimalcutpathset.minimalCutSets(dagTree)()
+        println(cutSets.size)
+        println(cutSets)
+    }
+
 }
