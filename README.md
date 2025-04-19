@@ -7,7 +7,7 @@ For IntelliJ, ensure the [Scala plugin](https://plugins.jetbrains.com/plugin/134
 For VSCode, ensure the [Scala/Metals](https://scalameta.org/metals/docs/editors/vscode/) extension is installed.
 
 Your IDE should now recognise this project as an [SBT](https://www.scala-sbt.org/) project.
-Depending on your IDE/Editor setup, you should also install SBT itself.
+Depending on your IDE/Editor setup, you should also install SBT itself on your operating system.
 
 ## Project setup
 
@@ -17,10 +17,10 @@ Depending on your IDE/Editor setup, you should also install SBT itself.
 - CutSetAlgorithm4.scala: contains the 'MCS-based' height approximation algorithm for dag-like fault trees (Mince/CuDA).
 - PathSetAlgorithm5.scala: contains the 'MPS-based' height approximation algorithm for dag-like fault trees (Pase/PaDA).
 - RandomBDTs.scala: contains the 'random binatry decision tree' height approximation algorithm for dag-like fault trees (Ranger).
-- Benchmark.scala: contains a [JMH](https://openjdk.org/projects/code-tools/jmh/) benchmark for comparing the running times of all algorithms mentioned in the Paper.
+- Benchmark.scala: contains a [JMH](https://openjdk.org/projects/code-tools/jmh/) benchmark for comparing the running times of all algorithms mentioned in the paper.
 - Conversion.scala: code which converts between Tree-Like FaultTree, Dag-Like FaultTree and BooleanFormula representations of fault trees.
 - TreesInPaper.scala: calculates height approximations for some real-world fault trees.
-- DFT.scala: simple parser and printer for .dft files.
+- DFT.scala: simple parser and printer for galileo-formatted .dft files.
 
 ## Running the benchmarks
 
