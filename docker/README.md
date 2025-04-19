@@ -64,7 +64,8 @@ cp ./bdd-files/HSC\(FT14\).dot ${FAULT_TREE_HEIGHT_DIR}/generated/bdd/HSC\(FT14\
 cd ${FAULT_TREE_HEIGHT_DIR}
 sbt "runMain reallife.TreesInPaper"
 ```
-The output will be written to '/opt/FaultTreeHeight/real-world-fault trees.csv'
+The output will be written to '/opt/FaultTreeHeight/real-world-fault trees.csv'.
+A cell will contain the value -1 when an algorithm did not run for a fault tree.
 
 ### Run the JMH benchmark to measure the execution time of the algorithms implemented in Scala
 ```shell
