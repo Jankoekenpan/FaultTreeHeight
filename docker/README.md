@@ -61,14 +61,14 @@ cp ./bdd-files/HSC\(FT14\).dot ${FAULT_TREE_HEIGHT_DIR}/generated/bdd/HSC\(FT14\
 
 ### Run algorithms and gather height results
 ```shell
-cd ${FAULT_TREE_HIGHT_DIR}
+cd ${FAULT_TREE_HEIGHT_DIR}
 sbt "runMain reallife.TreesInPaper"
 ```
 The output will be written to '/opt/FaultTreeHeight/real-world-fault trees.csv'
 
 ### Run the JMH benchmark to measure the execution time of the algorithms implemented in Scala
 ```shell
-cd ${FAULT_TREE_HIGHT_DIR}
+cd ${FAULT_TREE_HEIGHT_DIR}
 sbt jmh:run
 ```
 Note that this operation can take up to 10 hours.
