@@ -71,3 +71,5 @@ The output will be written to '/opt/FaultTreeHeight/real-world-fault trees.csv'
 cd ${FAULT_TREE_HIGHT_DIR}
 sbt jmh:run
 ```
+Note that this operation can take up to 10 hours.
+To reduce the benchmark execution time, uncomment the @Fork annotation on the RealWorldFaultTreesBenchmark class in Benchmark.scala.

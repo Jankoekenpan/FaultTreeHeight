@@ -1,7 +1,7 @@
 package benchmark
 
 import minimalcutpathset.{MinceNormalised, MinceOrderedSet, PaseNormalised, PaseOrderedSet}
-import org.openjdk.jmh.annotations.{Benchmark, BenchmarkMode, Mode, OutputTimeUnit, Scope, Setup, State}
+import org.openjdk.jmh.annotations.{Benchmark, BenchmarkMode, Fork, Mode, OutputTimeUnit, Scope, Setup, State}
 
 import java.util.concurrent.TimeUnit
 import scala.collection.immutable.IntMap
