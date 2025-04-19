@@ -15,7 +15,9 @@ Depending on your IDE/Editor setup, you should also install SBT itself on your o
 - RecursiveAlgorithm2.scala: contains the 'recursive' height approximation algorithm for tree-like fault trees (Remind/BUDA).
 - BinaryDecisionTree.scala: contains the 'recursive' height approximation algorithm for dag-like fault trees (Remind/BUDA).
 - CutSetAlgorithm4.scala: contains the 'MCS-based' height approximation algorithm for dag-like fault trees (Mince/CuDA).
+  - MinceOrderedSet.scala: contains the 'size' variation of the CuDA algorithm.
 - PathSetAlgorithm5.scala: contains the 'MPS-based' height approximation algorithm for dag-like fault trees (Pase/PaDA).
+  - PaseOrderedSet.scala: contains the 'size' variation of the PaDA algorithm.
 - RandomBDTs.scala: contains the 'random binatry decision tree' height approximation algorithm for dag-like fault trees (Ranger).
 - Benchmark.scala: contains a [JMH](https://openjdk.org/projects/code-tools/jmh/) benchmark for comparing the running times of all algorithms mentioned in the paper.
 - Conversion.scala: code which converts between Tree-Like FaultTree, Dag-Like FaultTree and BooleanFormula representations of fault trees.
@@ -33,7 +35,3 @@ Linux example: `export JAVA_HOME=/opt/jdk23`
 Execute `sbt jmh:run` from a terminal.
 <br>
 Note that this operation can take up to 10 hours.
-
-## Random trees
-
-To generate the plots, run RandomTrees#main. Use JVM arguments `--add-exports java.base/java.lang=ALL-UNNAMED --add-exports java.desktop/sun.awt=ALL-UNNAMED --add-exports java.desktop/sun.java2d=ALL-UNNAMED`.
