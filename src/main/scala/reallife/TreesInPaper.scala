@@ -3,7 +3,7 @@ package reallife
 import bdd.{BDD, BDDOrdering}
 import benchmark.Conversion
 import dft.DFT
-import minimalcutpathset.{MinceNormalised, MinceOrderedSet, PaseNormalised, PaseOrderedSet}
+import minimalcutpathset.{MinceOrderedSet, PaseOrderedSet}
 
 import java.io.File
 import java.nio.file.{Files, Path, StandardOpenOption}
@@ -19,8 +19,6 @@ object TestBDDHeights {
 //        println(TreesInPaper.runDagLikeFaultTree(FT12_OGPF2))
         println(TreesInPaper.runTreeLikeFaultTree(FT_Example))
         println(TreesInPaper.runTreeLikeFaultTree(FT_Example1))
-
-
     }
 }
 
@@ -108,22 +106,22 @@ object TreesInPaper {
         println(s"DEBUG: path sets (${minimalPathSets.size}) = ${minimalPathSets}")
 
         val heightEnumeration: Double = if runEminent then {
-            println(s"Calculate height of ${treeLikeFT.name} using Enumeration algorithm (eminent)...")
+            println(s"Calculate height of ${treeLikeFT.name} using Enumeration algorithm (EDA)...")
             decisiontree.height(booleanFormula, probabilities)
         } else -1
 
         val heightRecursive2: Double = if runRemind then {
-            println(s"Calculate height of ${treeLikeFT.name} using Recursive algorithm 2 (remind)...")
+            println(s"Calculate height of ${treeLikeFT.name} using Recursive algorithm 2 (BUDA)...")
             faulttree.height7(flattenedTree) // Note: recursive algorithm uses flattened FT.
         } else -1
 
         val heightPathSet: Double = if runPase then {
-            println(s"Calculate height of ${treeLikeFT.name} using PathSet algorithm (pase)...")
+            println(s"Calculate height of ${treeLikeFT.name} using PathSet algorithm (PaDAprob)...")
             minimalcutpathset.algorithm5(minimalPathSets, probabilities)._2
         } else -1
 
         val heightCutSet: Double = if runMince then {
-            println(s"Calculate height of ${treeLikeFT.name} using CutSet algorithm (mince)...")
+            println(s"Calculate height of ${treeLikeFT.name} using CutSet algorithm (CuDAprob)...")
             minimalcutpathset.algorithm4(minimalCutSets, probabilities)._2
         } else -1
 
@@ -132,23 +130,13 @@ object TreesInPaper {
             BDD.height(bdd, bddProbabilities)
         } else -1
 
-        val heightMinceNormalised: Double = if runMince then {
-            println(s"Calculate height of ${treeLikeFT.name} using mince-normalised algorithm...")
-            MinceNormalised.minceNormalised(minimalCutSets, probabilities)._2
-        } else -1
-
         val heightMinceOrderedSet: Double = if runMince then {
-            println(s"Calculate height of ${treeLikeFT.name} using mince-ordered-set algorithm...")
+            println(s"Calculate height of ${treeLikeFT.name} using CutSet algorithm (CuDAsize)...")
             MinceOrderedSet.minceOrderedSet(minimalCutSets, probabilities)._2
         } else -1
 
-        val heightPaseNormalised: Double = if runPase then {
-            println(s"Calculate height of ${treeLikeFT.name} using pase-normalised algorithm...")
-            PaseNormalised.paseNormalised(minimalPathSets, probabilities)._2
-        } else -1
-
         val heightPaseOrderedSet: Double = if runPase then {
-            println(s"Calculate height of ${treeLikeFT.name} using pase-ordered-set algorithm...")
+            println(s"Calculate height of ${treeLikeFT.name} using PathSet algorithm (PaDAsize)...")
             PaseOrderedSet.paseOrderedSet(minimalPathSets, probabilities)._2
         } else -1
 
@@ -162,9 +150,7 @@ object TreesInPaper {
             heightCutSet = heightCutSet,
             heightPathSet = heightPathSet,
             heightBDD = heightBDD,
-            heightMinceNormalised = heightMinceNormalised,
             heightMinceOrderedSet = heightMinceOrderedSet,
-            heightPaseNormalised = heightPaseNormalised,
             heightPaseOrderedSet = heightPaseOrderedSet,
         )
     }
@@ -194,22 +180,22 @@ object TreesInPaper {
         val minimalPathSets = minimalcutpathset.minimalPathSets(dagFT)(basicEvents)
 
         val heightEnumeration: Double = if runEminent then {
-            println(s"Calculate height of ${dagLikeFT.name} using Enumeration algorithm (eminent)...")
+            println(s"Calculate height of ${dagLikeFT.name} using Enumeration algorithm (EDA)...")
             decisiontree.height(booleanFormula, probabilities)
         } else -1
 
         val heightRecursive3: Double = if runRemind then {
-            println(s"Calculate height of ${dagLikeFT.name} using Recursive algorithm 3 (remind)...")
+            println(s"Calculate height of ${dagLikeFT.name} using Recursive algorithm 3 (BUDA)...")
             decisiontree.algorithm8(flattenedDag, probabilities)._2 // Note: recursive algorithm uses flattened FT.
         } else -1
 
         val heightCutSet: Double = if runMince then {
-            println(s"Calculate height of ${dagLikeFT.name} using CutSet algorithm (mince)...")
+            println(s"Calculate height of ${dagLikeFT.name} using CutSet algorithm (CuDAprob)...")
             minimalcutpathset.algorithm4(minimalCutSets, probabilities)._2
         } else -1
 
         val heightPathSet: Double = if runPase then {
-            println(s"Calculate height of ${dagLikeFT.name} using PathSet algorithm (pase)...")
+            println(s"Calculate height of ${dagLikeFT.name} using PathSet algorithm (PaDAprob)...")
             minimalcutpathset.algorithm5(minimalPathSets, probabilities)._2
         } else -1
 
@@ -218,23 +204,13 @@ object TreesInPaper {
             BDD.height(bdd, bddProbabilities)
         } else -1
 
-        val heightMinceNormalised: Double = if runMince then {
-            println(s"Calculate height of ${dagLikeFT.name} using mince-normalised algorithm...")
-            MinceNormalised.minceNormalised(minimalCutSets, probabilities)._2
-        } else -1
-
         val heightMinceOrderedSet: Double = if runMince then {
-            println(s"Calculate height of ${dagLikeFT.name} using mince-ordered-set algorithm...")
+            println(s"Calculate height of ${dagLikeFT.name} using CutSet algorithm (CuDAsize)...")
             MinceOrderedSet.minceOrderedSet(minimalCutSets, probabilities)._2
         } else -1
 
-        val heightPaseNormalised: Double = if runPase then {
-            println(s"Calculate height of ${dagLikeFT.name} using pase-normalised algorithm...")
-            PaseNormalised.paseNormalised(minimalPathSets, probabilities)._2
-        } else -1
-
         val heightPaseOrderedSet: Double = if runPase then {
-            println(s"Calculate height of ${dagLikeFT.name} using pase-ordered-set algorithm...")
+            println(s"Calculate height of ${dagLikeFT.name} using PathSet algorithm (PaDAsize)...")
             PaseOrderedSet.paseOrderedSet(minimalPathSets, probabilities)._2
         } else -1
 
@@ -248,9 +224,7 @@ object TreesInPaper {
             heightCutSet = heightCutSet,
             heightPathSet = heightPathSet,
             heightBDD = heightBDD,
-            heightMinceNormalised = heightMinceNormalised,
             heightMinceOrderedSet = heightMinceOrderedSet,
-            heightPaseNormalised = heightPaseNormalised,
             heightPaseOrderedSet = heightPaseOrderedSet,
         )
     }
@@ -267,10 +241,8 @@ case class HeightResults(
     heightCutSet: Double,
     heightPathSet: Double,
     heightBDD: Double,
-    heightMinceNormalised: Double = -1,
-    heightMinceOrderedSet: Double = -1,
-    heightPaseNormalised: Double = -1,
-    heightPaseOrderedSet: Double = -1,
+    heightMinceOrderedSet: Double,
+    heightPaseOrderedSet: Double,
 )
 
 object HeightResults {
@@ -280,12 +252,12 @@ object HeightResults {
         Files.createFile(Path.of(outFile))
 
     def printHeader(file: Path): Unit = {
-        val line = "Fault Tree,# Basic events, # Minimal cut sets,# Minimal path sets,Height (eminent),Height (remind),Height (mince),Height (pase),Height (storm-dft bdd),Height (mince-normalised),Height (mince-ordered-set),Height (pase-normalised),Height (pase-ordered-set)"
+        val line = "Fault Tree,# Basic events, # Minimal cut sets,# Minimal path sets,Height (EDA),Height (BUDA),Height (CuDAprob),Height (PaDAprob),Height (storm-dft bdd),Height (CuDAsize),Height (PaDAsize)"
         writeLine(file, line)
     }
 
     def printResults(file: Path, results: HeightResults): Unit = {
-        val line = s""""${results.treeName}","${results.basicEvents}","${results.cutSets}","${results.pathSets}","${results.heightExact}","${results.heightRecursive}","${results.heightCutSet}","${results.heightPathSet}","${results.heightBDD}","${results.heightMinceNormalised}","${results.heightMinceOrderedSet}","${results.heightPaseNormalised}","${results.heightPaseOrderedSet}""""
+        val line = s""""${results.treeName}","${results.basicEvents}","${results.cutSets}","${results.pathSets}","${results.heightExact}","${results.heightRecursive}","${results.heightCutSet}","${results.heightPathSet}","${results.heightBDD}","${results.heightMinceOrderedSet}","${results.heightPaseOrderedSet}""""
         writeLine(file, line)
     }
 
