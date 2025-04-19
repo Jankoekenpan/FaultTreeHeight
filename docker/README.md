@@ -2,6 +2,7 @@
 
 ## Obtaining the docker image:
 ### Option 1: Building the docker image yourself:
+In a shell in the same directory as the Dockerfile:
 ```shell
 docker build -t fault-tree-height -f fault-tree-height.Dockerfile .
 ```
