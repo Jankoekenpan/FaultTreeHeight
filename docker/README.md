@@ -26,7 +26,7 @@ docker run -it fault-tree-height
 cd ${STORM_DIR}
 chmod +x conversion.sh
 ./conversion.sh AssessingtheRisks2\(FT1\)
-./conversion.sh T0 Chopper\(FT2\)
+./conversion.sh T0\ Chopper\(FT2\)
 ./conversion.sh ATC\(FT3\)
 ./conversion.sh Aircraft\(FT4\)
 ./conversion.sh LiquidStorageTank\(FT5\)
@@ -44,8 +44,9 @@ This command will also output the FaultTree to BDD conversion time.
 
 ### Copying BDD files to the FaultTreeHeight repository
 ```shell
+cd ${STORM_DIR}
 cp ./bdd-files/AssessingtheRisks2\(FT1\).dot ${FAULT_TREE_HEIGHT_DIR}/generated/bdd/AssessingtheRisks2\(FT1\).dot
-cp ./bdd-files/T0 Chopper\(FT2\).dot ${FAULT_TREE_HEIGHT_DIR}/generated/bdd/T0 Chopper\(FT2\).dot
+cp ./bdd-files/T0\ Chopper\(FT2\).dot ${FAULT_TREE_HEIGHT_DIR}/generated/bdd/T0\ Chopper\(FT2\).dot
 cp ./bdd-files/ATC\(FT3\).dot ${FAULT_TREE_HEIGHT_DIR}/generated/bdd/ATC\(FT3\).dot
 cp ./bdd-files/Aircraft\(FT4\).dot ${FAULT_TREE_HEIGHT_DIR}/generated/bdd/Aircraft\(FT4\).dot
 cp ./bdd-files/LiquidStorageTank\(FT5\).dot ${FAULT_TREE_HEIGHT_DIR}/generated/bdd/LiquidStorageTank\(FT5\).dot
