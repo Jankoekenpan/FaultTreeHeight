@@ -76,6 +76,9 @@ object TreesInPaper {
             println()
             HeightResults.printResults(outFile, results)
         }
+
+        println()
+        println("Output written to " + outFile.toAbsolutePath)
     }
 
     def runTreeLikeFaultTree(treeLikeFT: TreeLikeFaultTree,
