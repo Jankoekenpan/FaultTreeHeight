@@ -56,12 +56,12 @@ ENV PATH="${SBT_DIR}/bin:${PATH}"
 # Verify installation
 RUN sbt --version
 
-# Install Storm
+# Install Storm (remove -DSTROM_PORTABLE=ON to enable usage of CPU extensions, for possibly better performance).
 RUN git clone -b feature/time-bdd-conversion https://github.com/Jankoekenpan/storm.git $STORM_DIR \
     && cd $STORM_DIR \
     && mkdir build \
     && cd build \
-    && cmake .. \
+    && cmake .. -DSTORM_PORTABLE=ON \
     && make
 
 # Install FaultTreeHeight

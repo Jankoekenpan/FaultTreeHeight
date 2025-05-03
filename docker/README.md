@@ -9,7 +9,7 @@ docker build -t fault-tree-height -f fault-tree-height.Dockerfile .
 Note: this will take a while since Storm needs to be compiled from source.
 ### Option 2: Load the docker image from the tar archive:
 ```shell
-docker load fault-tree-height.tar 
+docker image load --input fault-tree-height.tar
 ```
 
 ## Running the docker image
