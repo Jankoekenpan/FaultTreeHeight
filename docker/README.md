@@ -7,10 +7,14 @@ In a shell in the same directory as the Dockerfile:
 docker build -t fault-tree-height -f fault-tree-height.Dockerfile .
 ```
 Note: this will take a while since Storm needs to be compiled from source.
+Building Strom from source however is recommended to reproduce results from the paper most accurately.
+By modifying the dockerfile and removing the portability option from the Storm build, the C++ compiler can
+output cpu instructions optimised for your hardware.
 ### Option 2: Load the docker image from the tar archive:
 ```shell
 docker image load --input fault-tree-height.tar
 ```
+Use this option if you just want to get results quickly.
 
 ## Running the docker image
 ```shell
@@ -40,7 +44,7 @@ chmod +x conversion.sh
 ./conversion.sh BHNGPipeline\(FT13\)
 ./conversion.sh HSC\(FT14\)
 ```
-This command will also output the FaultTree to BDD conversion time.
+These commands will also output the FaultTree to BDD conversion time.
 
 ### Copying BDD files to the FaultTreeHeight repository
 ```shell
